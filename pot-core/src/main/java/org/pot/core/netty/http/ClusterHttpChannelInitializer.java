@@ -5,6 +5,7 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
+import org.pot.core.script.ScriptManager;
 import org.pot.core.service.HttpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -16,6 +17,8 @@ public class ClusterHttpChannelInitializer extends ChannelInitializer<SocketChan
 
   @Autowired
   HttpService httpService;
+  @Autowired
+  ScriptManager scriptService;
 
   public ClusterHttpChannelInitializer() {
   }
@@ -29,6 +32,7 @@ public class ClusterHttpChannelInitializer extends ChannelInitializer<SocketChan
     pipeline.addLast("encoder", new HttpResponseEncoder());
     ClusterHttpServerHandler clusterHttpServerHandler = new ClusterHttpServerHandler();
     clusterHttpServerHandler.setHttpService(httpService);
+    clusterHttpServerHandler.setScriptService(scriptService);
     pipeline.addLast(clusterHttpServerHandler);
   }
 }

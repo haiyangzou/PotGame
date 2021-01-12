@@ -13,13 +13,11 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.LastHttpContent;
 import io.netty.util.ReferenceCountUtil;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+@Slf4j
 public class StreamChunkAggregator extends MessageToMessageDecoder<HttpObject> {
-
-    private static final Logger log = LoggerFactory.getLogger(
-        StreamChunkAggregator.class);
 
     private volatile FullHttpMessage curMsg;
     public static final int DEFAULT_MAX_COMPOSITEBUFFER_COMPONENTS = 1024;

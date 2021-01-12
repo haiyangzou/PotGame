@@ -18,28 +18,28 @@ import io.netty.handler.codec.http.multipart.MemoryAttribute;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.pot.core.io.handler.HttpHandler;
 import org.pot.core.io.message.MsgUtil;
+import org.pot.core.script.ScriptManager;
 import org.pot.core.util.TimeUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
 /**
  * http消息处理
  */
+@Slf4j
 @Component
 @Scope("prototype")
 public abstract class HttpServerIoHandler extends ChannelInboundHandlerAdapter {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(
-      HttpServerIoHandler.class);
 
   private static final HttpDataFactory factory = new DefaultHttpDataFactory(
       DefaultHttpDataFactory.MINSIZE);
   private HttpRequest request;
   private HttpPostRequestDecoder decoder;
+  @Autowired
+  ScriptManager scriptService;
 
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -47,8 +47,9 @@ public abstract class HttpServerIoHandler extends ChannelInboundHandlerAdapter {
       request = (HttpRequest) msg;
       HttpMethod method = request.method();
       String uri = request.uri();
+
       if (uri == null || uri.length() == 0) {
-        LOGGER.warn("{} 请求地址为空", MsgUtil.getRemoteIpPort(ctx.channel()));
+        log.warn("{} 请求地址为空", MsgUtil.getRemoteIpPort(ctx.channel()));
         return;
       }
       try {
@@ -64,10 +65,11 @@ public abstract class HttpServerIoHandler extends ChannelInboundHandlerAdapter {
         }
 
         decoder = new HttpPostRequestDecoder(factory, request);
-        HttpHandler handler = scriptService.getHttpHandler(uri);
-        LOGGER.debug("http request uri:{}", uri);
+        HttpHandler handler = (HttpHandler) scriptService.getScriptByName(uri);
+
+        log.debug("http request uri:{}", uri);
         if (handler == null) {
-          LOGGER.warn("{} 请求地址{}处理器未实现", MsgUtil.getRemoteIpPort(ctx.channel()), uri);
+          log.warn("{} 请求地址{}处理器未实现", MsgUtil.getRemoteIpPort(ctx.channel()), uri);
           return;
         }
         if (HttpMethod.POST.equals(method)) {
@@ -83,7 +85,7 @@ public abstract class HttpServerIoHandler extends ChannelInboundHandlerAdapter {
 
         time = TimeUtil.currentTimeMillis() - time;
         if (time > 20) {
-          LOGGER.warn("{}处理时间超过{}", handler.getClass().getSimpleName(), time);
+          log.warn("{}处理时间超过{}", handler.getClass().getSimpleName(), time);
         }
       } catch (Exception e) {
         e.printStackTrace();
@@ -146,5 +148,11 @@ public abstract class HttpServerIoHandler extends ChannelInboundHandlerAdapter {
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
     ctx.close();
   }
+  public ScriptManager getScriptService() {
+    return scriptService;
+  }
 
+  public void setScriptService(ScriptManager scriptService) {
+    this.scriptService = scriptService;
+  }
 }

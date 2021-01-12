@@ -10,6 +10,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import java.util.logging.Level;
+import lombok.extern.slf4j.Slf4j;
 import org.pot.core.netty.config.NettyServerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +20,9 @@ import org.springframework.stereotype.Component;
  * HTTP 服务器
  */
 @Component
+@Slf4j
 public class HttpServer {
 
-  private static final Logger LOG = LoggerFactory.getLogger(
-      HttpServer.class);
 
 
   private NettyServerConfig nettyServerConfig;
@@ -54,15 +54,15 @@ public class HttpServer {
   public void stop() {
     synchronized (this) {
       if (!isRunning) {
-        LOG.info("HttpServer " + nettyServerConfig.getName() + "is already stoped.");
+        log.info("HttpServer " + nettyServerConfig.getName() + "is already stoped.");
         return;
       }
       channelFuture.channel().closeFuture();
       isRunning = false;
       try {
-        LOG.info("Server is stoped.");
+        log.info("Server is stoped.");
       } catch (Exception ex) {
-        LOG.error("", ex);
+        log.error("", ex);
       } finally {
         workerGroup.shutdownGracefully();
         bossGroup.shutdownGracefully();

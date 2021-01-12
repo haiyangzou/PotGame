@@ -1,0 +1,35 @@
+package org.pot.core;
+
+import lombok.extern.slf4j.Slf4j;
+import org.pot.core.io.config.AppConfig;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+
+/**
+ * 处理登录，支付等接口,无状态服务器
+ */
+@EnableMongoRepositories
+@Slf4j
+public class PotApp implements CommandLineRunner {
+
+    public static void main(String[] args) {
+        try {
+            AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+            ServerContext.setApplicationContext(context);
+            context.register(AppConfig.class);
+            context.refresh();
+//            Runtime.getRuntime().addShutdownHook(context.getBean(ShutdownThread.class));
+        } catch (Exception e) {
+            log.error("Server Start Fail.", e);
+            //ApplicationUtil.deletePidFile(new File(SharedConstant.PID_FILE_PATH));
+            System.exit(-1);
+        }
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+
+    }
+}
