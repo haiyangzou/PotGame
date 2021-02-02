@@ -109,10 +109,6 @@ public class ScriptManager implements BeanFactoryAware {
       //注册 class
       Class<?> clazz = scriptEntry.getScriptClass();
       DefaultListableBeanFactory factory = (DefaultListableBeanFactory) beanFactory;
-      if (factory.containsBeanDefinition(scriptEntry.getName())) {
-        log.info("bean1:{}", factory.getBean(scriptEntry.getName()));
-//        factory.removeBeanDefinition(scriptEntry.getName());
-      }
       BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
       factory
           .registerBeanDefinition(scriptEntry.getName(), beanDefinitionBuilder.getBeanDefinition());
@@ -120,7 +116,8 @@ public class ScriptManager implements BeanFactoryAware {
       log.info("bean2:{}", factory.getBean(scriptEntry.getName()));
       allScriptFileMap.put(file.getPath(), scriptEntry);
       allScriptMap.put(scriptEntry.getPath(), scriptEntry);
-      Object inst = getScriptInstance(clazz);
+//      Object inst = getScriptInstance(clazz);
+      Object inst = factory.getBean(scriptEntry.getName());
       log.info("compileGroovy:{}", inst);
       return inst;
     } finally {
