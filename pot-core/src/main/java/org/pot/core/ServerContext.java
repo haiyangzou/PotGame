@@ -7,7 +7,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 /**
  * 游戏全局上下文
  *
- * @author sunchong
+ * @author zouhaiyang
  */
 public class ServerContext {
 

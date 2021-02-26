@@ -6,7 +6,9 @@ import java.lang.reflect.Proxy;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
+import org.pot.core.io.config.AppConfig;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 /**
@@ -19,16 +21,16 @@ public class PotApp implements CommandLineRunner {
     private static ExecutorService es = Executors.newFixedThreadPool(1);
     public static void main(String[] args) {
         try {
-            People people = new Teacher();
-            InvocationHandler handler = new WorkHandler(people);
-            People proxy = (People) Proxy.newProxyInstance(handler.getClass().getClassLoader(),
-                people.getClass().getInterfaces(), handler);
-            proxy.work();
-            proxy.study();
-//            AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-//            ServerContext.setApplicationContext(context);
-//            context.register(AppConfig.class);
-//            context.refresh();
+//            People people = new Teacher();
+//            InvocationHandler handler = new WorkHandler(people);
+//            People proxy = (People) Proxy.newProxyInstance(handler.getClass().getClassLoader(),
+//                people.getClass().getInterfaces(), handler);
+//            proxy.work();
+//            proxy.study();
+            AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+            ServerContext.setApplicationContext(context);
+            context.register(AppConfig.class);
+            context.refresh();
 //            Runtime.getRuntime().addShutdownHook(context.getBean(ShutdownThread.class));
         } catch (Exception e) {
             log.error("Server Start Fail.", e);

@@ -5,7 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * 
- * @author sunchong
+ * @author zouhaiyang
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Script {

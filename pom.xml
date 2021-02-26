@@ -9,6 +9,7 @@
   <version>releases</version>
   <modules>
     <module>pot-core</module>
+    <module>pot-game</module>
   </modules>
   <packaging>pom</packaging>
   <name>pot</name>
@@ -16,7 +17,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <mvn.compiler.source>1.8</mvn.compiler.source>
     <mvn.compiler.target>1.8</mvn.compiler.target>
-    <lombok.version>1.16.10</lombok.version>
+    <lombok.version>1.18.4</lombok.version>
   </properties>
   <dependencyManagement>
     <dependencies>

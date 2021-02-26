@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * 路径相关的工具
- * @author sunchong
+ * @author zouhaiyang
  */
 public class PathUtil {
 	/**
