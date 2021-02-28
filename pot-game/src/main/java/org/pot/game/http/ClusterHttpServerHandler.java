@@ -1,5 +1,6 @@
-package org.pot.core.netty.http;
+package org.pot.game.http;
 
+import org.pot.core.netty.http.HttpServerIoHandler;
 import org.pot.core.script.ScriptManager;
 import org.pot.core.service.HttpService;
 
@@ -18,8 +19,5 @@ public class ClusterHttpServerHandler extends HttpServerIoHandler {
   public void setHttpService(HttpService httpService) {
     this.service = service;
   }
-
-  public void setScriptService(ScriptManager scriptService) {
-    this.scriptService = scriptService;
-  }
+  
 }

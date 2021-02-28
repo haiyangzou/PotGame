@@ -1,10 +1,11 @@
-package org.pot.core.netty.http;
+package org.pot.game.http;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
+import org.pot.core.netty.http.StreamChunkAggregator;
 import org.pot.core.script.ScriptManager;
 import org.pot.core.service.HttpService;
 import org.springframework.beans.factory.annotation.Autowired;

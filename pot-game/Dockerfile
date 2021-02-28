@@ -1,11 +1,10 @@
 FROM openjdk:14-jdk-alpine
 
-COPY target/lib /usr/src/mmo-login/lib
-COPY target/mmo-login-releases.jar /usr/src/mmo-login/mmo-login-releases.jar
-COPY mmo-login-scripts/src /usr/src/mmo-login-scripts/src
+COPY target/lib /home/pot-game/lib
+COPY target/pot-game-releases.jar /home/pot-game/pot-game-releases.jar
 
-ENV CLASSPATH .:${JAVA_HOME}/lib:${JRE_HOME}/lib:/usr/src/mmo-login/lib
+ENV CLASSPATH .:${JAVA_HOME}/lib:${JRE_HOME}/lib:/home/pot-game/lib
 
-WORKDIR /usr/src/mmo-login
+WORKDIR /home/pot-game
 
-CMD  java -jar mmo-login-releases.jar
+CMD  java -jar pot-game.jar

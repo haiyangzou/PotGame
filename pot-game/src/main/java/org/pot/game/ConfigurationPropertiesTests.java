@@ -1,4 +1,4 @@
-package org.pot.core;
+package org.pot.game;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

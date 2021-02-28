@@ -1,8 +1,9 @@
-package org.pot.core;
+package org.pot.game;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  * 游戏全局上下文

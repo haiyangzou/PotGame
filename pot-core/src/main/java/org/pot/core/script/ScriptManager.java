@@ -50,14 +50,14 @@ public class ScriptManager implements BeanFactoryAware {
   public ScriptManager() {
     String dir = System.getProperty("user.dir");
     String path =
-        "." + File.separator + "pot-core" + File.separator + "src" + File.separator + "main"
+            dir + File.separator + "src" + File.separator + "main"
             + File.separator
             + "groovy"
             + File.separator;
-    String outpath =
+    String outPath =
         dir + File.separator + "target" + File.separator + "scriptsbin" + File.separator;
     String jarsDir = dir + File.separator + "target" + File.separator;
-    setSource(path, outpath, jarsDir);
+    setSource(path, outPath, jarsDir);
   }
 
   @Bean(name = "groovyClassLoader")

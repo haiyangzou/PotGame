@@ -3,7 +3,6 @@ package script.msg
 import io.netty.buffer.ByteBuf
 import lombok.extern.slf4j.Slf4j
 import org.pot.core.io.handler.HttpHandler
-import org.pot.core.protocol.WorldProtocol
 import org.pot.core.script.Script
 import org.pot.core.service.KafkaProducerService
 import org.springframework.beans.factory.annotation.Autowired

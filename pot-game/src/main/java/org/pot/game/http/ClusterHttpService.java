@@ -1,14 +1,16 @@
-package org.pot.core.netty.http;
+package org.pot.game.http;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.core.netty.config.NettyProperties;
+import org.pot.core.netty.http.HttpServer;
 import org.pot.core.script.ScriptManager;
 import org.pot.core.service.HttpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 /**
  * http服务器

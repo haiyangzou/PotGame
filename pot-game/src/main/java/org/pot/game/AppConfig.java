@@ -1,4 +1,4 @@
-package org.pot.core.io.config;
+package org.pot.game;
 
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;

@@ -22,7 +22,7 @@ public class KafkaProducerService {
 	private KafkaProducer<String, GeneratedMessageV3> producer;
 	@PostConstruct
 	private void init(){
-		connect("10.24.6.149:9092");
+//		connect("10.24.6.149:9092");
 	}
 	/**
 	 * 连接kafka
