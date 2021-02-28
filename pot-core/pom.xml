@@ -84,7 +84,6 @@
         <directory>src/main/resources/</directory>
         <filtering>true</filtering>
         <includes>
-          <include>config/app.properties</include>
           <include>config/pot.properties</include>
         </includes>
       </resource>
