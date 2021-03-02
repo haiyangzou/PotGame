@@ -17,7 +17,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <mvn.compiler.source>1.8</mvn.compiler.source>
     <mvn.compiler.target>1.8</mvn.compiler.target>
-    <lombok.version>1.18.18</lombok.version>
+    <lombok.version>1.18.16</lombok.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -88,8 +88,6 @@
         <configuration>
           <fork>true</fork>
           <compilerArgs>
-            <arg>--enable-preview</arg>
-            <arg>-Xlint:all</arg>
             <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
             <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
             <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
