@@ -17,7 +17,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <mvn.compiler.source>1.8</mvn.compiler.source>
     <mvn.compiler.target>1.8</mvn.compiler.target>
-    <lombok.version>1.18.4</lombok.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -33,11 +32,6 @@
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>1.7.28</version>
-      </dependency>
-      <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>${lombok.version}</version>
       </dependency>
       <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
       <dependency>
@@ -81,13 +75,6 @@
   </dependencies>
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skipTests>true</skipTests>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
