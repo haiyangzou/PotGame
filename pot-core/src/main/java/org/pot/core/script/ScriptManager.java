@@ -49,11 +49,7 @@ public class ScriptManager implements BeanFactoryAware {
 
   public ScriptManager() {
     String dir = System.getProperty("user.dir");
-    String path =
-            dir + File.separator + "src" + File.separator + "main"
-            + File.separator
-            + "groovy"
-            + File.separator;
+    String path = dir + File.separator + "groovy" + File.separator;
     String outPath =
         dir + File.separator + "target" + File.separator + "scriptsbin" + File.separator;
     String jarsDir = dir + File.separator + "target" + File.separator;
