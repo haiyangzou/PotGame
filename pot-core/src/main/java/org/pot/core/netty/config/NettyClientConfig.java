@@ -2,8 +2,8 @@ package org.pot.core.netty.config;
 
 /**
  * 客户端连接配置
- * @author zou
- * @mail
+ * @author JiangZhiYong
+ * @mail 359135103@qq.com
  */
 public class NettyClientConfig {
 
@@ -11,28 +11,30 @@ public class NettyClientConfig {
     private String name="game";
 
     /**接收数据缓冲大小*/
-//    protected int receiveBufferSize = 1048576;
+    protected int receiveBufferSize = 1048576;
 
     /**发送数据缓冲大小*/
-//    protected int sendBufferSize = 1048576;
+    protected int sendBufferSize = 1048576;
 
     // 读取空闲时间检测
-//    private int readerIdleTime = 120;
+    private int readerIdleTime = 120;
 
     // 写入空闲时间检测
-//    private int writerIdleTime = 120;
+    private int writerIdleTime = 120;
 
     //连接超时
-//    private int connectTimeOut=5000;
+    private int connectTimeOut=5000;
 
     /**ip地址*/
-//    private String ip="127.0.0.1";
+    private String ip="127.0.0.1";
 
     /**端口*/
     private int port=8000;
 
     /**连接数*/
-    private int connectCount = 1;
+    private int connectCount=1;
+
+    private Object channelParam;
 
     public String getName() {
         return name;
@@ -42,46 +44,46 @@ public class NettyClientConfig {
         this.name = name;
     }
 
-//    public int getReceiveBufferSize() {
-//        return receiveBufferSize;
-//    }
-//
-//    public void setReceiveBufferSize(int receiveBufferSize) {
-//        this.receiveBufferSize = receiveBufferSize;
-//    }
-//
-//    public int getSendBufferSize() {
-//        return sendBufferSize;
-//    }
-//
-//    public void setSendBufferSize(int sendBufferSize) {
-//        this.sendBufferSize = sendBufferSize;
-//    }
-//
-//
-//    public int getReaderIdleTime() {
-//        return readerIdleTime;
-//    }
-//
-//    public void setReaderIdleTime(int readerIdleTime) {
-//        this.readerIdleTime = readerIdleTime;
-//    }
-//
-//    public int getWriterIdleTime() {
-//        return writerIdleTime;
-//    }
-//
-//    public void setWriterIdleTime(int writerIdleTime) {
-//        this.writerIdleTime = writerIdleTime;
-//    }
-//
-//    public int getConnectTimeOut() {
-//        return connectTimeOut;
-//    }
-//
-//    public void setConnectTimeOut(int connectTimeOut) {
-//        this.connectTimeOut = connectTimeOut;
-//    }
+    public int getReceiveBufferSize() {
+        return receiveBufferSize;
+    }
+
+    public void setReceiveBufferSize(int receiveBufferSize) {
+        this.receiveBufferSize = receiveBufferSize;
+    }
+
+    public int getSendBufferSize() {
+        return sendBufferSize;
+    }
+
+    public void setSendBufferSize(int sendBufferSize) {
+        this.sendBufferSize = sendBufferSize;
+    }
+
+
+    public int getReaderIdleTime() {
+        return readerIdleTime;
+    }
+
+    public void setReaderIdleTime(int readerIdleTime) {
+        this.readerIdleTime = readerIdleTime;
+    }
+
+    public int getWriterIdleTime() {
+        return writerIdleTime;
+    }
+
+    public void setWriterIdleTime(int writerIdleTime) {
+        this.writerIdleTime = writerIdleTime;
+    }
+
+    public int getConnectTimeOut() {
+        return connectTimeOut;
+    }
+
+    public void setConnectTimeOut(int connectTimeOut) {
+        this.connectTimeOut = connectTimeOut;
+    }
 
 
     public int getPort() {
@@ -100,16 +102,24 @@ public class NettyClientConfig {
         this.connectCount = connectCount;
     }
 
-//    public String getIp() {
-//        return ip;
-//    }
-//
-//    public void setIp(String ip) {
-//        this.ip = ip;
-//    }
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public Object getChannelParam() {
+        return channelParam;
+    }
+
+    public void setChannelParam(Object channelParam) {
+        this.channelParam = channelParam;
+    }
 
     @Override
     public String toString() {
-        return String.format("%s:%d", name, port);
+        return String.format("%s:%d",ip,port);
     }
 }

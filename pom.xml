@@ -10,6 +10,7 @@
     <module>pot-core</module>
     <module>pot-game</module>
     <module>pot-message</module>
+    <module>pot-login</module>
   </modules>
   <packaging>pom</packaging>
   <name>pot</name>
