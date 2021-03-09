@@ -83,7 +83,7 @@ public abstract class HttpHandler implements IHandler {
     			response.headers().set(HttpHeaderNames.CONTENT_LENGTH,
 		    	response.content().readableBytes());
 		    	response.headers().set(HttpHeaderNames.ACCEPT_CHARSET,"UTF-8");
-		    	response.headers().set(HttpHeaderNames.CONTENT_TYPE,"application/json; charset=utf-8");
+		    	response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json; charset=utf-8");
           response.retain();
     		}
     		channel.writeAndFlush(response);

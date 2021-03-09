@@ -7,7 +7,6 @@ Netty+kafka 分布式消息队列
 数据库 mybatis
 reids redisson
 ## Module
-1. Logical scripts that end with the project module at the end of scripts as the corresponding project can be hot-updated. [docker run](https://github.com/jzyong/mmo-server/blob/master/mmo-res/docker/local/DockerLocalRun.md)
 
 ## Technology select
 1. spring-boot
