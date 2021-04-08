@@ -1,6 +1,7 @@
 package org.pot.game;
 
 import lombok.extern.slf4j.Slf4j;
+import org.pot.core.service.ShutdownThread;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -21,7 +22,7 @@ public class PotGame implements CommandLineRunner {
             ServerContext.setApplicationContext(context);
             context.register(AppConfig.class);
             context.refresh();
-//            Runtime.getRuntime().addShutdownHook(context.getBean(ShutdownThread.class));
+            Runtime.getRuntime().addShutdownHook(context.getBean(ShutdownThread.class));
         } catch (Exception e) {
             log.error("Server Start Fail.", e);
             //ApplicationUtil.deletePidFile(new File(SharedConstant.PID_FILE_PATH));

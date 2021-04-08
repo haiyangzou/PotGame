@@ -5,6 +5,7 @@ import io.netty.channel.Channel;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import java.util.HashMap;
@@ -83,7 +84,13 @@ public abstract class HttpHandler implements IHandler {
     			response.headers().set(HttpHeaderNames.CONTENT_LENGTH,
 		    	response.content().readableBytes());
 		    	response.headers().set(HttpHeaderNames.ACCEPT_CHARSET,"UTF-8");
+		    	response.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_ORIGIN,"*");
+		    	response.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_HEADERS,"X-Requested-With, Content-Type");
+		    	response.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_METHODS,"PUT,POST,GET,DELETE,OPTIONS");
 		    	response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json; charset=utf-8");
+		    	if(message.method().equals(HttpMethod.OPTIONS)){
+				    response.setStatus(HttpResponseStatus.OK);
+			    }
           response.retain();
     		}
     		channel.writeAndFlush(response);
