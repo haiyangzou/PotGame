@@ -28,12 +28,22 @@ public class GlobalProperties {
 	 */
 	private String profile;
 
+	private Cache cache;
+
 	public String getInfo() {
 		return info;
 	}
 
 	public void setInfo(String info) {
 		this.info = info;
+	}
+
+	public Cache getCache() {
+		return cache;
+	}
+
+	public void setCache(Cache cache) {
+		this.cache = cache;
 	}
 
 	public String getZookeeperUrl() {
@@ -50,5 +60,34 @@ public class GlobalProperties {
 
 	public void setProfile(String profile) {
 		this.profile = profile;
+	}
+	public static class Cache {
+		private int maxSize;
+		private int batch;
+		private int concurrency;
+
+		public int getMaxSize() {
+			return maxSize;
+		}
+
+		public void setMaxSize(int maxSize) {
+			this.maxSize = maxSize;
+		}
+
+		public int getBatch() {
+			return batch;
+		}
+
+		public void setBatch(int batch) {
+			this.batch = batch;
+		}
+
+		public int getConcurrency() {
+			return concurrency;
+		}
+
+		public void setConcurrency(int concurrency) {
+			this.concurrency = concurrency;
+		}
 	}
 }

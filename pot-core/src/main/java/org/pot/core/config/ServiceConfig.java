@@ -5,8 +5,7 @@ import org.pot.core.util.JsonUtils;
 /**
  * 服务配置
  *
- * @author jzy
- * @mail 359135103@qq.com
+ * @author zhy
  */
 @JsonRootName("details")
 public class ServiceConfig {
