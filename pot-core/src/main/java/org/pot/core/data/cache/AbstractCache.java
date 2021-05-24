@@ -69,7 +69,6 @@ public abstract class AbstractCache<K, V> implements CacheLoaderWriter<K, V> {
 
     public void save(K key, V value) {
         cache.put(key, value);
-//        UPDATE_LOG.info("update - {}", value);
     }
 
     public V get(K key) {

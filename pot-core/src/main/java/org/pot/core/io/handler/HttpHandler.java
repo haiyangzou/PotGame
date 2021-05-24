@@ -40,24 +40,24 @@ public abstract class HttpHandler implements IHandler {
         return channel;
     }
 
-    @Override
-    public void setChannel(Channel channel) {
-        this.channel = channel;
-    }
+	@Override
+	public void setChannel(Channel channel) {
+		this.channel = channel;
+	}
 
-    @Override
-    public DefaultFullHttpRequest getMessage() { // HttpRequestImpl
-        return this.message;
-    }
+	@Override
+	public DefaultFullHttpRequest getMessage() { // HttpRequestImpl
+		return this.message;
+	}
 
-    @Override
-    public void setMessage(Object message) {
-        if (message instanceof DefaultFullHttpRequest) {
-            this.message = (DefaultFullHttpRequest) message;
-        }
-    }
+	@Override
+	public void setMessage(Object message) {
+		if (message instanceof DefaultFullHttpRequest) {
+			this.message = (DefaultFullHttpRequest) message;
+		}
+	}
 
-    public DefaultFullHttpResponse getResponse() {
+	public DefaultFullHttpResponse getResponse() {
 		return response;
 	}
 
@@ -111,7 +111,7 @@ public abstract class HttpHandler implements IHandler {
     
     public byte[] getRequestContentBytes() {
     	ByteBuf buf = message.content();
-    	return buf.array();
+	    return buf.array();
     }
 
 	public Map<String, Object> getParam() {

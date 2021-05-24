@@ -8,6 +8,7 @@ import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.LastHttpContent;
+import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.DefaultHttpDataFactory;
 import io.netty.handler.codec.http.multipart.FileUpload;
 import io.netty.handler.codec.http.multipart.HttpDataFactory;
@@ -53,20 +54,17 @@ public abstract class HttpServerIoHandler extends ChannelInboundHandlerAdapter {
         return;
       }
       try {
-        if (HttpMethod.GET.equals(method)) {
-          if (uri.contains("?")) {
-            String param = uri.substring(uri.indexOf("?"));
-            if (param != null && param.length() > 0) {
-              if (msg instanceof DefaultFullHttpRequest) {
-                ((DefaultFullHttpRequest) msg).content().writeBytes(param.getBytes());
-              }
-            }
-          }
-        }
-
         decoder = new HttpPostRequestDecoder(factory, request);
         HttpHandler handler = (HttpHandler) scriptService.getScriptByName(uri);
-
+        if (HttpMethod.GET.equals(method)) {
+          QueryStringDecoder decoder = new QueryStringDecoder(request.uri());
+          Map<String, Object> paramMap = new HashMap<>();
+          decoder.parameters().entrySet().forEach(entry -> {
+            // entry.getValue()是一个List, 只取第一个元素
+            paramMap.put(entry.getKey(), entry.getValue().get(0));
+          });
+          handler.setParam(paramMap);
+        }
         log.debug("http request uri:{}", uri);
         if (handler == null) {
           log.warn("{} 请求地址{}处理器未实现", MsgUtil.getRemoteIpPort(ctx.channel()), uri);

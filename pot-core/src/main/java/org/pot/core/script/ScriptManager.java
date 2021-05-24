@@ -68,21 +68,21 @@ public class ScriptManager implements BeanFactoryAware {
 
   @PostConstruct
   public void init() {
-    scheduledExecutorService.scheduleAtFixedRate(() -> {
-      try {
-        List<File> sourceFileList = new ArrayList<>();
-        FileUtil.getFiles(this.sourceDir, sourceFileList, ".groovy", null);
-        sourceFileList.forEach(file -> {
-          ScriptEntry scriptEntry = getScriptEntry(file.getPath());
-          if (scriptEntry == null || scriptEntry.getLastModifiyTime() != file
-              .lastModified()) {
-            addScript(file);
-          }
-        });
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }, 5000L, 5000L, TimeUnit.MILLISECONDS);
+//    scheduledExecutorService.scheduleAtFixedRate(() -> {
+//      try {
+//        List<File> sourceFileList = new ArrayList<>();
+//        FileUtil.getFiles(this.sourceDir, sourceFileList, ".groovy", null);
+//        sourceFileList.forEach(file -> {
+//          ScriptEntry scriptEntry = getScriptEntry(file.getPath());
+//          if (scriptEntry == null || scriptEntry.getLastModifiyTime() != file
+//              .lastModified()) {
+//            addScript(file);
+//          }
+//        });
+//      } catch (Exception e) {
+//        e.printStackTrace();
+//      }
+//    }, 5000L, 5000L, TimeUnit.MILLISECONDS);
   }
 
   public Object removeScript(ScriptEntry scriptEntry) {

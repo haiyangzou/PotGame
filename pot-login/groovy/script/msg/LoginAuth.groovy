@@ -4,8 +4,10 @@ package script.msg
 import lombok.extern.slf4j.Slf4j
 import org.pot.core.io.handler.HttpHandler
 import org.pot.core.script.Script
-import org.pot.core.service.KafkaProducerService
-import org.springframework.beans.factory.annotation.Autowired
+import org.pot.login.domain.object.AccountsData
+import org.pot.login.service.AccountService
+
+import javax.annotation.Resource
 
 /**
  *
@@ -13,22 +15,26 @@ import org.springframework.beans.factory.annotation.Autowired
  */
 @Script(type = 1, name = "", path = "/login_auth")
 @Slf4j
-class TestMsgScript extends HttpHandler {
-    @Autowired
-    private KafkaProducerService kafkaProducerService;
+class LoginAuth extends HttpHandler {
+//    @Autowired
+//    private KafkaProducerService kafkaProducerService;
+    @Resource
+    AccountService accountService;
     @Override
     void run() {
         try {
+            if(!getParam().containsKey("openId")){
+                setMsgBytes()
+                return
+            }
+            String token ="d"
+            Long openId = getParam().get("openId")
 
+            System.out.println();
             //todo send pb to game server
-//            WorldProtocol.MarchRequest request = WorldProtocol.MarchRequest.newBuilder()
-//                    .setArmyIndex(1)
-//                    .setIsSituStation(false)
-//                    .setMarchType(WorldProtocol.MarchType.ATTACK)
-//                    .setMarchTypeValue(1)
-//                    .build();
-//            kafkaProducerService.sendPb(request);
-//            setMsgBytes(var.getBytes());
+            AccountsData account = accountService.defaultInstance(openId)
+            String error = account.status == 1?"":""
+
         } finally {
             response()
         }
