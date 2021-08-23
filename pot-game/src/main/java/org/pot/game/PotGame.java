@@ -18,6 +18,7 @@ public class PotGame implements CommandLineRunner {
     private static ExecutorService es = Executors.newFixedThreadPool(1);
     public static void main(String[] args) {
         try {
+            
             AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
             ServerContext.setApplicationContext(context);
             context.register(AppConfig.class);
