@@ -30,7 +30,6 @@ public class PotGame implements CommandLineRunner {
             System.exit(-1);
         }
     }
-
     @Override
     public void run(String... args) throws Exception {
     }
