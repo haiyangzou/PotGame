@@ -14,9 +14,9 @@ import javax.annotation.Resource
  *
  * @author zhy* @Data Create in 2017/12/20
  */
-@Script(type = 1, name = "", path = "/login_auth")
+@Script(type = 1, name = "", path = "/create_role")
 @groovy.util.logging.Slf4j
-class LoginAuth extends HttpHandler {
+class CreateRole extends HttpHandler {
 //    @Autowired
 //    private KafkaProducerService kafkaProducerService;
     @Resource
@@ -31,6 +31,13 @@ class LoginAuth extends HttpHandler {
             String token ="db"
             Long openId = Long.parseLong(getParam().get("openId"))
             AccountsData account = accountService.defaultInstance(openId)
+            if(Objects.isNull(account)){
+                account.setCreated_at(TimeUtil.currentTimeMillis())
+                account.setStatus(1)
+                account.setOpenid(openId)
+                account.setUpdated_at(TimeUtil.currentTimeMillis())
+                log.info("account not find")
+            }
 
             log.info("content:{}",openId)
         } finally {

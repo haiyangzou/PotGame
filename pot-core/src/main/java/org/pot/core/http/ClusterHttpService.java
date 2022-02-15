@@ -1,4 +1,4 @@
-package org.pot.login.http;
+package org.pot.core.http;
 
 import lombok.extern.slf4j.Slf4j;
 import org.pot.core.netty.config.NettyProperties;
@@ -34,10 +34,10 @@ public class ClusterHttpService extends HttpService {
 
     @PostConstruct
     public void init() {
-        scriptService.init((str) -> {
-            log.error("脚本加载错误:{}", str);
-            System.exit(0);
-        });
+//        scriptService.init((str) -> {
+//            log.error("脚本加载错误:{}", str);
+//            System.exit(0);
+//        });
         if (CollectionUtils.isEmpty(nettyProperties.getServerConfigs())) {
             log.error("server config error");
         }

@@ -1,4 +1,4 @@
-package org.pot.game;
+package org.pot.core;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

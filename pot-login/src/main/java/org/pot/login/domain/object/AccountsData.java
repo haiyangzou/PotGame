@@ -6,11 +6,13 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "account")
 @Getter
 @Setter
-public class AccountsData {
+public class AccountsData implements Serializable {
 	@Id
 	private long id;
 	private long account_id;

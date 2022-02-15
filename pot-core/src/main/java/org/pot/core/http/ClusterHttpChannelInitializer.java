@@ -1,4 +1,4 @@
-package org.pot.login.http;
+package org.pot.core.http;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

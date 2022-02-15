@@ -1,10 +1,12 @@
 package org.pot.game;
 
 import lombok.extern.slf4j.Slf4j;
-import org.pot.core.service.ShutdownThread;
+import org.pot.core.ServerContext;
+import org.pot.game.service.ShutdownThread;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

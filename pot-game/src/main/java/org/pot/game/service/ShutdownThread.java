@@ -1,4 +1,4 @@
-package org.pot.core.service;
+package org.pot.game.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +23,7 @@ public class ShutdownThread extends Thread {
 		try {
 			logger.info("server begin shutdown...");
 			logger.info("server shutdown!");
+
 		} catch (Exception e) {
 			logger.error("", e);
 		}

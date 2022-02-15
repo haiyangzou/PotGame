@@ -16,10 +16,11 @@ import javax.annotation.Resource
  */
 @Script(type = 1, name = "", path = "/favicon.ico")
 @Slf4j
-class GetFaviconHandler extends HttpHandler {
+class GetFavicon extends HttpHandler {
     @Override
     void run() {
         String result = "favicon.ico";
         setMsgBytes(result.getBytes());
+
     }
 }

@@ -1,4 +1,4 @@
-package org.pot.login.http;
+package org.pot.core.http;
 
 import org.pot.core.netty.http.HttpServerIoHandler;
 import org.pot.core.service.HttpService;

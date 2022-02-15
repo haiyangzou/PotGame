@@ -1,6 +1,5 @@
 package org.pot.login.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.pot.core.data.cache.AbstractCache;
 import org.pot.login.data.repository.AccountDataRepository;
 import org.pot.login.domain.object.AccountsData;
@@ -27,7 +26,7 @@ public class AccountService extends AbstractCache<Long, AccountsData> {
 		AccountsData account = get(key);
 		if (account == null) {
 			account = new AccountsData();
-			account.setOpenid(key);
+			account.setId(key);
 			save(key, account);
 		}
 		return account;
