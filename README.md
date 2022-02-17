@@ -13,7 +13,7 @@ redis redisson
 2. mongodb
 3. maven
 4. netty
-5. grpc
+5. dubbo
 6. redis
 7. zookeeper
 8. kafka

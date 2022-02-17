@@ -11,6 +11,7 @@
     <module>pot-game</module>
     <module>pot-message</module>
     <module>pot-login</module>
+      <module>pot-room</module>
   </modules>
   <packaging>pom</packaging>
   <name>pot</name>
@@ -83,6 +84,11 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
       <version>2.2.2.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.dubbo</groupId>
+      <artifactId>dubbo</artifactId>
+      <version>2.7.9</version>
     </dependency>
   </dependencies>
   <build>

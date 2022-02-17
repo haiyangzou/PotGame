@@ -8,6 +8,8 @@ import org.pot.core.util.TimeUtil
 import org.pot.login.domain.object.AccountsData
 import org.pot.login.service.AccountService
 
+import org.springframework.beans.factory.annotation.Autowired
+
 import javax.annotation.Resource
 
 /**
@@ -30,15 +32,6 @@ class CreateRole extends HttpHandler {
             }
             String token ="db"
             Long openId = Long.parseLong(getParam().get("openId"))
-            AccountsData account = accountService.defaultInstance(openId)
-            if(Objects.isNull(account)){
-                account.setCreated_at(TimeUtil.currentTimeMillis())
-                account.setStatus(1)
-                account.setOpenid(openId)
-                account.setUpdated_at(TimeUtil.currentTimeMillis())
-                log.info("account not find")
-            }
-
             log.info("content:{}",openId)
         } finally {
             response()
