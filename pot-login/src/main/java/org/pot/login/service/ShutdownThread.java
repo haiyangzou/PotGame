@@ -16,7 +16,7 @@ public class ShutdownThread extends Thread {
     private static final Logger logger = LoggerFactory.getLogger(ShutdownThread.class);
 
     @Autowired
-    private LoginService loginService;
+    private ZkService loginService;
 
     public ShutdownThread() {
     }

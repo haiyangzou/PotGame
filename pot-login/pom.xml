@@ -36,6 +36,11 @@
             <groupId>org.ehcache</groupId>
             <artifactId>ehcache</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+            <version>2.7.9</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -48,7 +53,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.pot.game.PotGame</mainClass>
+                            <mainClass>org.pot.login.PotLogin</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

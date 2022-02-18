@@ -17,7 +17,7 @@ import javax.annotation.PreDestroy;
 
 @Service
 @Slf4j
-public class RoomService {
+public class ZKService {
     @Autowired
     ZkClientService zkClientService;
 

@@ -16,7 +16,7 @@ public class ShutdownThread extends Thread {
     private static final Logger logger = LoggerFactory.getLogger(ShutdownThread.class);
 
     @Autowired
-    private RoomService roomService;
+    private ZKService ZKService;
 
     public ShutdownThread() {
     }
@@ -24,7 +24,7 @@ public class ShutdownThread extends Thread {
     @Override
     public void run() {
         try {
-            roomService.destroy();
+            ZKService.destroy();
             logger.info("login server begin shutdown...");
             logger.info(" loginserver shutdown!");
 

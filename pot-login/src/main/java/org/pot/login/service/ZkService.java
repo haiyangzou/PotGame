@@ -17,7 +17,7 @@ import javax.annotation.PreDestroy;
 
 @Service
 @Slf4j
-public class LoginService {
+public class ZkService {
     @Autowired
     private ZkClientService zkClientService;
 
@@ -27,7 +27,7 @@ public class LoginService {
     @Autowired
     private LoginConfig loginConfig;
 
-    public LoginService() {
+    public ZkService() {
     }
 
     @PostConstruct

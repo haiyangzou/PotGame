@@ -1,3 +1,5 @@
+package org.pot.room;
+
 import lombok.extern.slf4j.Slf4j;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheManagerBuilder;
