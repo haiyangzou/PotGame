@@ -7,9 +7,11 @@ import org.ehcache.config.builders.PooledExecutionServiceConfigurationBuilder;
 import org.pot.core.ServerContext;
 import org.pot.room.service.ShutdownThread;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -24,6 +26,7 @@ import java.util.concurrent.Executors;
 @SpringBootApplication(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
 @ComponentScan(value = {"org.pot"})
 @EnableMongoRepositories
+@EnableAutoConfiguration(exclude = HibernateJpaAutoConfiguration.class)
 @Slf4j
 public class PotRoom implements CommandLineRunner {
 
