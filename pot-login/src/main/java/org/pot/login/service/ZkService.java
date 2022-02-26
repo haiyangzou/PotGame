@@ -27,9 +27,6 @@ public class ZkService {
     @Autowired
     private LoginConfig loginConfig;
 
-    public ZkService() {
-    }
-
     @PostConstruct
     public void init() {
         try {
