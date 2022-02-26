@@ -8,7 +8,8 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ComponentScan("org.pot")
-@PropertySource(value = {"classpath:application.properties"}, encoding = "UTF-8")
+@ImportResource(locations = {"classpath*:config/login.xml"})
+@PropertySource(value = {"classpath*:application.properties"}, encoding = "UTF-8")
 @ConfigurationPropertiesScan
 public class AppConfig {
 

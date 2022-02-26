@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
  * 处理登录，支付等接口,无状态服务器
  */
 @SpringBootApplication(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
-@ImportResource(locations = {"classpath:config/login.xml"})
+
 @ComponentScan(value ={"org.pot"})
 @EnableMongoRepositories
 @Slf4j
