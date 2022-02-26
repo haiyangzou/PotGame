@@ -1,2 +1,2 @@
 echo must copy file...
-docker build -t PotRoom -f Dockerfile ./
+docker build -t potroom -f Dockerfile ./
