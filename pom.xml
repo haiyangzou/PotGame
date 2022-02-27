@@ -90,6 +90,11 @@
       <artifactId>dubbo-spring-boot-starter</artifactId>
       <version>3.0.2.1</version>
     </dependency>
+    <dependency>
+      <groupId>com.github.l42111996</groupId>
+      <artifactId>kcp-base</artifactId>
+      <version>1.6</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
