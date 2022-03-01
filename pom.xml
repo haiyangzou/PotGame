@@ -12,6 +12,7 @@
     <module>pot-message</module>
     <module>pot-login</module>
       <module>pot-room</module>
+    <module>pot-game-resource</module>
   </modules>
   <packaging>pom</packaging>
   <name>pot</name>
@@ -20,6 +21,7 @@
     <mvn.compiler.source>1.8</mvn.compiler.source>
     <mvn.compiler.target>1.8</mvn.compiler.target>
     <lombok.version>1.18.16</lombok.version>
+    <disruptor.version>3.4.4</disruptor.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -94,6 +96,12 @@
       <groupId>com.github.l42111996</groupId>
       <artifactId>kcp-base</artifactId>
       <version>1.6</version>
+    </dependency>
+    <dependency>
+      <groupId>com.lmax</groupId>
+      <artifactId>disruptor</artifactId>
+      <version>${disruptor.version}</version>
+      <optional>true</optional>
     </dependency>
   </dependencies>
   <build>

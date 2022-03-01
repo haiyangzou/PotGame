@@ -20,7 +20,7 @@ public class KcpLockStepSynchronizationClient implements KcpListener
 {
 
     public static void main(String[] args) {
-        String ip = "49.232.119.183";
+        String ip = "127.0.0.1";
         if(args.length>0){
             ip = args[0];
         }
@@ -50,18 +50,18 @@ public class KcpLockStepSynchronizationClient implements KcpListener
             kcpClient.connect(new InetSocketAddress(ip, 10009), channelConfig, lockStepSynchronizationClient);
         }
 
-        TimerThreadPool.scheduleWithFixedDelay(() -> {
-            long inSegs = Snmp.snmp.InSegs.longValue();
-            if(inSegs==0){
-                inSegs = 1;
-            }
-            System.out.println("每秒收包"+ (Snmp.snmp.InBytes.longValue()/1024.0/1024.0*8.0)+" M"+" 丢包率 "+((double)Snmp.snmp.LostSegs.longValue()/inSegs));
-            System.out.println("每秒发包"+ (Snmp.snmp.OutBytes.longValue()/1024.0/1024.0*8.0)+" M");
-            System.out.println(Snmp.snmp.toString());
-            System.out.println();
-
-            Snmp.snmp = new Snmp();
-        },1000);
+//        TimerThreadPool.scheduleWithFixedDelay(() -> {
+//            long inSegs = Snmp.snmp.InSegs.longValue();
+//            if(inSegs==0){
+//                inSegs = 1;
+//            }
+//            System.out.println("每秒收包"+ (Snmp.snmp.InBytes.longValue()/1024.0/1024.0*8.0)+" M"+" 丢包率 "+((double)Snmp.snmp.LostSegs.longValue()/inSegs));
+//            System.out.println("每秒发包"+ (Snmp.snmp.OutBytes.longValue()/1024.0/1024.0*8.0)+" M");
+//            System.out.println(Snmp.snmp.toString());
+//            System.out.println();
+//
+//            Snmp.snmp = new Snmp();
+//        },1000);
 
     }
 

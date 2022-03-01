@@ -35,34 +35,24 @@ public class KcpLockStepSynchronizationServer implements KcpListener
         channelConfig.setTimeoutMillis(10000);
         KcpServer kcpServer = new KcpServer();
         kcpServer.init(kcpLockStepSynchronizationServer, channelConfig, 10009);
-
         kcpLockStepSynchronizationServer.roomManager = new RoomManager();
-
-
-        TimerThreadPool.scheduleWithFixedDelay(() -> {
-            try {
-                long inSegs = Snmp.snmp.InSegs.longValue();
-                if(inSegs==0){
-                    inSegs = 1;
-                }
-                System.out.println("每秒收包"+ (Snmp.snmp.InBytes.longValue()/1024.0/1024.0*8.0)+" M"+" 丢包率 "+((double)Snmp.snmp.LostSegs.longValue()/inSegs));
-                System.out.println("每秒发包"+ (Snmp.snmp.OutBytes.longValue()/1024.0/1024.0*8.0)+" M");
-                System.out.println(Snmp.snmp.toString());
-                System.out.println();
-                Snmp.snmp = new Snmp();
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        },1000);
+//        TimerThreadPool.scheduleWithFixedDelay(() -> {
+//            try {
+//                long inSegs = Snmp.snmp.InSegs.longValue();
+//                if(inSegs==0){
+//                    inSegs = 1;
+//                }
+//                System.out.println("每秒收包"+ (Snmp.snmp.InBytes.longValue()/1024.0/1024.0*8.0)+" M"+" 丢包率 "+((double)Snmp.snmp.LostSegs.longValue()/inSegs));
+//                System.out.println("每秒发包"+ (Snmp.snmp.OutBytes.longValue()/1024.0/1024.0*8.0)+" M");
+//                System.out.println(Snmp.snmp.toString());
+//                System.out.println();
+//                Snmp.snmp = new Snmp();
+//
+//            }catch (Exception e){
+//                e.printStackTrace();
+//            }
+//        },1000);
     }
-
-
-
-
-
-
-
     @Override
     public void onConnected(Ukcp ukcp) {
         System.out.println("有连接进来"+ukcp.user());
@@ -80,7 +70,7 @@ public class KcpLockStepSynchronizationServer implements KcpListener
 
     @Override
     public void handleReceive(ByteBuf byteBuf, Ukcp ukcp) {
-        //System.out.println("收到消息"+ukcp.user());
+        System.out.println("收到消息"+ukcp.user());
         Player player = ukcp.user().getCache();
         Room room = roomManager.getRoom(player.getId());
         ByteBuf byteBufAllocator = ByteBufAllocator.DEFAULT.directBuffer(20);

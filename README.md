@@ -5,7 +5,8 @@ spring-boot
 Netty+kafka 分布式消息队列
 网关层(actor模型) 保存玩家 session
 数据库 jpa, mybatis
-redis redisson
+spring-lecture
+spring-mongo
 ## Module
 
 ## Technology select
@@ -18,4 +19,4 @@ redis redisson
 7. zookeeper
 8. kafka
 ## kcp lockstep
-1.kcp 
+1.kcp-base
