@@ -18,8 +18,8 @@
   <name>pot</name>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <mvn.compiler.source>1.8</mvn.compiler.source>
-    <mvn.compiler.target>1.8</mvn.compiler.target>
+    <mvn.compiler.source>17</mvn.compiler.source>
+    <mvn.compiler.target>17</mvn.compiler.target>
     <lombok.version>1.18.16</lombok.version>
     <disruptor.version>3.4.4</disruptor.version>
   </properties>
@@ -47,7 +47,7 @@
       <dependency>
         <groupId>com.google.protobuf</groupId>
         <artifactId>protobuf-java</artifactId>
-        <version>3.11.0</version>
+        <version>4.0.0-rc-2</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.jackson</groupId>
@@ -67,7 +67,7 @@
       <dependency>
         <groupId>org.codehaus.groovy</groupId>
         <artifactId>groovy</artifactId>
-        <version>2.4.7</version>
+        <version>3.0.17</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -75,11 +75,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
-      <version>2.6.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-cache</artifactId>
       <version>2.6.3</version>
     </dependency>
     <dependency>
@@ -102,6 +97,11 @@
       <artifactId>disruptor</artifactId>
       <version>${disruptor.version}</version>
       <optional>true</optional>
+    </dependency>
+        <dependency>
+      <groupId>com.github.ben-manes.caffeine</groupId>
+      <artifactId>caffeine</artifactId>
+      <version>2.9.3</version>
     </dependency>
   </dependencies>
   <build>

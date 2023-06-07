@@ -14,7 +14,6 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import java.util.concurrent.ExecutorService;
@@ -27,7 +26,6 @@ import java.util.concurrent.Executors;
 
 @ComponentScan(value ={"org.pot"})
 @EnableMongoRepositories
-@Slf4j
 public class PotLogin implements CommandLineRunner {
 
     private static ExecutorService es = Executors.newFixedThreadPool(1);

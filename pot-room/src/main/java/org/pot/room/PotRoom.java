@@ -27,7 +27,6 @@ import java.util.concurrent.Executors;
 @ComponentScan(value = {"org.pot"})
 @EnableMongoRepositories
 @EnableAutoConfiguration(exclude = HibernateJpaAutoConfiguration.class)
-@Slf4j
 public class PotRoom implements CommandLineRunner {
 
     private static ExecutorService es = Executors.newFixedThreadPool(1);

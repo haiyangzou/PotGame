@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by JinMiao
+ * Created by zhy
  * 2019-06-26.
  */
 public class Room implements Runnable, ITask {

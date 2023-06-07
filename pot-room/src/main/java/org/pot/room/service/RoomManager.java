@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by JinMiao
+ * Created by zhy
  * 2020/7/17.
  */
 public class RoomManager {

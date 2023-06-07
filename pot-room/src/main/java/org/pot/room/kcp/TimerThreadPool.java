@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 内部定时器
- * Created by JinMiao
+ * Created by zhy
  * 2020/11/24.
  */
 public class TimerThreadPool {

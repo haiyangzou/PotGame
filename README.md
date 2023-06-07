@@ -20,3 +20,8 @@ spring-mongo
 8. kafka
 ## kcp lockstep
 1.kcp-base
+
+##常见问题
+1.优先队列
+2.线程死锁
+3.

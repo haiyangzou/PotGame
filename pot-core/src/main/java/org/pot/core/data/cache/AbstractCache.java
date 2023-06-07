@@ -17,7 +17,6 @@ import org.pot.core.constant.GlobalProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 
-@Slf4j
 public abstract class AbstractCache<K, V> implements CacheLoaderWriter<K, V> {
 
     private Cache<K, V> cache;
