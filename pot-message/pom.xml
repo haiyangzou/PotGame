@@ -11,6 +11,11 @@
   <artifactId>pot-message</artifactId>
   <dependencies>
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>pot-common</artifactId>
+      <version>${project.version}</version>
+  </dependency>
+    <dependency>
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-java</artifactId>
       <version>4.0.0-rc-2</version>
@@ -54,7 +59,7 @@
           </pluginArtifact>
           <!--要编译的.proto文件的路径-->
           <protoSourceRoot>src/main/resources/protobuf</protoSourceRoot>
-          <!--                    <outputDirectory>src/main/java/</outputDirectory>-->
+          <outputDirectory>src/main/java/</outputDirectory>
         </configuration>
         <executions>
           <!-- <execution>

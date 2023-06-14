@@ -11,15 +11,18 @@
     <module>pot-game</module>
     <module>pot-message</module>
     <module>pot-login</module>
-      <module>pot-room</module>
+    <module>pot-room</module>
     <module>pot-game-resource</module>
+    <module>pot-gateway</module>
+    <module>pot-common</module>
+      <module>pot-cache</module>
   </modules>
   <packaging>pom</packaging>
   <name>pot</name>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <mvn.compiler.source>17</mvn.compiler.source>
-    <mvn.compiler.target>17</mvn.compiler.target>
+    <mvn.compiler.source>8</mvn.compiler.source>
+    <mvn.compiler.target>8</mvn.compiler.target>
     <lombok.version>1.18.16</lombok.version>
     <disruptor.version>3.4.4</disruptor.version>
   </properties>
@@ -102,6 +105,36 @@
       <groupId>com.github.ben-manes.caffeine</groupId>
       <artifactId>caffeine</artifactId>
       <version>2.9.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <version>3.19.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
+        <dependency>
+      <groupId>org.reflections</groupId>
+      <artifactId>reflections</artifactId>
+      <version>0.9.12</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>guava</artifactId>
+          <groupId>com.google.guava</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>30.1.1-jre</version>
+    </dependency>
+    <dependency>
+     <groupId>commons-io</groupId>
+     <artifactId>commons-io</artifactId>
+     <version>2.11.0</version> 
     </dependency>
   </dependencies>
   <build>

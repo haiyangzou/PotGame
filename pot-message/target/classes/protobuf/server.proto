@@ -1,0 +1,23 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package = "org.pot.message.protocol";
+option java_multiple_files = true;
+option java_outer_classname = "ServerMessage";
+option go_package="message";
+
+message ServerNetPing{
+    int64 time = 1;
+}
+message ServerNetPong{
+    ServerNetPong ping = 1;
+}
+message ErrorCode{
+    string name =1;
+    int32 code = 2;
+}
+message DisConnectCode{
+    ErrorCode errorCode = 1;
+}
+message AckCode{
+    string name = 1;
+}
