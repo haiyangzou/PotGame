@@ -16,6 +16,8 @@ public interface IConnection<M extends FrameMessage> {
 
     String getRemoteHost();
 
+    void setRemoteHost(String remoteHost);
+
     void flush();
 
     void setImmediateFlush(boolean immediateFlush);
@@ -36,5 +38,8 @@ public interface IConnection<M extends FrameMessage> {
 
     boolean isIdle(long connectionIdleMills);
 
+    int getRecvMessageQueueSize();
+
+    void updateLastReadTime();
 
 }

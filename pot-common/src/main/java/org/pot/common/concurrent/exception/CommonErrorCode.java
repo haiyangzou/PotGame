@@ -2,6 +2,7 @@ package org.pot.common.concurrent.exception;
 
 public enum CommonErrorCode implements IErrorCode {
     UNKNOWN_ERROR(1000),
+    INVALID_REQUEST(1001),
     CONNECT_FAIL(1007),
     IDLE_KICK(1021);
 

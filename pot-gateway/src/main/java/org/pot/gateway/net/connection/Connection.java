@@ -6,12 +6,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.pot.gateway.net.netty.FrameMessage;
+import org.pot.message.protocol.ServerNetPing;
 import org.pot.message.protocol.ServerNetPong;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.util.AttributeKey;
+import lombok.extern.slf4j.Slf4j;
 
+import org.pot.common.Constants;
+
+@Slf4j
 public class Connection<M extends FrameMessage> implements IConnection<M> {
 
     private final Channel channel;
@@ -86,9 +91,17 @@ public class Connection<M extends FrameMessage> implements IConnection<M> {
     @Override
     public void recvMessage(M message) {
         if (message.isProtoType(ServerNetPong.class)) {
-
+            ServerNetPong pong = message.getProto();
+            long cost = System.currentTimeMillis() - pong.getPing().getTime();
+            if (cost > Constants.NET_SLOW_MS) {
+                log.info("net loopback time too long({}ms). conn={}", cost, this);
+            }
+            return;
         }
-        if (isClosed()) {
+        if (message.isProtoType(ServerNetPing.class)) {
+            ServerNetPing ping = message.getProto();
+            ServerNetPong pong = ServerNetPong.newBuilder().setPing(ping).build();
+            sendMessage(message.renew(pong));
             return;
         }
         recivMessageQueue.offer(message);
@@ -141,6 +154,21 @@ public class Connection<M extends FrameMessage> implements IConnection<M> {
 
     public int getRemotePort() {
         return remotePort;
+    }
+
+    @Override
+    public void setRemoteHost(String remoteHost) {
+        this.remoteHost = remoteHost;
+    }
+
+    @Override
+    public int getRecvMessageQueueSize() {
+        return this.recivMessageQueue.size();
+    }
+
+    @Override
+    public void updateLastReadTime() {
+        this.lastReadTime = System.currentTimeMillis();
     }
 
 }

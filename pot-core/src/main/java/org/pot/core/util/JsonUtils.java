@@ -33,7 +33,7 @@ public class JsonUtils {
     try {
       result = ((ObjectMapper) objMapperLocal.get()).writeValueAsString(value);
     } catch (Exception var3) {
-      log.error("toJson error:{0}", new Object[]{value});
+      log.error("toJson error:{0}", new Object[] { value });
     }
 
     if ("null".equals(result)) {
@@ -47,7 +47,7 @@ public class JsonUtils {
     try {
       return ((ObjectMapper) objMapperLocal.get()).readValue(jsonString, clazz);
     } catch (Exception var3) {
-      log.error("toT error: {0}", new Object[]{jsonString});
+      log.error("toT error: {0}", new Object[] { jsonString });
       return null;
     }
   }
@@ -56,7 +56,7 @@ public class JsonUtils {
     try {
       return ((ObjectMapper) objMapperLocal.get()).readValue(jsonString, valueTypeRef);
     } catch (Exception var3) {
-      log.error("toT error: {0}", new Object[]{jsonString});
+      log.error("toT error: {0}", new Object[] { jsonString });
       return null;
     }
   }
@@ -66,7 +66,7 @@ public class JsonUtils {
       return (List) ((ObjectMapper) objMapperLocal.get())
           .readValue(jsonString, TypeFactory.collectionType(List.class, clazz));
     } catch (Exception var3) {
-      log.error("toTList error: {0}", new Object[]{jsonString});
+      log.error("toTList error: {0}", new Object[] { jsonString });
       return null;
     }
   }
@@ -82,7 +82,7 @@ public class JsonUtils {
       result = ((ObjectMapper) objMapperLocal.get()).defaultPrettyPrintingWriter()
           .writeValueAsString(value);
     } catch (Exception var3) {
-      log.error("prettyPrint error: {0}", new Object[]{value});
+      log.error("prettyPrint error: {0}", new Object[] { value });
     }
 
     if ("null".equals(result)) {
@@ -93,22 +93,31 @@ public class JsonUtils {
   }
 
   public static void main(String[] args) {
-    JsonUtils.Message msg1 = new JsonUtils.Message();
-    msg1.uid = "1";
-    msg1.opr_time = new Date();
-    msg1.content = "hello world---1";
-    JsonUtils.Message msg2 = new JsonUtils.Message();
-    msg2.uid = "2";
-    msg2.opr_time = new Date();
-    msg2.content = "hello world---2";
-    List<JsonUtils.Message> list = new ArrayList();
-    list.add(msg1);
-    list.add(msg2);
-    String json = toJSON(list);
-    System.out.println(json);
-    List<JsonUtils.Message> newMsg = toTList(json, JsonUtils.Message.class);
-    System.out.println(newMsg);
-    System.out.println(((JsonUtils.Message) newMsg.get(0)).uid);
+    // JsonUtils.Message msg1 = new JsonUtils.Message();
+    // msg1.uid = "1";
+    // msg1.opr_time = new Date();
+    // msg1.content = "hello world---1";
+    // JsonUtils.Message msg2 = new JsonUtils.Message();
+    // msg2.uid = "2";
+    // msg2.opr_time = new Date();
+    // msg2.content = "hello world---2";
+    // List<JsonUtils.Message> list = new ArrayList();
+    // list.add(msg1);
+    // list.add(msg2);
+    // String json = toJSON(list);
+    // System.out.println(json);
+    // List<JsonUtils.Message> newMsg = toTList(json, JsonUtils.Message.class);
+    // System.out.println(newMsg);
+    // System.out.println(((JsonUtils.Message) newMsg.get(0)).uid);
+    System.out.print(valid());
+  }
+
+  private static boolean valid() {
+    for (int i = 0; i < 10; i++) {
+      if (i > 11)
+        return false;
+    }
+    return true;
   }
 
   static class Message {

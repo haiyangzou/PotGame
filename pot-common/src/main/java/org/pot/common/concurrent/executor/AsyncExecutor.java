@@ -5,6 +5,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.pot.common.concurrent.exception.ExceptionUtil;
+import org.pot.common.config.ExecutorConfig;
 import org.pot.common.util.Indicator;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,6 +15,13 @@ public class AsyncExecutor {
     private final StandardExecutor threadPoolExcutor;
     private final String name;
     private final Indicator indicator = Indicator.builder("tps").build();
+
+    public AsyncExecutor(ExecutorConfig config) {
+        this.name = config.getThreadName();
+        threadPoolExcutor = new StandardExecutor(config.getQueueMaxSize(), config.getCoreThreadSize(),
+                config.getMaxThreadSize(), config.getKeepAliveTime(), config.getKeepAlivTimeUnit(), this.name + "Sch");
+        scheduledExcutor = ScheduledExcutor.newScheduledExecutor(config.getCoreThreadSize(), this.name + "Sch");
+    }
 
     public AsyncExecutor(String name, int coreSize) {
         this.name = name;

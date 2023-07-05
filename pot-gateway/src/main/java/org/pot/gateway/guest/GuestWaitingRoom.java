@@ -2,10 +2,9 @@ package org.pot.gateway.guest;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import org.apache.dubbo.remoting.api.ConnectionManager;
 import org.pot.common.function.Ticker;
 import org.pot.common.net.ipv4.FireWall;
+import org.pot.gateway.engine.PotGateway;
 import org.pot.gateway.net.connection.ConnectionManagerListener;
 import org.pot.gateway.net.connection.IConnection;
 import org.pot.gateway.net.netty.FrameCmdMessage;
@@ -63,7 +62,7 @@ public class GuestWaitingRoom implements Ticker, ConnectionManagerListener<Frame
     }
 
     private void asyncExecuteGuestTask(Guest guest) {
-
+        PotGateway.getInstance().getAsyncExecutor().execute(new GuestTask(guest));
     }
 
 }

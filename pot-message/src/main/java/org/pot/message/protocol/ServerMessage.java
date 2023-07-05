@@ -50,7 +50,7 @@ public final class ServerMessage {
     java.lang.String[] descriptorData = {
       "\n\014server.proto\022\014ProtoMessage\"\035\n\rServerNe" +
       "tPing\022\014\n\004time\030\001 \001(\003\":\n\rServerNetPong\022)\n\004" +
-      "ping\030\001 \001(\0132\033.ProtoMessage.ServerNetPong\"" +
+      "ping\030\001 \001(\0132\033.ProtoMessage.ServerNetPing\"" +
       "\'\n\tErrorCode\022\014\n\004name\030\001 \001(\t\022\014\n\004code\030\002 \001(\005" +
       "\"<\n\016DisConnectCode\022*\n\terrorCode\030\001 \001(\0132\027." +
       "ProtoMessage.ErrorCode\"\027\n\007AckCode\022\014\n\004nam" +

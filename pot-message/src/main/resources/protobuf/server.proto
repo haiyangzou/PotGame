@@ -9,7 +9,7 @@ message ServerNetPing{
     int64 time = 1;
 }
 message ServerNetPong{
-    ServerNetPong ping = 1;
+    ServerNetPing ping = 1;
 }
 message ErrorCode{
     string name =1;

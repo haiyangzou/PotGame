@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.swing.Icon;
+
 import io.netty.channel.Channel;
+import io.netty.channel.socket.SocketChannel;
 
 import org.pot.gateway.net.netty.FrameMessage;
 
@@ -23,6 +27,11 @@ public class ConnectionManager<M extends FrameMessage> {
     @Setter
     private volatile ConnectionManagerListener<M> listener;
 
+    public IConnection<M> addConnection(SocketChannel channel) {
+        return addConnection(channel, channel.remoteAddress().getAddress().getHostAddress(),
+                channel.remoteAddress().getPort());
+    }
+
     public IConnection<M> addConnection(Channel channel, String remoteHost, int remotePort) {
         if (channel == null) {
             log.error("Connection channel is null,remoteHost={},remotePort={}", remoteHost, remotePort);
@@ -40,6 +49,16 @@ public class ConnectionManager<M extends FrameMessage> {
             }
         }
         return connections;
+    }
+
+    public IConnection<M> getConnection(Channel channel) {
+        return channel == null ? null : channelMap.get(channel);
+    }
+
+    public IConnection<M> removeConnection(Channel channel) {
+        IConnection<M> connection = getConnection(channel);
+        removeConnection(connection);
+        return connection;
     }
 
     public void removeConnection(IConnection<M> connection) {

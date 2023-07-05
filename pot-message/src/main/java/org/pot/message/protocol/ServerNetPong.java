@@ -49,11 +49,11 @@ private static final long serialVersionUID = 0L;
             done = true;
             break;
           case 10: {
-            org.pot.message.protocol.ServerNetPong.Builder subBuilder = null;
+            org.pot.message.protocol.ServerNetPing.Builder subBuilder = null;
             if (ping_ != null) {
               subBuilder = ping_.toBuilder();
             }
-            ping_ = input.readMessage(org.pot.message.protocol.ServerNetPong.parser(), extensionRegistry);
+            ping_ = input.readMessage(org.pot.message.protocol.ServerNetPing.parser(), extensionRegistry);
             if (subBuilder != null) {
               subBuilder.mergeFrom(ping_);
               ping_ = subBuilder.buildPartial();
@@ -94,25 +94,25 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int PING_FIELD_NUMBER = 1;
-  private org.pot.message.protocol.ServerNetPong ping_;
+  private org.pot.message.protocol.ServerNetPing ping_;
   /**
-   * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+   * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
    * @return Whether the ping field is set.
    */
   public boolean hasPing() {
     return ping_ != null;
   }
   /**
-   * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+   * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
    * @return The ping.
    */
-  public org.pot.message.protocol.ServerNetPong getPing() {
-    return ping_ == null ? org.pot.message.protocol.ServerNetPong.getDefaultInstance() : ping_;
+  public org.pot.message.protocol.ServerNetPing getPing() {
+    return ping_ == null ? org.pot.message.protocol.ServerNetPing.getDefaultInstance() : ping_;
   }
   /**
-   * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+   * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
    */
-  public org.pot.message.protocol.ServerNetPongOrBuilder getPingOrBuilder() {
+  public org.pot.message.protocol.ServerNetPingOrBuilder getPingOrBuilder() {
     return getPing();
   }
 
@@ -431,31 +431,31 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private org.pot.message.protocol.ServerNetPong ping_;
+    private org.pot.message.protocol.ServerNetPing ping_;
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.pot.message.protocol.ServerNetPong, org.pot.message.protocol.ServerNetPong.Builder, org.pot.message.protocol.ServerNetPongOrBuilder> pingBuilder_;
+        org.pot.message.protocol.ServerNetPing, org.pot.message.protocol.ServerNetPing.Builder, org.pot.message.protocol.ServerNetPingOrBuilder> pingBuilder_;
     /**
-     * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+     * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
      * @return Whether the ping field is set.
      */
     public boolean hasPing() {
       return pingBuilder_ != null || ping_ != null;
     }
     /**
-     * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+     * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
      * @return The ping.
      */
-    public org.pot.message.protocol.ServerNetPong getPing() {
+    public org.pot.message.protocol.ServerNetPing getPing() {
       if (pingBuilder_ == null) {
-        return ping_ == null ? org.pot.message.protocol.ServerNetPong.getDefaultInstance() : ping_;
+        return ping_ == null ? org.pot.message.protocol.ServerNetPing.getDefaultInstance() : ping_;
       } else {
         return pingBuilder_.getMessage();
       }
     }
     /**
-     * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+     * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
      */
-    public Builder setPing(org.pot.message.protocol.ServerNetPong value) {
+    public Builder setPing(org.pot.message.protocol.ServerNetPing value) {
       if (pingBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -469,10 +469,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+     * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
      */
     public Builder setPing(
-        org.pot.message.protocol.ServerNetPong.Builder builderForValue) {
+        org.pot.message.protocol.ServerNetPing.Builder builderForValue) {
       if (pingBuilder_ == null) {
         ping_ = builderForValue.build();
         onChanged();
@@ -483,13 +483,13 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+     * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
      */
-    public Builder mergePing(org.pot.message.protocol.ServerNetPong value) {
+    public Builder mergePing(org.pot.message.protocol.ServerNetPing value) {
       if (pingBuilder_ == null) {
         if (ping_ != null) {
           ping_ =
-            org.pot.message.protocol.ServerNetPong.newBuilder(ping_).mergeFrom(value).buildPartial();
+            org.pot.message.protocol.ServerNetPing.newBuilder(ping_).mergeFrom(value).buildPartial();
         } else {
           ping_ = value;
         }
@@ -501,7 +501,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+     * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
      */
     public Builder clearPing() {
       if (pingBuilder_ == null) {
@@ -515,33 +515,33 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+     * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
      */
-    public org.pot.message.protocol.ServerNetPong.Builder getPingBuilder() {
+    public org.pot.message.protocol.ServerNetPing.Builder getPingBuilder() {
       
       onChanged();
       return getPingFieldBuilder().getBuilder();
     }
     /**
-     * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+     * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
      */
-    public org.pot.message.protocol.ServerNetPongOrBuilder getPingOrBuilder() {
+    public org.pot.message.protocol.ServerNetPingOrBuilder getPingOrBuilder() {
       if (pingBuilder_ != null) {
         return pingBuilder_.getMessageOrBuilder();
       } else {
         return ping_ == null ?
-            org.pot.message.protocol.ServerNetPong.getDefaultInstance() : ping_;
+            org.pot.message.protocol.ServerNetPing.getDefaultInstance() : ping_;
       }
     }
     /**
-     * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+     * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.pot.message.protocol.ServerNetPong, org.pot.message.protocol.ServerNetPong.Builder, org.pot.message.protocol.ServerNetPongOrBuilder> 
+        org.pot.message.protocol.ServerNetPing, org.pot.message.protocol.ServerNetPing.Builder, org.pot.message.protocol.ServerNetPingOrBuilder> 
         getPingFieldBuilder() {
       if (pingBuilder_ == null) {
         pingBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.pot.message.protocol.ServerNetPong, org.pot.message.protocol.ServerNetPong.Builder, org.pot.message.protocol.ServerNetPongOrBuilder>(
+            org.pot.message.protocol.ServerNetPing, org.pot.message.protocol.ServerNetPing.Builder, org.pot.message.protocol.ServerNetPingOrBuilder>(
                 getPing(),
                 getParentForChildren(),
                 isClean());

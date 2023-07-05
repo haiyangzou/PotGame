@@ -1,10 +1,25 @@
 package org.pot.common.net.ipv4;
 
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class Ipv4Util {
+    public static List<String> getLocalhostIpv4Address(boolean containsLoopback) throws SocketException {
+        List<Pair<String, String>> ipv4AddressAndMask = getLocalhostIpv4AddressAndMask(containsLoopback);
+        return ipv4AddressAndMask.stream().map(Pair::getLeft).collect(Collectors.toList());
+    }
+
+    public static List<Pair<String, String>> getLocalhostIpv4AddressAndMask(boolean containsLoopback) throws SocketException {
+        List<Pair<String, String>> ipv4 = new ArrayList<>();
+        return ipv4;
+    }
+
     /**
      * 通过掩码位数,获取如这样表示的ipv4地址"255.255.255.255"的掩码的字符串
      * 8 - 255.0.0.0
@@ -47,7 +62,6 @@ public class Ipv4Util {
 
     /**
      * 获取ip值与mask值'与'的结果
-     * 
      */
 
     public static long toNetSegmentValue(String ipString, String maskString) {

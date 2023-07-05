@@ -97,5 +97,4 @@ public class Ipv4Rule {
         return rules.stream()
                 .anyMatch(item -> item.netSegmentValue == Ipv4Util.toNetSegmentValue(ipString, item.maskValue));
     }
-
 }

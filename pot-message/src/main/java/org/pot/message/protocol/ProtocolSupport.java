@@ -94,8 +94,20 @@ public class ProtocolSupport {
         return buildProtoErrorMsg(code.getErrorCode());
     }
 
+    public static ErrorCode buildProtoErrorMsg(Class<? extends Message> protoType, IErrorCode code) {
+        return buildProtoErrorMsg(protoType, code.getErrorCode());
+    }
+
+    public static ErrorCode buildProtoErrorMsg(Class<? extends Message> protoType, int errorCode) {
+        return ErrorCode.newBuilder().setCode(errorCode).setName(name(protoType)).build();
+    }
+
     public static ErrorCode buildProtoErrorMsg(int errorCode) {
         return ErrorCode.newBuilder().setCode(errorCode).setName("").build();
+    }
+
+    public static AckCode buildProtoAckMsg(Class<? extends Message> protoType) {
+        return AckCode.newBuilder().setName(name(protoType)).build();
     }
 
 }

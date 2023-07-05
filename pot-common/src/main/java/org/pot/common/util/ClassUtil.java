@@ -16,8 +16,9 @@ import java.util.function.Predicate;
 
 public class ClassUtil {
     public static String getAbbreviatedName(Class<?> type) {
-        return getAbbreviatedName(type.getName(),1);
+        return getAbbreviatedName(type.getName(), 1);
     }
+
     public static String getAbbreviatedName(String stacktrace, int depth) {
         if (stacktrace == null || stacktrace.length() == 0) {
             return StringUtils.EMPTY;
@@ -47,17 +48,24 @@ public class ClassUtil {
         }
         return new String(abbre, 0, target);
     }
-    public static boolean isConcrete(Class<?> type){
+
+    public static boolean isConcrete(Class<?> type) {
         int mod = type.getModifiers();
         return !Modifier.isInterface(mod) && !Modifier.isAbstract(mod);
     }
-    public static <T,A extends Annotation> Set<Class<? extends T>> getSubTypeOf(final Class scope, final Class<T> type, Predicate<Class<? extends T>> filter){
-        return getSubTypeOf(scope.getPackage(),type,null,filter);
+
+    public static <T, A extends Annotation> Set<Class<? extends T>> getSubTypeOf(final Class scope, final Class<T> type,
+            Predicate<Class<? extends T>> filter) {
+        return getSubTypeOf(scope.getPackage(), type, null, filter);
     }
-    public static <T,A extends Annotation> Set<Class<? extends T>> getSubTypeOf(final Package scope, final Class<T> type, Class<A> annotation,Predicate<Class<? extends T>> filter){
-        return getSubTypeOf(scope.getName(),type,null,filter);
+
+    public static <T, A extends Annotation> Set<Class<? extends T>> getSubTypeOf(final Package scope,
+            final Class<T> type, Class<A> annotation, Predicate<Class<? extends T>> filter) {
+        return getSubTypeOf(scope.getName(), type, null, filter);
     }
-    public static <T,A extends Annotation> Set<Class<? extends T>> getSubTypeOf(final String scope, final Class<T> type, Class<A> annotation, Predicate<Class<? extends T>> filter){
+
+    public static <T, A extends Annotation> Set<Class<? extends T>> getSubTypeOf(final String scope,
+            final Class<T> type, Class<A> annotation, Predicate<Class<? extends T>> filter) {
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.setExpandSuperTypes(true);
         configurationBuilder.setScanners(new SubTypesScanner());
@@ -65,7 +73,8 @@ public class ClassUtil {
         configurationBuilder.setUrls(ClasspathHelper.forPackage(scope));
         final Reflections reflections = new Reflections(configurationBuilder);
         Set<Class<? extends T>> subTypeSet = reflections.getSubTypesOf(type);
-        subTypeSet.removeIf(clazz->(filter!=null && !filter.test(clazz) ||(annotation!=null && !clazz.isAnnotationPresent(annotation))));
+        subTypeSet.removeIf(clazz -> (filter != null && !filter.test(clazz)
+                || (annotation != null && !clazz.isAnnotationPresent(annotation))));
         return ImmutableSet.copyOf(subTypeSet);
     }
 }

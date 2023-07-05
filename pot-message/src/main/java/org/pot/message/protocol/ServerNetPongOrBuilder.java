@@ -8,17 +8,17 @@ public interface ServerNetPongOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+   * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
    * @return Whether the ping field is set.
    */
   boolean hasPing();
   /**
-   * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+   * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
    * @return The ping.
    */
-  org.pot.message.protocol.ServerNetPong getPing();
+  org.pot.message.protocol.ServerNetPing getPing();
   /**
-   * <code>.ProtoMessage.ServerNetPong ping = 1;</code>
+   * <code>.ProtoMessage.ServerNetPing ping = 1;</code>
    */
-  org.pot.message.protocol.ServerNetPongOrBuilder getPingOrBuilder();
+  org.pot.message.protocol.ServerNetPingOrBuilder getPingOrBuilder();
 }
