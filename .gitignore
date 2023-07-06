@@ -16,3 +16,4 @@ lombok.config
 !/*/src/main/java/**/logs
 !/*/src/main/java/**/out
 !/*/src/main/java/**/build
+!/*/target
