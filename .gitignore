@@ -17,3 +17,4 @@ lombok.config
 !/*/src/main/java/**/out
 !/*/src/main/java/**/build
 !/*/target
+/pot-message/src/main/java/org/**
