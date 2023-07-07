@@ -3,11 +3,17 @@ package org.pot.common;
 import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.pot.common.net.ipv4.Ipv4Util;
 import org.pot.common.util.CollectionUtil;
+import org.pot.common.util.FilenameUtil;
 
+import java.io.File;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public interface Constants {
     @Slf4j
@@ -28,14 +34,36 @@ public interface Constants {
                 log.info("TimeZone is{}", ZoneId.systemDefault());
                 localhostIp = ImmutableList.copyOf(Ipv4Util.getLocalhostIpv4Address(false));
                 if (CollectionUtil.isEmpty(localhostIp)) {
-
+                    throw new IllegalStateException("Failed to Get Ipv4 Address");
                 }
+                wideNetIp = ImmutableList.copyOf(localhostIp.stream().filter(Ipv4Util::isWideNetworkIpv4Address).collect(Collectors.toList()));
+                localNetIp = ImmutableList.copyOf(localhostIp.stream().filter(Ipv4Util::isWideNetworkIpv4Address).collect(Collectors.toList()));
+                log.info("LocalhostIp is {}", Ipv4Util.join(localhostIp));
+                File userDir = new File(System.getProperty("user.dir"));
+                if (userDir.exists()) {
+                    contextPath = FilenameUtil.formatPath(userDir);
+                } else {
+                    contextPath = StringUtils.EMPTY;
+                }
+                log.info("ContextPath is{}", contextPath);
+
             } catch (Throwable throwable) {
                 throw new RuntimeException("Constants Env Error", throwable);
             }
         }
+
+        public static void setDebugOption(String debugOption) {
+            debug = BooleanUtils.toBoolean(debugOption);
+            if (debug) {
+                log.warn("DebugOption={},please ensure this is not production environment!", debugOption);
+            }
+        }
     }
 
-
+    long AWAIT_MS = 10L;
+    long AWAIT_TIMEOUT_MS = 10 * 1000L;
+    long RUN_INTERVAL_MS = 10L;
+    long RUN_SLOW_MS = 10L;
     long NET_SLOW_MS = 500L;
+    String WEB_STATIC = "web-static";
 }

@@ -21,7 +21,10 @@ spring-mongo
 ## kcp lockstep
 1.kcp-base
 
+pot-common
+1.runtime监控
+2.gc,死锁检查
 ##常见问题
 1.优先队列
-2.线程死锁
+2.线程死锁 
 3.
