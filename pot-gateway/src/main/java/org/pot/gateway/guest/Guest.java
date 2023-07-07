@@ -2,8 +2,8 @@ package org.pot.gateway.guest;
 
 import org.pot.common.concurrent.exception.CommonErrorCode;
 import org.pot.common.concurrent.exception.IErrorCode;
-import org.pot.gateway.net.connection.IConnection;
-import org.pot.gateway.net.netty.FrameCmdMessage;
+import org.pot.core.net.connection.IConnection;
+import org.pot.core.net.netty.FrameCmdMessage;
 import org.pot.message.protocol.DisConnectCode;
 import org.pot.message.protocol.ErrorCode;
 import org.pot.message.protocol.ProtocolSupport;

@@ -1,8 +1,8 @@
-package org.pot.gateway.net.connection;
+package org.pot.core.net.connection;
 
 import java.util.List;
 
-import org.pot.gateway.net.netty.FrameMessage;
+import org.pot.core.net.netty.FrameMessage;
 
 import lombok.extern.slf4j.Slf4j;
 

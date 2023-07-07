@@ -1,6 +1,6 @@
-package org.pot.gateway.net.connection;
+package org.pot.core.net.connection;
 
-import org.pot.gateway.net.netty.FrameMessage;
+import org.pot.core.net.netty.FrameMessage;
 
 public interface ConnectionManagerListener<M extends FrameMessage> {
     boolean onAdd(final IConnection<M> connection) throws Exception;

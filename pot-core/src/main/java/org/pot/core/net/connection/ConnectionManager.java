@@ -1,16 +1,14 @@
-package org.pot.gateway.net.connection;
+package org.pot.core.net.connection;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.swing.Icon;
-
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 
-import org.pot.gateway.net.netty.FrameMessage;
+import org.pot.core.net.netty.FrameMessage;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

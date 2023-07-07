@@ -12,6 +12,15 @@ import org.pot.common.util.ClassUtil;
 import org.pot.common.util.StringUtil;
 
 public class ExceptionUtil {
+    public static Throwable getRootCase(final Throwable throwable) {
+        Throwable superCause = throwable;
+        while (superCause != null && superCause.getCause() != null) {
+            superCause = superCause.getCause();
+        }
+        return superCause;
+    }
+
+
     private static final Map<String, String> callerCache = new ConcurrentSkipListMap<>();
 
     public static String computeCaller(Object object, Class<?> exceptedClasss) {
@@ -36,7 +45,7 @@ public class ExceptionUtil {
     }
 
     public static String getStackTraceWithDepth(final int depth, final String retStr,
-            Class... exceptedClass) {
+                                                Class... exceptedClass) {
         Set<String> excepted = Sets.newHashSet(StringUtil.toStringArray(exceptedClass, Class::getName));
         excepted.add(ExceptionUtil.class.getName());
         ArrayList<StackTraceElement> stackTraceElements = Lists.newArrayList(new Throwable().getStackTrace());

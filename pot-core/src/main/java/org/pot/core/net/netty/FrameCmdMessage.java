@@ -1,4 +1,4 @@
-package org.pot.gateway.net.netty;
+package org.pot.core.net.netty;
 
 import org.apache.commons.lang3.StringUtils;
 import org.pot.message.protocol.ProtocolSupport;

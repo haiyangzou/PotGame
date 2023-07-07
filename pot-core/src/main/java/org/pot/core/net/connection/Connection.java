@@ -1,11 +1,11 @@
-package org.pot.gateway.net.connection;
+package org.pot.core.net.connection;
 
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.pot.gateway.net.netty.FrameMessage;
+import org.pot.core.net.netty.FrameMessage;
 import org.pot.message.protocol.ServerNetPing;
 import org.pot.message.protocol.ServerNetPong;
 

@@ -1,4 +1,4 @@
-package org.pot.gateway.net.netty;
+package org.pot.core.net.netty;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.buffer.ByteBuf;

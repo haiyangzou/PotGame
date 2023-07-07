@@ -5,9 +5,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.pot.common.function.Ticker;
 import org.pot.common.net.ipv4.FireWall;
 import org.pot.gateway.engine.PotGateway;
-import org.pot.gateway.net.connection.ConnectionManagerListener;
-import org.pot.gateway.net.connection.IConnection;
-import org.pot.gateway.net.netty.FrameCmdMessage;
+import org.pot.core.net.connection.ConnectionManagerListener;
+import org.pot.core.net.connection.IConnection;
+import org.pot.core.net.netty.FrameCmdMessage;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,7 +1,6 @@
-package org.pot.gateway.net.netty;
+package org.pot.core.net.netty;
 
-import org.checkerframework.checker.units.qual.C;
-import org.pot.gateway.net.connection.IConnection;
+import org.pot.core.net.connection.IConnection;
 
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -54,7 +53,7 @@ public class NettyChannleHandler<M extends FrameMessage> extends ChannelDuplexHa
         }
         if (msg instanceof FrameMessage) {
             int size = connection.getRecvMessageQueueSize();
-            int maxSize = engine.getNettyConfig().getConnectionRecvQueueMaxSize();
+            int maxSize = engine.getConfig().getConnectionRecvQueueMaxSize();
             if (size > maxSize) {
                 log.error("channelRead channel={}", ctx.channel());
                 close(ctx);

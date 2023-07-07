@@ -1,4 +1,4 @@
-package org.pot.gateway.net.netty;
+package org.pot.core.net.netty;
 
 import com.google.protobuf.Message;
 import lombok.Getter;

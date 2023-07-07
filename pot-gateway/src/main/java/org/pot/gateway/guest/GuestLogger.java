@@ -5,7 +5,7 @@ import org.pot.common.structure.ElapsedTimeMonitor;
 import org.pot.core.util.LogUtil;
 import org.pot.gateway.engine.PotGateway;
 import org.pot.gateway.log.GatewayLogger;
-import org.pot.gateway.net.netty.FrameCmdMessage;
+import org.pot.core.net.netty.FrameCmdMessage;
 import org.pot.message.protocol.ProtocolPrinter;
 import org.pot.message.protocol.ProtocolSupport;
 

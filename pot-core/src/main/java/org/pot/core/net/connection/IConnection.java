@@ -1,6 +1,6 @@
-package org.pot.gateway.net.connection;
+package org.pot.core.net.connection;
 
-import org.pot.gateway.net.netty.FrameMessage;
+import org.pot.core.net.netty.FrameMessage;
 
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;

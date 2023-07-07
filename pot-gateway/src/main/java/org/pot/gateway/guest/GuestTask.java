@@ -3,7 +3,7 @@ package org.pot.gateway.guest;
 import org.pot.common.concurrent.exception.CommonErrorCode;
 import org.pot.common.concurrent.exception.IErrorCode;
 import org.pot.common.concurrent.exception.ServiceException;
-import org.pot.gateway.net.netty.FrameCmdMessage;
+import org.pot.core.net.netty.FrameCmdMessage;
 import org.pot.message.protocol.ProtocolSupport;
 
 import com.google.protobuf.Message;
