@@ -1,0 +1,10 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package = "org.pot.message.protocol.login";
+option java_multiple_files = true;
+message LoginDataS2S{
+ int64 gameUid = 1;
+}
+message LogoutReqC2S{
+ int64 gameUid = 1;
+}
