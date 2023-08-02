@@ -1,9 +1,5 @@
 package org.pot.core.engine;
 
-import com.alibaba.dubbo.rpc.Result;
-
-import javassist.bytecode.SignatureAttribute.ObjectType;
-
 @HandlerDefinition
 public interface Handler<ObjectType, RequestType, ResultType> {
     @HandlerDefinition

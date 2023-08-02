@@ -1,12 +1,9 @@
 package org.pot.login;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.PooledExecutionServiceConfigurationBuilder;
 import org.pot.core.ServerContext;
-import org.pot.login.service.ShutdownThread;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
@@ -31,11 +28,6 @@ public class PotLogin implements CommandLineRunner {
     private static ExecutorService es = Executors.newFixedThreadPool(1);
 
     public static void main(String[] args) {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        ServerContext.setApplicationContext(context);
-        context.register(AppConfig.class);
-        context.refresh();
-        Runtime.getRuntime().addShutdownHook(context.getBean(ShutdownThread.class));
     }
 
     @Override

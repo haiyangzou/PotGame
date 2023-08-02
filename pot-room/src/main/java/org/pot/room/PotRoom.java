@@ -1,11 +1,9 @@
 package org.pot.room;
 
-import lombok.extern.slf4j.Slf4j;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.PooledExecutionServiceConfigurationBuilder;
 import org.pot.core.ServerContext;
-import org.pot.room.service.ShutdownThread;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,11 +30,7 @@ public class PotRoom implements CommandLineRunner {
     private static ExecutorService es = Executors.newFixedThreadPool(1);
 
     public static void main(String[] args) {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        ServerContext.setApplicationContext(context);
-        context.register(AppConfig.class);
-        context.refresh();
-        Runtime.getRuntime().addShutdownHook(context.getBean(ShutdownThread.class));
+
     }
 
     @Override

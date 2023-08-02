@@ -6,8 +6,9 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public enum DateTimeString {
-    DATA_TIME_MILLIS_ZONE(false, "yyy-MM-dd HH:mm:ss,SSS Z");
-
+    DATA_TIME_MILLIS_ZONE(false, "yyy-MM-dd HH:mm:ss,SSS Z"),
+    TIME(true, "HH:mm:ss"),
+    DATE(true, "yyy-MM-dd");
     private final boolean local;
     private final DateTimeFormatter formatter;
 
@@ -28,7 +29,7 @@ public enum DateTimeString {
         return toString(DateTimeUtil.toLocalDateTime(date));
     }
 
-    public final String toString(final Long date){
+    public final String toString(final Long date) {
         return toString(DateTimeUtil.toLocalDateTime(date));
     }
 }

@@ -1,7 +1,5 @@
 package org.pot.common.util;
 
-import javafx.util.Pair;
-
 public class NumberUtil {
     public static String byteCountToDisplaySize(long size) {
         if (size < 1024) {

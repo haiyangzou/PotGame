@@ -42,7 +42,7 @@ public class AsyncExecutor {
     }
 
     public ScheduledFuture<?> scheduleAtFixedRate(long slowMills, Runnable comRunnable, long iniDelay, long period,
-            TimeUnit unit) {
+                                                  TimeUnit unit) {
         return scheduledExcutor.scheduleAtFixedRate(wrap(slowMills, comRunnable), iniDelay, period, unit);
     }
 
@@ -83,5 +83,17 @@ public class AsyncExecutor {
             executorService.shutdownNow()
                     .forEach(runnable -> log.warn("{} shutdown not completed task {}", name, runnable));
         }
+    }
+
+    public boolean isIdle() {
+        return isThreadPoolExecutorIdle() && isScheduledExecutorIdle();
+    }
+
+    public boolean isThreadPoolExecutorIdle() {
+        return threadPoolExcutor.isIdle();
+    }
+
+    public boolean isScheduledExecutorIdle() {
+        return scheduledExcutor.isIdle();
     }
 }
