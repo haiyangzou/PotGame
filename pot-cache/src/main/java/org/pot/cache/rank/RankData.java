@@ -2,18 +2,22 @@ package org.pot.cache.rank;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.pot.cache.player.PlayerCaches;
 import org.pot.cache.rank.codec.RankItemCodec;
 import org.pot.cache.union.UnionCaches;
 import org.pot.common.util.CollectionUtil;
+import org.pot.common.util.JsonUtil;
+import org.pot.common.util.MapUtil;
 import org.pot.common.util.RunSignal;
+import org.springframework.data.domain.Range;
 import org.springframework.data.redis.core.ZSetOperations;
 
-import java.util.List;
-import java.util.NavigableMap;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class RankData {
     private static final String RANK_DATA_REDIS_PREFIX = "RANK:DATA:";
@@ -75,6 +79,47 @@ public class RankData {
                     rankCache.executor.execute(() -> PlayerCaches.snapShot().getSnapshot(rankItem.getUuid()));
                 }
             }
+            for (RankItem nonCHangedRankItem : nonCHangedRankItems) {
+                rankCache.redisTemplate.opsForHash().get(rankExtraKey, Long.toString(nonCHangedRankItem.getUuid())).doOnSuccess(nonCHangedRankItem::parseExtraData).subscribe();
+            }
+            putMemoryRank(nonCHangedRankItems);
+        }
+        if (localRank && !first) {
+            return;
+        }
+        if (loadSignal.signal() || first) {
+            rankCache.redisTemplate.opsForZSet().reverseRangeWithScores(rankKey, Range.closed(0L, maxSize)).collectList().doOnSuccess(typedTuples -> redisRankItems.getAndUpdate(rankItems -> Collections.unmodifiableList(typedTuples))).subscribe();
+        }
+    }
+
+    private void putMemoryRank(Collection<RankItem> rankItems) {
+        if (CollectionUtil.isEmpty(rankItems)) {
+            return;
+        }
+        rankInfoList.removeAll(rankItems);
+        rankInfoList.addAll(rankItems);
+        rankInfoList.sort(Comparator.reverseOrder());
+    }
+
+    private void putRedisRank(List<RankItem> rankItems, boolean alive) {
+        if (CollectionUtil.isEmpty(rankItems)) {
+            return;
+        }
+        List<List<RankItem>> partitions = ListUtils.partition(rankItems, 1000);
+        for (List<RankItem> partition : partitions) {
+            List<ZSetOperations.TypedTuple<String>> rankTuples = partition.stream().map(codec::encode).collect(Collectors.toList());
+            Map<String, String> rankExtraMap = partition.stream().filter(e -> e.getRawExtraData() != null).collect(Collectors.toMap(e -> Long.toString(e.getUuid()), e -> JsonUtil.toJson(e.getRawExtraData())));
+            if (alive) {
+                rankCache.redisTemplate.opsForZSet().addAll(rankKey, rankTuples).subscribe();
+                if (MapUtil.isNotEmpty(rankExtraMap)) {
+                    rankCache.redisTemplate.opsForHash().putAll(rankExtraKey, rankExtraMap).subscribe();
+                }
+            } else {
+                rankCache.redisTemplate.opsForZSet().addAll(rankKey, rankTuples).block();
+                if (MapUtil.isNotEmpty(rankExtraMap)) {
+                    rankCache.redisTemplate.opsForHash().putAll(rankExtraKey, rankExtraMap).block();
+                }
+            }
         }
     }
 
@@ -87,7 +132,90 @@ public class RankData {
 
         @Override
         public void run() {
+            try {
+                flushSemaphore.acquire();
+                int size = changedRankItemMap.size();
+                List<RankItem> changedRankItems = Lists.newArrayListWithExpectedSize(size);
+                for (int i = 0; i < size; i++) {
+                    Map.Entry<Long, RankItem> rankItemEntry = changedRankItemMap.pollFirstEntry();
+                    if (rankItemEntry == null || rankItemEntry.getValue() == null) break;
+                    changedRankItems.add(rankItemEntry.getValue());
+                }
+                putMemoryRank(changedRankItems);
+                putRedisRank(changedRankItems, alive);
+                if (rankDeleting) {
+                    rankCache.redisTemplate.delete(rankKey).block();
+                    rankCache.redisTemplate.delete(rankExtraKey).block();
+                    changedRankItemMap.clear();
+                    changedRankItemSet.clear();
+                    rankInfoList.clear();
+                    rankDeleting = false;
+                }
+                for (Long uuid : rankInfoDeleting) {
+                    rankCache.redisTemplate.opsForZSet().remove(rankKey, String.valueOf(uuid)).block();
+                    rankCache.redisTemplate.opsForZSet().remove(rankExtraKey, String.valueOf(uuid)).block();
+                    rankInfoList.removeIf(rankItem -> rankItem.getUuid() == uuid);
+                    changedRankItemMap.remove(uuid);
+                    changedRankItemSet.remove(uuid);
+                    rankInfoDeleting.remove(uuid);
+                }
+                if (alive) {
+                    loadRedisRankItems(false);
+                    truncate();
+                } else {
+                    putRedisRank(rankInfoList.stream().filter(rankItem -> changedRankItemSet.contains(rankItem.getUuid())).collect(Collectors.toList()), alive);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         }
+    }
+
+    private void truncate() {
+        truncateMemoryRank();
+        if (truncateSignal.signal()) {
+            rankCache.executor.execute(this::truncateRedisRank);
+        }
+    }
+
+    private void truncateMemoryRank() {
+        long oversize = rankInfoList.size() - maxSize;
+        for (long i = 0; i < oversize; i++) {
+            try {
+                rankInfoList.remove(rankInfoList.size() - 1);
+            } catch (IndexOutOfBoundsException ex) {
+                break;
+            }
+        }
+    }
+
+    private void truncateRedisRank() {
+        List<Object> keys = rankCache.redisTemplate.opsForHash().keys(rankExtraKey).collectList().block();
+        if (CollectionUtil.isEmpty(keys)) {
+            rankCache.redisTemplate.opsForZSet().removeRange(rankKey, Range.closed(0L, -maxSize - 1L)).subscribe();
+            return;
+        }
+        List<String> ranks = rankCache.redisTemplate.opsForZSet().reverseRange(rankKey, Range.closed(0L, maxSize)).collectList().block();
+        if (CollectionUtil.isEmpty(ranks)) {
+            rankCache.redisTemplate.delete(rankExtraKey).subscribe();
+            return;
+        }
+        Set<String> removeExtraIds = new HashSet<>();
+        Set<String> extraIds = keys.stream().map(String::valueOf).collect(Collectors.toSet());
+        Set<String> rankIds = ranks.stream().map(String::valueOf).collect(Collectors.toSet());
+        for (String extraId : extraIds) {
+            if (!rankIds.contains(extraId)) {
+                removeExtraIds.add(extraId);
+            }
+        }
+        if (!removeExtraIds.isEmpty()) {
+            rankCache.redisTemplate.opsForHash().remove(rankExtraKey, removeExtraIds.toArray()).subscribe();
+        }
+        //尾删法,防止排行榜末尾变化频繁是，将波动的排行榜额外数据删除掉,A->B->A问题
+        //例如：1->查extra=[a,b,c],2->查rank = [a,b,d],3->删除extra=[c],但此时rank又变回[a,b,c],错误的将c删除
+        //尾删法,每次删除周期运作时，当前周期内上过榜的元素不删除，仅删除本周期内尾活动且未上榜的元素，为彻底解决，仍有小概率会出现。
+        //所以采用，每次定福时,再次保存仍在排行榜上的,本地变化过的热数据,防止错误的删除数据后，如不再触发更新排行榜，会找不到额外数据
+        rankCache.redisTemplate.opsForZSet().removeRange(rankKey, Range.closed(0L, -maxSize - 1L)).subscribe();
     }
 }
