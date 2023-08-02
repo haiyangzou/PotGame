@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
+
 import java.time.Duration;
 import java.util.Iterator;
 import java.util.Map;
@@ -23,7 +24,7 @@ import java.util.function.Function;
 public class PlayerSnapShotCache {
     // Add other fields and methods as needed
     public static final String CACHE_REDIS_PREFIX = "PlayerSnapshotId";
-    public static Duration CACHE_EXPRIED_DURATION = Duration.ofDays(90);
+    public static Duration CACHE_EXPIRED_DURATION = Duration.ofDays(90);
     private final PlayerCacheConfig cacheConfig;
     private final AsyncExecutor executor;
     private final ReactiveStringRedisTemplate redisTemplate;
@@ -36,16 +37,16 @@ public class PlayerSnapShotCache {
     private final Semaphore flushSemaphore = new Semaphore(1);
 
     public PlayerSnapShotCache(PlayerCacheConfig cacheConfig,
-            ReactiveStringRedisTemplate redisTemplate,
-            Function<Long, PlayerSnapShot> memory,
-            Function<Long, PlayerSnapShot> database) {
+                               ReactiveStringRedisTemplate redisTemplate,
+                               Function<Long, PlayerSnapShot> memory,
+                               Function<Long, PlayerSnapShot> database) {
         // Initialize the fields with the provided parameters
         this.cacheConfig = cacheConfig;
         this.executor = new AsyncExecutor(PlayerSnapShot.class.getSimpleName(), cacheConfig.getThreads());
         this.redisTemplate = redisTemplate;
         this.cache = com.github.benmanes.caffeine.cache.Caffeine.newBuilder()
                 .recordStats()
-                .expireAfterWrite(CACHE_EXPRIED_DURATION)
+                .expireAfterWrite(CACHE_EXPIRED_DURATION)
                 .maximumSize(cacheConfig.getMaxSize())
                 .initialCapacity(cacheConfig.getMaxSize())
                 .refreshAfterWrite(cacheConfig.getRefreshSeconds(), TimeUnit.SECONDS)

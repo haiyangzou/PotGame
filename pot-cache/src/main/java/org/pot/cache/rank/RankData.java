@@ -2,7 +2,9 @@ package org.pot.cache.rank;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.pot.cache.player.PlayerCaches;
 import org.pot.cache.rank.codec.RankItemCodec;
+import org.pot.cache.union.UnionCaches;
 import org.pot.common.util.CollectionUtil;
 import org.pot.common.util.RunSignal;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -59,6 +61,19 @@ public class RankData {
             List<RankItem> nonCHangedRankItems = Lists.newArrayListWithExpectedSize(tempRedisRankItems.size());
             for (ZSetOperations.TypedTuple<String> tuple : tempRedisRankItems) {
                 RankItem rankItem = codec.decode(tuple);
+                if (rankItem == null) {
+                    rankCache.redisTemplate.opsForZSet().remove(rankKey, tuple.getValue()).subscribe();
+                    rankCache.redisTemplate.opsForHash().remove(rankExtraKey, tuple.getValue()).subscribe();
+                    continue;
+                }
+                if (!changedRankItemSet.contains(rankItem.getUuid())) {
+                    nonCHangedRankItems.add(rankItem);
+                }
+                if (unionRank) {
+                    rankCache.executor.execute(() -> UnionCaches.snapshot().getSnapshot(rankItem.getUuid()));
+                } else {
+                    rankCache.executor.execute(() -> PlayerCaches.snapShot().getSnapshot(rankItem.getUuid()));
+                }
             }
         }
     }

@@ -2,7 +2,7 @@ package org.pot.cache.player.snapshot;
 
 import java.util.function.Consumer;
 
-import org.pot.common.util.JsonUtils;
+import org.pot.common.util.JsonUtil;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,10 +28,10 @@ public class PlayerSnapShot {
     }
 
     public static PlayerSnapShot fromJson(String data) {
-        return JsonUtils.parseJson(data, PlayerSnapShot.class);
+        return JsonUtil.parseJson(data, PlayerSnapShot.class);
     }
 
     public String toJson() {
-        return JsonUtils.toJson(this);
+        return JsonUtil.toJson(this);
     }
 }

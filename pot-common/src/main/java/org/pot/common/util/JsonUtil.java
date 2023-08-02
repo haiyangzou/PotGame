@@ -12,22 +12,20 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonTypeName;
-import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import org.pot.common.relect.ConstructorUtil;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
-public class JsonUtils {
+public class JsonUtil {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     static {
@@ -59,7 +57,12 @@ public class JsonUtils {
         MAPPER.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
     }
 
-    public JsonUtils() {
+    public JsonUtil() {
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T clone(T value) {
+        return (T) parseJson(toJson(value), value.getClass());
     }
 
     public static void registerModules(Module... modules) {
