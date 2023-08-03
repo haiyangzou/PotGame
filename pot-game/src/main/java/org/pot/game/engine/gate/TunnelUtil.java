@@ -21,4 +21,17 @@ public class TunnelUtil {
         byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
         return ByteString.copyFrom(compressor.compress(bytes));
     }
+
+    public static PlayerData loadPlayerData(ByteString bytesString) {
+        byte[] bytes = compressor.decompress(bytesString.toByteArray());
+        return SerializeUtil.deserialize(bytes, PlayerData.class);
+    }
+
+    public static TunnelVisaData loadVisaData(ByteString bytesString) {
+        byte[] bytes = compressor.decompress(bytesString.toByteArray());
+        String json = new String(bytes, StandardCharsets.UTF_8);
+        return JsonUtil.parseJson(json, TunnelVisaData.class);
+    }
+
+
 }

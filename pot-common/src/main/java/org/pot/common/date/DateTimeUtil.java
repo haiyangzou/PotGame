@@ -1,6 +1,7 @@
 package org.pot.common.date;
 
 import org.pot.common.units.TimeUnitsConst;
+import org.pot.common.util.NumberUtil;
 
 import java.sql.Date;
 import java.time.Instant;
@@ -34,5 +35,11 @@ public class DateTimeUtil {
 
     public static LocalDateTime toLocalDateTime(final Instant instant, final ZoneId zoneId) {
         return LocalDateTime.ofInstant(instant, zoneId);
+    }
+
+    public static double computeNanosToMillis(final long nanoseconds) {
+        double nanosecondsPerMillisecond = TimeUnitsConst.NANOS_OF_MILLISECOND;
+        double milliseconds = nanoseconds / nanosecondsPerMillisecond;
+        return NumberUtil.convertPrecision(milliseconds, 3);
     }
 }

@@ -16,7 +16,7 @@ message GhostEnterSuccessCmd{
 }
 message GhostUpdateCmd{
   int64 playerId = 1;
-  bytes visaData = 2;
+  bytes playerData = 2;
 }
 message GhostExitCmd{
   int64 playerId = 1;
@@ -39,6 +39,7 @@ message GhostDestroySuccessCmd{
 message GhostFinishCmd{
   int64 playerId = 1;
   bytes visaData = 2;
+  bytes playerData = 3;
 }
 message GhostKeepAliveCmd{
   int64 playerId = 1;

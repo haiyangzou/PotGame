@@ -11,4 +11,13 @@ public class SerializeUtil {
             throw new IllegalStateException(e.getMessage(), e);
         }
     }
+
+    public static <T> T deserialize(byte[] data, Class<T> clz) {
+        try {
+            return preferred.deserialize(data, clz);
+        } catch (Throwable e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        }
+    }
+
 }

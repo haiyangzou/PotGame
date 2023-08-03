@@ -15,15 +15,13 @@ import org.pot.core.net.connection.IConnection;
 import org.pot.core.net.netty.FramePlayerMessage;
 import org.pot.core.net.netty.NettyClientEngine;
 import org.pot.core.util.SignalLight;
-import org.pot.game.PotGame;
 import org.pot.game.engine.GameEngine;
+import org.pot.game.engine.player.Player;
 import org.pot.game.engine.player.PlayerManager;
 import org.pot.message.protocol.ServerNetPing;
 import org.pot.message.protocol.login.LoginDataS2S;
 import org.pot.message.protocol.tunnel.*;
-import scala.concurrent.impl.FutureConvertersImpl;
 
-import java.security.MessageDigest;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -158,7 +156,13 @@ public class Tunnel extends Thread {
     }
 
     private void processGhostCmd(TunnelPlayer tunnelPlayer, FramePlayerMessage framePlayerMessage) {
-
+        if (framePlayerMessage.isProtoType(GhostUpdateCmd.class)) {
+            update(tunnelPlayer, framePlayerMessage.getProto());
+        } else if (framePlayerMessage.isProtoType(GhostFinishCmd.class)) {
+            finish(tunnelPlayer, framePlayerMessage.getProto());
+        } else if (framePlayerMessage.isProtoType(GhostEnterErrorCmd.class)) {
+            recover(tunnelPlayer);
+        }
     }
 
     private boolean isGhostCmd(FramePlayerMessage framePlayerMessage) {
@@ -195,15 +199,17 @@ public class Tunnel extends Thread {
     }
 
     private void exec() {
-        if (!deletingTunnelPlayerMap.isEmpty()) {
-            Iterator<TunnelPlayer> iterator = deletingTunnelPlayerMap.values().iterator();
-            while (iterator.hasNext()) {
-                TunnelPlayer tunnelPlayer = iterator.next();
-                IConnection<FramePlayerMessage> remoteServerConnection = connection;
-                if (remoteServerConnection != null && !remoteServerConnection.isClosed()) {
-                    GhostDestroyCmd.Builder builder = GhostDestroyCmd.newBuilder().setPlayerId(tunnelPlayer.getPlayerUid());
-                    remoteServerConnection.sendMessage(new FramePlayerMessage(tunnelPlayer.getPlayerUid(), builder.build()));
-                    iterator.remove();
+        {
+            if (!deletingTunnelPlayerMap.isEmpty()) {
+                Iterator<TunnelPlayer> iterator = deletingTunnelPlayerMap.values().iterator();
+                while (iterator.hasNext()) {
+                    TunnelPlayer tunnelPlayer = iterator.next();
+                    IConnection<FramePlayerMessage> remoteServerConnection = connection;
+                    if (remoteServerConnection != null && !remoteServerConnection.isClosed()) {
+                        GhostDestroyCmd.Builder builder = GhostDestroyCmd.newBuilder().setPlayerId(tunnelPlayer.getPlayerUid());
+                        remoteServerConnection.sendMessage(new FramePlayerMessage(tunnelPlayer.getPlayerUid(), builder.build()));
+                        iterator.remove();
+                    }
                 }
             }
         }
@@ -289,6 +295,67 @@ public class Tunnel extends Thread {
     }
 
     private void recover(TunnelPlayer tunnelPlayer) {
+        tunnelPlayer.recover();
+        runningTunnelPlayerMap.remove(tunnelPlayer.getPlayerUid());
+        //save db
+    }
 
+    private void update(TunnelPlayer tunnelPlayer, GhostUpdateCmd ghostUpdateCmd) {
+        try {
+            tunnelPlayer.setPlayerData(TunnelUtil.loadPlayerData(ghostUpdateCmd.getPlayerData()));
+        } catch (Throwable throwable) {
+            log.error("Tunnel Player Update Error,PlayerUid={}", tunnelPlayer.getPlayerUid(), throwable);
+        }
+    }
+
+    public synchronized boolean join(Player player, TunnelVisaData tunnelVisaData) {
+        if (!isRunning() || isClosed()) return false;
+        if (contains(player.getUid())) return false;
+
+        IConnection<FramePlayerMessage> remoteServerConnection = connection;
+        if (remoteServerConnection == null && remoteServerConnection.isConnected()) return false;
+        TunnelPlayer tunnelPlayer = new TunnelPlayer(player.getUid(), tunnelVisaData);
+        tunnelPlayer.setState(TunnelPlayerState.PREPARE);
+        tunnelPlayer.getVisaData().setTargetServerId(server.getServerIdObject());
+        runningTunnelPlayerMap.putIfAbsent(tunnelPlayer.getPlayerUid(), tunnelPlayer);
+        //save db
+        tunnelPlayer.join();
+        return false;
+    }
+
+    private void finish(TunnelPlayer tunnelPlayer, GhostFinishCmd ghostFinishCmd) {
+        try {
+            tunnelPlayer.setVisaData(TunnelUtil.loadVisaData(ghostFinishCmd.getVisaData()));
+            tunnelPlayer.setPlayerData(TunnelUtil.loadPlayerData(ghostFinishCmd.getPlayerData()));
+        } catch (Throwable throwable) {
+            log.error("Tunnel player Finish Error,PlayerUid={}", tunnelPlayer.getPlayerUid(), throwable);
+        }
+        if (TunnelManager.instance.redirect(tunnelPlayer)) {
+            runningTunnelPlayerMap.remove(tunnelPlayer.getPlayerUid());
+        } else {
+            recover(tunnelPlayer);
+        }
+        IConnection<FramePlayerMessage> remoteServerConnection = connection;
+        if (remoteServerConnection != null && !remoteServerConnection.isConnected()) {
+            GhostDestroyCmd.Builder builder = GhostDestroyCmd.newBuilder().setPlayerId(tunnelPlayer.getPlayerUid());
+            remoteServerConnection.sendMessage(new FramePlayerMessage(tunnelPlayer.getPlayerUid(), builder.build()));
+        }
+    }
+
+    boolean contains(long playerUid) {
+        return runningTunnelPlayerMap.containsKey(playerUid);
+    }
+
+    synchronized boolean redirect(TunnelPlayer tunnelPlayer) {
+        if (!isRunning() || isClosed()) return false;
+        if (contains(tunnelPlayer.getPlayerUid())) return false;
+
+        IConnection<FramePlayerMessage> remoteServerConnection = connection;
+        if (remoteServerConnection == null && remoteServerConnection.isConnected()) return false;
+        tunnelPlayer.setState(TunnelPlayerState.READY);
+        tunnelPlayer.getVisaData().setTargetServerId(server.getServerIdObject());
+        runningTunnelPlayerMap.putIfAbsent(tunnelPlayer.getPlayerUid(), tunnelPlayer);
+        //TODO save db
+        return true;
     }
 }

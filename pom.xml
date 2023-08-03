@@ -17,6 +17,7 @@
         <module>pot-common</module>
         <module>pot-cache</module>
         <module>pot-web</module>
+        <module>pot-dal</module>
     </modules>
     <packaging>pom</packaging>
     <name>pot</name>

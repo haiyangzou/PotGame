@@ -14,4 +14,9 @@ public class HessianSerializer implements Serializer {
         out.flush();
         return byteArrayOutputStream.toByteArray();
     }
+
+    @Override
+    public <T> T deserialize(byte[] data, Class<T> clz) throws IOException {
+        return null;
+    }
 }

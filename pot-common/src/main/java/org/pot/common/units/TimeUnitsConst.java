@@ -8,5 +8,5 @@ public final class TimeUnitsConst {
     public static final long MILLIS_OF_5_MINUTES = 5 * MILLIS_OF_MINUTE;
     public static final long MILLIS_OF_SECOND = ChronoUnit.SECONDS.getDuration().toMillis();
 
-
+    public static final long NANOS_OF_MILLISECOND = ChronoUnit.MILLIS.getDuration().toNanos();
 }

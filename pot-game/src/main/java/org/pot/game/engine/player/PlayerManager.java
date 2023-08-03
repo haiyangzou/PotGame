@@ -11,6 +11,18 @@ public class PlayerManager {
     public PlayerManager() {
     }
 
+    public static Player fetchPlayer(long gameUid) {
+        return getInstance().getPlayer(gameUid);
+    }
+
+    public Player getPlayer(long gameUid) {
+        return null;
+    }
+
+    public PlayerGroup getPlayerGroup(long gameUid) {
+        return null;
+    }
+
     public LoginDataS2S loginPlayer(PlayerSession playerSession, LoginDataS2S loginDataS2S) {
         return null;
     }

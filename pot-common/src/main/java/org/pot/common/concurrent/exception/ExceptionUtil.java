@@ -1,15 +1,15 @@
 package org.pot.common.concurrent.exception;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import org.apache.commons.lang3.StringUtils;
+import org.pot.common.util.ClassUtil;
+import org.pot.common.util.StringUtil;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListMap;
-
-import org.apache.commons.lang3.StringUtils;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import org.pot.common.util.ClassUtil;
-import org.pot.common.util.StringUtil;
 
 public class ExceptionUtil {
     public static Throwable getRootCase(final Throwable throwable) {
@@ -27,10 +27,14 @@ public class ExceptionUtil {
         return computeCaller(object.getClass().getName(), exceptedClasss);
     }
 
-    public static String computeCaller(String name, Class<?> exceptedClasss) {
+    public static String computeCaller(Object object, Class<?> exceptedClass1, Class<?> exceptedClass2) {
+        return computeCaller(object.getClass().getName(), exceptedClass1, exceptedClass2);
+    }
+
+    public static String computeCaller(String name, Class<?> exceptedClass) {
         String result = callerCache.get(name);
         if (result == null) {
-            result = abbreviate(getStackTraceWithDepthByLine(1, callerCache.getClass(), exceptedClasss));
+            result = abbreviate(getStackTraceWithDepthByLine(1, callerCache.getClass(), exceptedClass));
             callerCache.put(name, result);
         }
         return result;

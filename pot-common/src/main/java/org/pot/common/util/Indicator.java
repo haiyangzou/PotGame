@@ -1,11 +1,11 @@
 package org.pot.common.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicLong;
-
-import org.apache.commons.lang3.StringUtils;
 
 public class Indicator implements Comparable<Indicator> {
     public static final class Builder {
@@ -82,7 +82,7 @@ public class Indicator implements Comparable<Indicator> {
     private final NavigableMap<Long, Long> recentValueMap = new ConcurrentSkipListMap<>();
 
     private Indicator(String name, int granularity, int recentValueSize, boolean cnt, boolean sum, boolean avg,
-            boolean min, boolean max) {
+                      boolean min, boolean max) {
         this.name = name;
         this.granularity = granularity;
         this.recentValueSize = recentValueSize;
@@ -91,6 +91,10 @@ public class Indicator implements Comparable<Indicator> {
         this.avg = avg;
         this.min = min;
         this.max = max;
+    }
+
+    public void increment() {
+        add(1);
     }
 
     public String getName() {
@@ -131,11 +135,11 @@ public class Indicator implements Comparable<Indicator> {
     }
 
     public void add(long v) {
-        long happendTime = System.currentTimeMillis() / granularity;
-        long happenValue = recentValueMap.merge(happendTime, v, Long::sum);
+        long happenTime = System.currentTimeMillis() / granularity;
+        long happenValue = recentValueMap.merge(happenTime, v, Long::sum);
         maxValue.updateAndGet(prevMaxValue -> {
             if (happenValue > prevMaxValue) {
-                maxHappenTime.updateAndGet(prevMaxHappenTime -> happendTime);
+                maxHappenTime.updateAndGet(prevMaxHappenTime -> happenTime);
                 return happenValue;
             } else {
                 return prevMaxValue;
