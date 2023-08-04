@@ -3,6 +3,7 @@ package org.pot.common.concurrent.executor;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.common.Constants;
 import org.pot.common.concurrent.exception.ExceptionUtil;
+import org.pot.common.structure.ElapsedTimeMonitor;
 
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -12,6 +13,7 @@ public class AsyncRunner {
     private final Long id;
     private final Class<?> ownerClass;
     private final Queue<Runnable> queue = new LinkedBlockingDeque<>();
+    public static final ElapsedTimeMonitor elapsedTimeMonitor = ElapsedTimeMonitor.ofDefaultWarm(AsyncRunner.class.getName(), "ms");
 
     public AsyncRunner(Class<?> ownerClass) {
         this(null, ownerClass);
@@ -70,5 +72,6 @@ public class AsyncRunner {
         } else {
             log.error("Async Runner Slow: cost={}ms, id={},caller={}", time, id, caller);
         }
+        elapsedTimeMonitor.recordElapsedTime(caller, time);
     }
 }

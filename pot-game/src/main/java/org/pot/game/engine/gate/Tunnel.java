@@ -58,6 +58,11 @@ public class Tunnel extends Thread {
         this.start();
     }
 
+    void close() {
+        running = false;
+        log.info("Close Tunnel,ServerType= {},ServerId={},ServerHost={}", server.getTypeName(), server.getServerId(), server.getHost());
+    }
+
     @Override
     public void run() {
         long intervalMillis = 30;
@@ -70,6 +75,53 @@ public class Tunnel extends Thread {
         }
         this.shutdown();
         this.closed = true;
+    }
+
+    int getPlayerSize() {
+        return runningTunnelPlayerMap.size();
+    }
+
+    int getOnlinePlayerSize() {
+        int size = 0;
+        for (TunnelPlayer tunnelPlayer : runningTunnelPlayerMap.values()) {
+            if (tunnelPlayer.isOnline()) size++;
+        }
+        return size;
+    }
+
+    void quit() {
+        for (TunnelPlayer tunnelPlayer : runningTunnelPlayerMap.values()) {
+            tunnelPlayer.getVisaData().setTimeout(System.currentTimeMillis());
+            log.info("Quit Tunnel Player,PlayerUid={},State={},ServerType={},ServerId={},ServerHost={}", tunnelPlayer.getPlayerUid(), tunnelPlayer.getState(), server.getTypeName(), server.getServerId(), server.getHost());
+        }
+    }
+
+    void quit(long playerUid) {
+    }
+
+    boolean isTunnelling(long playerUid) {
+        TunnelPlayer tunnelPlayer = runningTunnelPlayerMap.get(playerUid);
+        if (tunnelPlayer == null) return false;
+        return tunnelPlayer.getState() != TunnelPlayerState.PREPARE;
+    }
+
+    synchronized boolean reconnect(PlayerSession playerSession, LoginDataS2S loginDataS2S) {
+        if (contains(loginDataS2S.getGameUid())) {
+            reconnectingSessionQueue.offer(Pair.of(playerSession, loginDataS2S));
+            return true;
+        }
+        return false;
+    }
+
+    synchronized void add(TunnelPlayer tunnelPlayer) {
+        runningTunnelPlayerMap.putIfAbsent(tunnelPlayer.getPlayerUid(), tunnelPlayer);
+        log.info("Add Tunnel Player,PlayerUid={}", tunnelPlayer.getPlayerUid());
+    }
+
+    synchronized void del(TunnelPlayer tunnelPlayer) {
+        recover(tunnelPlayer);
+        deletingTunnelPlayerMap.putIfAbsent(tunnelPlayer.getPlayerUid(), tunnelPlayer);
+        log.info("Del Tunnel Player,PlayerUid={}", tunnelPlayer.getPlayerUid());
     }
 
     private void shutdown() {

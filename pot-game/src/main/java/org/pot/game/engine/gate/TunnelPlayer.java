@@ -100,4 +100,9 @@ public class TunnelPlayer {
             });
         });
     }
+
+    public boolean isOnline() {
+        PlayerSession atomic = this.playerSession;
+        return atomic != null && atomic.isOnline();
+    }
 }
