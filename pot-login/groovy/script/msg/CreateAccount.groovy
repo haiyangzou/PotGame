@@ -4,7 +4,7 @@ package script.msg
 import org.pot.core.io.handler.HttpHandler
 import org.pot.core.script.Script
 import org.pot.core.util.TimeUtil
-import org.pot.login.domain.object.AccountsData
+import org.pot.login.domain.object.UserAccount
 import org.pot.login.service.AccountService
 
 import javax.annotation.Resource
@@ -29,7 +29,7 @@ class CreateAccount extends HttpHandler {
                 return
             }
             Long openId = Long.parseLong(getParam().get("openId"))
-            AccountsData account = accountService.defaultInstance(openId)
+            UserAccount account = accountService.defaultInstance(openId)
             account.setCreated_at(TimeUtil.currentTimeMillis())
             account.setStatus(1)
             account.setOpenid(openId)

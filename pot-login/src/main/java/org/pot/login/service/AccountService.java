@@ -1,8 +1,8 @@
 package org.pot.login.service;
 
 import org.pot.core.data.cache.AbstractCache;
-import org.pot.login.data.repository.AccountDataRepository;
-import org.pot.login.domain.object.AccountsData;
+import org.pot.login.data.repository.UserAccountRepository;
+import org.pot.login.domain.object.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
@@ -11,36 +11,36 @@ import org.springframework.stereotype.Component;
  * Description: User: zouhaiyang Date: 2021-04-14
  */
 @Component
-public class AccountService extends AbstractCache<Long, AccountsData> {
+public class AccountService extends AbstractCache<Long, UserAccount> {
 
-	@Autowired
-	private AccountDataRepository accountRepository;
+    @Autowired
+    private UserAccountRepository accountRepository;
 
-	public AccountService(
-			CrudRepository<AccountsData, Long> repository) {
-		super(repository);
-	}
+    public AccountService(
+            CrudRepository<UserAccount, Long> repository) {
+        super(repository);
+    }
 
-	@Override
-	public AccountsData defaultInstance(Long key) {
-		AccountsData account = get(key);
-		if (account == null) {
-			account = new AccountsData();
-			account.setId(key);
-			save(key, account);
-		}
-		return account;
-	}
+    @Override
+    public UserAccount defaultInstance(Long key) {
+        UserAccount account = get(key);
+        if (account == null) {
+            account = new UserAccount();
+            account.setUid(key);
+            save(key, account);
+        }
+        return account;
+    }
 
-	@Override
-	public AccountsData load(Long openId) throws Exception {
-		AccountsData account = accountRepository.findById(openId).orElse(null);
-		return account;
-	}
+    @Override
+    public UserAccount load(Long openId) throws Exception {
+        UserAccount account = accountRepository.findById(openId).orElse(null);
+        return account;
+    }
 
-	@Override
-	public void write(Long key, AccountsData value) throws Exception {
-		accountRepository.save(value);
-	}
+    @Override
+    public void write(Long key, UserAccount value) throws Exception {
+        accountRepository.save(value);
+    }
 
 }
