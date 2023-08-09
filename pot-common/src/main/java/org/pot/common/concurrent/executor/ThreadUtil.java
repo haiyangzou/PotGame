@@ -1,15 +1,18 @@
 package org.pot.common.concurrent.executor;
 
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.concurrent.ThreadFactory;
-
+import com.google.common.base.Stopwatch;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.pot.common.concurrent.exception.ExceptionUtil;
 import org.pot.common.structure.ElapsedTimeMonitor;
 import org.pot.common.util.MathUtil;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-
-import lombok.extern.slf4j.Slf4j;
+import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Supplier;
 
 @Slf4j
 public class ThreadUtil {
@@ -23,7 +26,7 @@ public class ThreadUtil {
     }
 
     public static ThreadFactory newThreadFactory(String name, boolean daemon, int priority,
-            UncaughtExceptionHandler handler) {
+                                                 UncaughtExceptionHandler handler) {
         ThreadFactoryBuilder builder = new ThreadFactoryBuilder();
         builder.setNameFormat(name);
         builder.setDaemon(daemon);
@@ -50,5 +53,44 @@ public class ThreadUtil {
 
     public static void run(long intervalMillis, Runnable runnable) throws Throwable {
         run(true, intervalMillis, runnable);
+    }
+
+    public static void await(long await, TimeUnit unit, Supplier<Boolean> stop) {
+        String caller = ExceptionUtil.computeCaller(stop, ThreadUtil.class);
+        await(await, unit, stop, caller);
+    }
+
+    public static void await(long await, TimeUnit unit, Supplier<Boolean> stop, String cause) {
+        try {
+            await(await, 0, unit, stop, cause);
+        } catch (TimeoutException e) {
+            log.error("thread await was timeout", e);
+        }
+    }
+
+    public static void await(long await, long timeout, TimeUnit unit, Supplier<Boolean> stop, String cause) throws TimeoutException {
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        try {
+            long seconds = 0;
+            do {
+                unit.sleep(await);
+                long ms = stopwatch.elapsed().toMillis();
+                if (seconds != TimeUnit.MILLISECONDS.toSeconds(ms)) {
+                    seconds = TimeUnit.MINUTES.toSeconds(ms);
+                }
+                if (timeout > 0 && ms >= unit.toMillis(timeout)) {
+                    throw new TimeoutException();
+                }
+            } while (!stop.get());
+        } catch (InterruptedException e) {
+            log.error("thread await was timeout", e);
+        }
+    }
+
+    public static void cancel(long await, TimeUnit unit, Future<?> future) {
+        if (future != null) {
+            future.cancel(false);
+            ThreadUtil.await(await, unit, future::isDone);
+        }
     }
 }

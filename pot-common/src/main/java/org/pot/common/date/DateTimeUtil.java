@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 public class DateTimeUtil {
     public static LocalDateTime toLocalDateTime(long date) {
@@ -41,5 +42,33 @@ public class DateTimeUtil {
         double nanosecondsPerMillisecond = TimeUnitsConst.NANOS_OF_MILLISECOND;
         double milliseconds = nanoseconds / nanosecondsPerMillisecond;
         return NumberUtil.convertPrecision(milliseconds, 3);
+    }
+
+    public static ZonedDateTime toZonedDateTime(final LocalDateTime localDateTime, final ZoneId zoneId) {
+        return localDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(zoneId);
+    }
+
+    public static ZonedDateTime toZonedDateTime(final ZoneId zoneId) {
+        return toZonedDateTime(LocalDateTime.now(), zoneId);
+    }
+
+    public static ZonedDateTime toSystemZonedDateTime(final LocalDateTime localDateTime) {
+        return toZonedDateTime(localDateTime, ZoneId.systemDefault());
+    }
+
+    public static long toMills(final ZonedDateTime zonedDateTime) {
+        return zonedDateTime.toInstant().toEpochMilli();
+    }
+
+    public static long toMills(final LocalDateTime localDateTime) {
+        return toMills(toSystemZonedDateTime(localDateTime));
+    }
+
+    public static Date toUtilDate(final Long utcMilli) {
+        return utcMilli == null ? null : new Date(utcMilli);
+    }
+
+    public static Date toUtilDate(final LocalDateTime localDateTime) {
+        return toUtilDate(toMills(localDateTime));
     }
 }

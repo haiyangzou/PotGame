@@ -20,4 +20,8 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
     protected GameEngine(Class<GameEngineConfig> configClass) throws Exception {
         super(configClass);
     }
+
+    public long getOpenTime() {
+        return GameServerInfo.getOpenTimestamp();
+    }
 }
