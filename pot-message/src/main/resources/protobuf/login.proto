@@ -2,8 +2,14 @@ syntax = "proto3";
 package ProtoMessage;
 option java_package = "org.pot.message.protocol.login";
 option java_multiple_files = true;
+message LoginReqC2S{
+  int32 longType = 1;
+  string account = 2;
+  string device = 3;
+  int32 serverId = 4;
+}
 message LoginDataS2S{
- int64 gameUid = 1;
+  int64 gameUid = 1;
 }
 message LogoutReqC2S{
  int64 gameUid = 1;
