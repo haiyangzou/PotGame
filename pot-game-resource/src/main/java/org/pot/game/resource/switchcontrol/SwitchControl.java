@@ -14,6 +14,7 @@ public class SwitchControl {
      * 不配置表示直接使用startTime + serverOpenDays作为循环开启时间
      */
     private String circleFirstStartTime;
+    private int startAddDays;
     private int startAddHour;
     private int startAddMinute;
     private int startAddSecond;
@@ -36,4 +37,6 @@ public class SwitchControl {
     private String closeBeforeServerTime;
 
     private int showTimeAfter;
+
+    private int noticeTimeBefore;
 }

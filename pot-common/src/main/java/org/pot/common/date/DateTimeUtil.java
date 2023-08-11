@@ -1,6 +1,7 @@
 package org.pot.common.date;
 
 import org.pot.common.units.TimeUnitsConst;
+import org.pot.common.util.DateTimeUnit;
 import org.pot.common.util.NumberUtil;
 
 import java.sql.Date;
@@ -70,5 +71,9 @@ public class DateTimeUtil {
 
     public static Date toUtilDate(final LocalDateTime localDateTime) {
         return toUtilDate(toMills(localDateTime));
+    }
+
+    public static long adjust(final DateTimeUnit dateTimeUnit, final long utcMilli, final boolean startWithZero, final long amount) {
+        return toMills(dateTimeUnit.adjust(toLocalDateTime(utcMilli), startWithZero, amount));
     }
 }
