@@ -26,6 +26,11 @@ public class SwitchManager implements Runnable {
     }
 
     public void init() {
+        initDB();
+    }
+
+    private void initDB() {
+        //从数据库中加载已保存的开关数据
 
     }
 

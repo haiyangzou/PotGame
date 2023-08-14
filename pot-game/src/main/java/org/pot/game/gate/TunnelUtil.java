@@ -1,4 +1,4 @@
-package org.pot.game.engine.gate;
+package org.pot.game.gate;
 
 import com.google.protobuf.ByteString;
 import org.pot.common.compressor.Lz4Compressor;

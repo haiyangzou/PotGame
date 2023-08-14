@@ -79,33 +79,49 @@ public class DelayRunner {
     }
 
     public void delayTick(long mills, Runnable runnable) {
-        String caller = ExceptionUtil.computeCaller(runnable, ownerClass, AsyncRunner.class);
-        queue.add(new DelayTimeTask(currentTickNumber.get() + mills, () -> {
-            long now = System.currentTimeMillis();
-            try {
-                runnable.run();
-            } catch (Throwable cause) {
-                writeErrorLog(caller, cause);
+        String caller = ExceptionUtil.computeCaller(runnable, ownerClass, DelayRunner.class);
+        queue.add(new DelayTimeTask(currentTickNumber.get() + mills, new Runnable() {
+            @Override
+            public void run() {
+                long now = System.currentTimeMillis();
+                try {
+                    runnable.run();
+                } catch (Throwable cause) {
+                    writeErrorLog(caller, cause);
+                }
+                long time = System.currentTimeMillis() - now;
+                if (time > slowMillis) {
+                    writeSlowLog(time, caller);
+                }
             }
-            long time = System.currentTimeMillis() - now;
-            if (time > slowMillis) {
-                writeSlowLog(time, caller);
+
+            @Override
+            public String toString() {
+                return super.toString() + "@Caller=" + caller;
             }
         }));
     }
 
     public void delayTime(long mills, Runnable runnable) {
-        String caller = ExceptionUtil.computeCaller(runnable, ownerClass, AsyncRunner.class);
-        queue.add(new DelayTimeTask(System.currentTimeMillis() + mills, () -> {
-            long now = System.currentTimeMillis();
-            try {
-                runnable.run();
-            } catch (Throwable cause) {
-                writeErrorLog(caller, cause);
+        String caller = ExceptionUtil.computeCaller(runnable, ownerClass, DelayRunner.class);
+        queue.add(new DelayTimeTask(System.currentTimeMillis() + mills, new Runnable() {
+            @Override
+            public void run() {
+                long now = System.currentTimeMillis();
+                try {
+                    runnable.run();
+                } catch (Throwable cause) {
+                    writeErrorLog(caller, cause);
+                }
+                long time = System.currentTimeMillis() - now;
+                if (time > slowMillis) {
+                    writeSlowLog(time, caller);
+                }
             }
-            long time = System.currentTimeMillis() - now;
-            if (time > slowMillis) {
-                writeSlowLog(time, caller);
+
+            @Override
+            public String toString() {
+                return super.toString() + "@Caller=" + caller;
             }
         }));
     }

@@ -1,23 +1,24 @@
-package org.pot.game.engine.gate;
+package org.pot.game.gate;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.common.concurrent.exception.IErrorCode;
-import org.pot.common.util.RandomUtil;
+import org.pot.common.util.RunSignal;
 import org.pot.game.engine.WorldManager;
 import org.pot.game.engine.player.Player;
 import org.pot.game.engine.player.PlayerData;
 import org.pot.game.engine.player.PlayerManager;
 
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
+@Getter
 public class TunnelPlayer {
     private final long playerUid;
+    private final RunSignal runSignal = new RunSignal(1000);
     private volatile PlayerData playerData;
     private volatile TunnelVisaData visaData;
     private volatile PlayerSession playerSession;
-    private volatile long nextKeepAlive = System.currentTimeMillis();
     private volatile TunnelPlayerState state = TunnelPlayerState.PREPARE;
 
     public TunnelPlayer(long playerUid, TunnelVisaData visaData) {
@@ -64,14 +65,6 @@ public class TunnelPlayer {
         if (atomic != null) atomic.disconnect(errorCode);
     }
 
-    public boolean keepAlive(long currentTimeMills) {
-        if (nextKeepAlive > currentTimeMills) return false;
-        nextKeepAlive = currentTimeMills
-                + TimeUnit.SECONDS.toMillis(1)
-                + RandomUtil.randomLong(TimeUnit.SECONDS.toMillis(1));
-        return true;
-    }
-
     void setPlayerData(PlayerData playerData) {
         this.playerData = playerData;
         this.playerData.asyncUpdate(
@@ -94,9 +87,14 @@ public class TunnelPlayer {
     }
 
     void recover() {
-        Player player = PlayerManager.fetchPlayer(playerUid);
+        Player player = PlayerManager.getInstance().buildPlayer(playerSession, playerData);
         player.submit(() -> {
             WorldManager.getInstance().submit(() -> {
+                //迁城，随机或者指定
+                player.submit(() -> {
+                    //需要在世界线程执行后，在玩家线程执行的，在这里
+
+                });
             });
         });
     }

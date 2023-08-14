@@ -1,4 +1,4 @@
-package org.pot.game.engine.gate;
+package org.pot.game.gate;
 
 import com.google.protobuf.Message;
 import lombok.Getter;
@@ -331,16 +331,19 @@ public class Tunnel extends Thread {
                         tunnelPlayer.disconnect(CommonErrorCode.SERVER_MAINTAIN);
                         continue;
                     }
-                    if (tunnelPlayer.keepAlive(currentTimeMills)) {
-                        GhostKeepAliveCmd.Builder builder = GhostKeepAliveCmd.newBuilder().setPlayerId(tunnelPlayer.getPlayerUid());
+                    if (tunnelPlayer.getRunSignal().signal()) {
+                        long timeout = tunnelPlayer.getVisaData().getTimeout();
+                        if (timeout <= 0 || timeout > currentTimeMills) {
+                            //不显示或为到时间，发送保持活动消息给远端服务器
+                            GhostKeepAliveCmd.Builder builder = GhostKeepAliveCmd.newBuilder().setPlayerId(tunnelPlayer.getPlayerUid());
+                            remoteServerConnection.sendMessage(new FramePlayerMessage(tunnelPlayer.getPlayerUid(), builder.build()));
+                        }
+                    } else {
+                        //发送返回消息给远端服务器，然后等待返回消息，重建玩家
+                        GhostExitCmd.Builder builder = GhostExitCmd.newBuilder().setPlayerId(tunnelPlayer.getPlayerUid());
                         remoteServerConnection.sendMessage(new FramePlayerMessage(tunnelPlayer.getPlayerUid(), builder.build()));
                     }
-                    long timeout = tunnelPlayer.getVisaData().getTimeout();
-                    if (timeout <= 0 || timeout < currentTimeMills) {
-                        continue;
-                    }
-                    GhostExitCmd.Builder builder = GhostExitCmd.newBuilder().setPlayerId(tunnelPlayer.getPlayerUid());
-                    remoteServerConnection.sendMessage(new FramePlayerMessage(tunnelPlayer.getPlayerUid(), builder.build()));
+
                 }
             }
         }

@@ -1,9 +1,10 @@
 package org.pot.common.net.ipv4;
 
+import com.google.common.base.Objects;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.apache.commons.lang3.StringUtils;
-import com.google.common.base.Objects;
 
 public class Ipv4Rule {
     private static final class Item {
@@ -44,7 +45,7 @@ public class Ipv4Rule {
         addRule(StringUtils.split(rules, ","));
     }
 
-    public void addRule(Collection<String> rules) {
+    public void addRules(Collection<String> rules) {
         for (String rule : rules) {
             addRule(rule);
         }

@@ -9,8 +9,36 @@ message LoginReqC2S{
   int32 serverId = 4;
 }
 message LoginDataS2S{
-  int64 gameUid = 1;
+  LoginReqC2S loginReqC2S = 1;
+  int64 accountUid = 2;
+  int32 serverId = 3;
+  int64 gameUid = 4;
+  string ip = 5;
+  string country = 6;
+  string deviceLanguage = 7;
+  int32 errorCOde = 8;
+  string errorMessage = 9;
+  bool isReconnect = 10;
+  bool isDebugRole = 11;
+  bool isGmRole = 12;
+  bool isNewRole = 13;
+  int32 guidePolicy = 14;
+  int32 appUpdatePolicy = 15;
+  string appUpdateVersion = 16;
+  string appUpdateUrl = 17;
+  bool isMaintain = 18;
+  string maintainNoticeTitle = 19;
+  string maintainNoticeDetail = 20;
+  int32 maintainRemainingTime = 21;
+  string token = 22;
+  NewServerInfoDto newServerInfo = 23;
+  int32 newRoleReason = 24;
+  int64 banEndTime = 25;
 }
 message LogoutReqC2S{
- int64 gameUid = 1;
+  int64 gameUid = 1;
+}
+message NewServerInfoDto{
+  int32 serverId = 1;
+  int64 openTime = 2;
 }

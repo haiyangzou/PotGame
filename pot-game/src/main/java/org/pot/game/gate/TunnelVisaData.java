@@ -1,4 +1,4 @@
-package org.pot.game.engine.gate;
+package org.pot.game.gate;
 
 import lombok.Getter;
 import lombok.Setter;

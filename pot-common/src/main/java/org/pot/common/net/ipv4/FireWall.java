@@ -1,12 +1,10 @@
 package org.pot.common.net.ipv4;
 
-import java.io.File;
-
-import org.apache.commons.lang3.CharSetUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.io.FileUtils;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.File;
 
 @Slf4j
 public class FireWall {
@@ -102,10 +100,10 @@ public class FireWall {
         if (defaultOnEmpty != null && this.isEmpty()) {
             return defaultOnEmpty.isAllowedIpv4(ip);
         }
-        if(!Ipv4Util.isIpv4Address(ip))return false;//不是ipv4的地址
-        if(Ipv4Util.isLoopbackIpv4Address(ip))return true;//本机回环地址
-        if(allowed.contains(ip))return true;//在白名单内
-        if(denied.contains(ip))return false;//在黑名单内
+        if (!Ipv4Util.isIpv4Address(ip)) return false;//不是ipv4的地址
+        if (Ipv4Util.isLoopbackIpv4Address(ip)) return true;//本机回环地址
+        if (allowed.contains(ip)) return true;//在白名单内
+        if (denied.contains(ip)) return false;//在黑名单内
         return allowed.isEmpty();//白名单为空，全开放
     }
 
@@ -134,6 +132,25 @@ public class FireWall {
                 log.error("Reload Firewall File Error:{},{}", path, e);
             }
         }
+    }
+
+    public static FireWall empty() {
+        return new FireWall();
+    }
+
+    public static FireWall lan() {
+        FireWall fireWall = new FireWall();
+        fireWall.allowed.addRule("127.0.0.1");
+        fireWall.allowed.addRule("10.0.0.0");
+        fireWall.allowed.addRule("172.16.0.0/12");
+        fireWall.allowed.addRule("192.168.0.0/16");
+        try {
+            fireWall.allowed.addRules(Ipv4Util.getLocalhostIpv4Address(false));
+        } catch (Throwable throwable) {
+
+        }
+
+        return fireWall;
     }
 
     public void addRule(String rule) {
