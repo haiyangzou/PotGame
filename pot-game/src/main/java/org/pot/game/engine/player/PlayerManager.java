@@ -30,10 +30,18 @@ public class PlayerManager {
     }
 
     public LoginDataS2S loginPlayer(PlayerSession playerSession, LoginDataS2S loginDataS2S) {
-        return null;
+        return getPlayerGroup(loginDataS2S.getGameUid()).loginPlayer(playerSession, loginDataS2S);
     }
 
     public Player buildPlayer(PlayerSession playerSession, PlayerData playerData) {
         return getPlayerGroup(playerData.getUid()).buildPlayer(playerSession, playerData);
+    }
+
+    public boolean isPlayerRunning(long gameUid) {
+        return getPlayerGroup(gameUid).isPlayerRunning(gameUid);
+    }
+
+    public boolean isPlayerExists(long gameUid) {
+        return getPlayerGroup(gameUid).isPlayerExists(gameUid);
     }
 }

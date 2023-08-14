@@ -125,12 +125,46 @@ public class GameConn extends Thread {
                 || proType == GhostReconnectCmd.class;
     }
 
-    private void processGhostCmd(PlayerSession playerSession, FramePlayerMessage message) {
-
+    private void processGhostCmd(PlayerSession playerSession, FramePlayerMessage framePlayerMessage) {
+        if (framePlayerMessage.isProtoType(GhostKeepAliveCmd.class)) {
+            processGhostKeepAliveCmd(playerSession, framePlayerMessage);
+        } else if (framePlayerMessage.isProtoType(GhostEnterCmd.class)) {
+            processGhostEnterCmd(playerSession, framePlayerMessage);
+        } else if (framePlayerMessage.isProtoType(GhostExitCmd.class)) {
+            processGhostExitCmd(playerSession, framePlayerMessage);
+        } else if (framePlayerMessage.isProtoType(GhostDestroyCmd.class)) {
+            processGhostDestroyCmd(playerSession, framePlayerMessage);
+        } else if (framePlayerMessage.isProtoType(GhostReconnectCmd.class)) {
+            processGhostReconnectCmd(playerSession, framePlayerMessage);
+        }
     }
 
     private void processLogoutCmd(PlayerSession playerSession, FramePlayerMessage message) {
         playerSession.close();
+    }
+
+    private void processGhostKeepAliveCmd(PlayerSession playerSession, FramePlayerMessage message) {
+        GameEngine.getInstance().getAsyncExecutor().execute(new GhostKeepAliveTask(playerSession, message.getProto()));
+    }
+
+    private void processGhostExitCmd(PlayerSession playerSession, FramePlayerMessage message) {
+        playerSession.initialize();
+        GameEngine.getInstance().getAsyncExecutor().execute(new GhostExitTask(playerSession, message.getProto()));
+    }
+
+    private void processGhostDestroyCmd(PlayerSession playerSession, FramePlayerMessage message) {
+        playerSession.initialize();
+        GameEngine.getInstance().getAsyncExecutor().execute(new GhostDestroyTask(playerSession, message.getProto()));
+    }
+
+    private void processGhostReconnectCmd(PlayerSession playerSession, FramePlayerMessage message) {
+        playerSession.initialize();
+        GameEngine.getInstance().getAsyncExecutor().execute(new GhostReconnectTask(playerSession, message.getProto()));
+    }
+
+    private void processGhostEnterCmd(PlayerSession playerSession, FramePlayerMessage message) {
+        playerSession.initialize();
+        GameEngine.getInstance().getAsyncExecutor().execute(new GhostEnterTask(playerSession, message.getProto()));
     }
 
     private void processLoginCmd(PlayerSession playerSession, FramePlayerMessage message) {

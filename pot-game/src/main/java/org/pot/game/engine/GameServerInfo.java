@@ -22,4 +22,8 @@ public class GameServerInfo {
     public static long getOpenTimestamp() {
         return gameServer.getOpenTimestamp();
     }
+
+    public static int getServerId() {
+        return gameServer.getServerId();
+    }
 }
