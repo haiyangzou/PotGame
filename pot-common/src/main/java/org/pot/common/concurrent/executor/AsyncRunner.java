@@ -6,7 +6,9 @@ import org.pot.common.concurrent.exception.ExceptionUtil;
 import org.pot.common.structure.ElapsedTimeMonitor;
 
 import java.util.Queue;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.function.Supplier;
 
 @Slf4j
 public class AsyncRunner {
@@ -37,6 +39,32 @@ public class AsyncRunner {
                 log.error("Async Runner Occur Error: owner={}", ownerClass.getSimpleName(), cause);
             }
         }
+    }
+
+    public <T> T execute(Supplier<T> supplier) {
+        return submit(supplier).join();
+    }
+
+    public <T> CompletableFuture<T> submit(Supplier<T> supplier) {
+        return submit(Constants.RUN_SLOW_MS, supplier);
+    }
+
+    public <T> CompletableFuture<T> submit(long slowMills, Supplier<T> supplier) {
+        String caller = ExceptionUtil.computeCaller(supplier, ownerClass, AsyncRunner.class);
+        CompletableFuture<T> future = new CompletableFuture<>();
+        queue.add(() -> {
+            long now = System.currentTimeMillis();
+            try {
+                future.complete(supplier.get());
+            } catch (Throwable cause) {
+                writeErrorLog(caller, cause);
+            }
+            long time = System.currentTimeMillis() - now;
+            if (time > slowMills) {
+                writeSlowLog(time, caller);
+            }
+        });
+        return future;
     }
 
     public void submit(long slowMillis, Runnable runnable) {

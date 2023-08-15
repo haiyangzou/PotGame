@@ -343,7 +343,6 @@ public class Tunnel extends Thread {
                         GhostExitCmd.Builder builder = GhostExitCmd.newBuilder().setPlayerId(tunnelPlayer.getPlayerUid());
                         remoteServerConnection.sendMessage(new FramePlayerMessage(tunnelPlayer.getPlayerUid(), builder.build()));
                     }
-
                 }
             }
         }
