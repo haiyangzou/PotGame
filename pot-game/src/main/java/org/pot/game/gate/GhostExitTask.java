@@ -3,6 +3,7 @@ package org.pot.game.gate;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.common.concurrent.exception.CommonErrorCode;
+import org.pot.core.net.netty.FramePlayerMessage;
 import org.pot.game.engine.player.Player;
 import org.pot.game.engine.player.PlayerAsyncTask;
 import org.pot.game.engine.player.PlayerManager;
@@ -40,7 +41,13 @@ public class GhostExitTask implements Runnable {
                 if (oldPlayerSession != null && oldPlayerSession != playerSession) {
                     oldPlayerSession.disconnect(CommonErrorCode.LOGIN_KICK);
                 }
-                playerSession.establish(ghostExitCmd);
+                //跨服玩家的会话是与来源服务器保持的会话，需要始终保持活跃，跨服玩家才能发送消息给来源服务器
+                if (playerSession.isOnline()) {
+                    playerSession.recv(new FramePlayerMessage(ghostExitCmd.getPlayerId(), ghostExitCmd));
+                } else {
+                    playerSession.initialize();
+                    playerSession.establish(ghostExitCmd);
+                }
                 GhostExitSuccessCmd.Builder builder = GhostExitSuccessCmd.newBuilder();
                 builder.setPlayerId(ghostExitCmd.getPlayerId());
                 playerSession.send(builder.build());

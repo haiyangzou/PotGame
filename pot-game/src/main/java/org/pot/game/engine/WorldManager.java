@@ -91,9 +91,11 @@ public class WorldManager extends Thread {
     }
 
     private void tick() {
+        SignalLight.setOn("WorldTick");
         tickModule();
-        asyncRunner.run();
-        delayRunner.run();
+        SignalLight.watch("WorldAsyncRunner", asyncRunner::run);
+        SignalLight.watch("WorldDelayRunner", delayRunner::run);
+        SignalLight.setOff("WorldTick");
     }
 
     private void tickModule() {

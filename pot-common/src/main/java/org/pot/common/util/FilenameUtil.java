@@ -16,4 +16,11 @@ public class FilenameUtil {
         return FilenameUtils.separatorsToUnix(result);
     }
 
+    public static String formatPath(String file) {
+        if (StringUtils.isBlank(file)) {
+            return file;
+        }
+        return formatPath(new File(file));
+    }
+
 }

@@ -27,4 +27,14 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
     public long getOpenTime() {
         return GameServerInfo.getOpenTimestamp();
     }
+
+    @Override
+    protected void doStart() throws Throwable {
+
+    }
+
+    @Override
+    protected void doStop() {
+
+    }
 }

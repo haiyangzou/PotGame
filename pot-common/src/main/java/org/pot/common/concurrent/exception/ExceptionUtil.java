@@ -2,14 +2,16 @@ package org.pot.common.concurrent.exception;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.pot.common.util.ClassUtil;
 import org.pot.common.util.StringUtil;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class ExceptionUtil {
     public static Throwable getRootCase(final Throwable throwable) {
@@ -67,5 +69,23 @@ public class ExceptionUtil {
 
     public static String abbreviate(String stacktrace) {
         return ClassUtil.getAbbreviatedName(stacktrace, 3);
+    }
+
+    public static String getCaller(Class<?>... exceptedCLasses) {
+        LinkedHashSet<Class<?>> list = new LinkedHashSet<>();
+        list.add(HashSet.class);
+        list.add(TreeSet.class);
+        list.add(HashMap.class);
+        list.add(TreeMap.class);
+        list.add(ArrayList.class);
+        list.add(LinkedList.class);
+        list.add(ConcurrentHashMap.class);
+        list.add(CopyOnWriteArrayList.class);
+        list.add(CopyOnWriteArraySet.class);
+        list.add(ConcurrentSkipListMap.class);
+        if (ArrayUtils.isNotEmpty(exceptedCLasses)) {
+            Collections.addAll(list, exceptedCLasses);
+        }
+        return abbreviate(ExceptionUtil.getStackTraceWithDepthByLine(1, list.toArray(new Class<?>[0])));
     }
 }

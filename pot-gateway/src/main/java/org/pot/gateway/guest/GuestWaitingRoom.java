@@ -1,17 +1,17 @@
 package org.pot.gateway.guest;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import org.pot.common.function.Ticker;
-import org.pot.common.net.ipv4.FireWall;
-import org.pot.gateway.engine.PotGateway;
-import org.pot.core.net.connection.ConnectionManagerListener;
-import org.pot.core.net.connection.IConnection;
-import org.pot.core.net.netty.FrameCmdMessage;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.pot.common.function.Ticker;
+import org.pot.common.net.ipv4.FireWall;
+import org.pot.core.net.connection.ConnectionManagerListener;
+import org.pot.core.net.connection.IConnection;
+import org.pot.core.net.netty.FrameCmdMessage;
+import org.pot.gateway.engine.GatewayEngine;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Slf4j
 public class GuestWaitingRoom implements Ticker, ConnectionManagerListener<FrameCmdMessage> {
@@ -62,7 +62,7 @@ public class GuestWaitingRoom implements Ticker, ConnectionManagerListener<Frame
     }
 
     private void asyncExecuteGuestTask(Guest guest) {
-        PotGateway.getInstance().getAsyncExecutor().execute(new GuestTask(guest));
+        GatewayEngine.getInstance().getAsyncExecutor().execute(new GuestTask(guest));
     }
 
 }

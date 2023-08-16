@@ -3,11 +3,14 @@ package org.pot.game.engine.world;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.common.relect.ConstructorUtil;
+import org.pot.game.engine.world.module.map.WorldMapModule;
 import org.pot.game.engine.world.module.var.WorldVarModule;
 
 @Slf4j
 public enum WorldModuleType {
-    WORLD_VAR(WorldVarModule.class);
+    WORLD_VAR(WorldVarModule.class),
+    WORLD_MAP(WorldMapModule.class),
+    ;
     private final WorldModule instance;
     @Getter
     private final Class<? extends WorldModule> moduleClass;

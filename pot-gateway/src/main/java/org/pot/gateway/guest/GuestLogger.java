@@ -1,16 +1,15 @@
 package org.pot.gateway.guest;
 
-import org.pot.common.concurrent.exception.IErrorCode;
-import org.pot.common.structure.ElapsedTimeMonitor;
-import org.pot.core.util.LogUtil;
-import org.pot.gateway.engine.PotGateway;
-import org.pot.gateway.log.GatewayLogger;
-import org.pot.core.net.netty.FrameCmdMessage;
-import org.pot.message.protocol.ProtocolPrinter;
-import org.pot.message.protocol.ProtocolSupport;
-
 import com.google.protobuf.Message;
 import lombok.extern.slf4j.Slf4j;
+import org.pot.common.concurrent.exception.IErrorCode;
+import org.pot.common.structure.ElapsedTimeMonitor;
+import org.pot.core.net.netty.FrameCmdMessage;
+import org.pot.core.util.LogUtil;
+import org.pot.gateway.engine.GatewayEngine;
+import org.pot.gateway.log.GatewayLogger;
+import org.pot.message.protocol.ProtocolPrinter;
+import org.pot.message.protocol.ProtocolSupport;
 
 @Slf4j
 public class GuestLogger {
@@ -29,7 +28,7 @@ public class GuestLogger {
     }
 
     static void writeErrorLog(Guest guest, long taskCreateTime, long taskStartTime, FrameCmdMessage frameCmdMessage,
-            GuestRequestHandler<?> handler, IErrorCode errorCode, Throwable throwable) {
+                              GuestRequestHandler<?> handler, IErrorCode errorCode, Throwable throwable) {
         long end = System.currentTimeMillis();
         long taskRunTime = end - taskCreateTime;
         long taskWaitTime = taskStartTime = taskCreateTime;
@@ -55,7 +54,7 @@ public class GuestLogger {
     }
 
     static void writeRequestLog(Guest guest, long taskCreateTime, long taskStartTime, FrameCmdMessage frameCmdMessage,
-            GuestRequestHandler<?> handler) {
+                                GuestRequestHandler<?> handler) {
         long end = System.currentTimeMillis();
         long taskRunTime = end - taskCreateTime;
         long taskWaitTime = taskStartTime = taskCreateTime;
@@ -63,8 +62,8 @@ public class GuestLogger {
         long messageWaitTime = taskStartTime - frameCmdMessage.getCreateTime();
         long messageTotalTime = end - frameCmdMessage.getCreateTime();
         Message params = frameCmdMessage.getProto();
-        boolean runSlow = taskRunTime > PotGateway.getInstance().getConfig().getGuestReqExecSlowMillis();
-        boolean waitSlow = messageWaitTime > PotGateway.getInstance().getConfig().getGuestReqWaitSlowMillis();
+        boolean runSlow = taskRunTime > GatewayEngine.getInstance().getConfig().getGuestReqExecSlowMillis();
+        boolean waitSlow = messageWaitTime > GatewayEngine.getInstance().getConfig().getGuestReqWaitSlowMillis();
         if (runSlow) {
             runElapsedTimeMonitor.recordElapsedTime(frameCmdMessage.getProtoName(), taskRunTime);
         }

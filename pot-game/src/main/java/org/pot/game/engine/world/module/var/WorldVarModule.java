@@ -1,10 +1,13 @@
 package org.pot.game.engine.world.module.var;
 
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.pot.common.util.RunSignal;
 import org.pot.game.engine.world.AbstractWorldModule;
 import org.pot.game.engine.world.WorldModuleType;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -33,5 +36,53 @@ public class WorldVarModule extends AbstractWorldModule {
 
     private void asyncSave() {
 
+    }
+
+    public void remove(String key) {
+        varMap.remove(key);
+        changed = true;
+    }
+
+    public boolean containsKey(String key) {
+        return varMap.containsKey(key);
+    }
+
+    public boolean getBoolean(String key) {
+        return BooleanUtils.toBoolean(varMap.get(key));
+    }
+
+    public boolean getBoolean(String key, boolean defaultValue) {
+        return containsKey(key) ? getBoolean(key) : defaultValue;
+    }
+
+    public void putBoolean(String key, boolean value) {
+        varMap.put(key, Boolean.toString(value));
+        changed = true;
+    }
+
+    public String getString(String key) {
+        return Objects.requireNonNull(varMap.get(key));
+    }
+
+    public String getString(String key, String defaultValue) {
+        return containsKey(key) ? getString(key) : defaultValue;
+    }
+
+    public void putString(String key, String value) {
+        varMap.put(key, StringUtils.trimToEmpty(value));
+        changed = true;
+    }
+
+    public int getInt(String key) {
+        return Integer.parseInt(varMap.get(key));
+    }
+
+    public int getInt(String key, int defaultValue) {
+        return containsKey(key) ? getInt(key) : defaultValue;
+    }
+
+    public void putInt(String key, int value) {
+        varMap.put(key, Integer.toString(value));
+        changed = true;
     }
 }

@@ -10,4 +10,8 @@ public class MathUtil {
     public static long limit(final long number, final long min, final long max) {
         return number < min ? min : number > max ? max : number;
     }
+
+    public static int divideAndCeil(final int a, final int b) {
+        return (a / b) + (a % b > 0 ? 1 : 0);
+    }
 }

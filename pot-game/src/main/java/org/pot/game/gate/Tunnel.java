@@ -193,6 +193,11 @@ public class Tunnel extends Thread {
                 continue;
             }
             if (tunnelPlayer == null) {
+                log.error("Not Exists Tunnel Player. PlayerUid={},Request={}", uid, framePlayerMessage.getProtoName());
+                if (framePlayerMessage.isProtoType(GhostUpdateCmd.class) || framePlayerMessage.isProtoType(GhostFinishCmd.class)) {
+                    GhostDestroyCmd.Builder builder = GhostDestroyCmd.newBuilder().setPlayerId(framePlayerMessage.getPlayerId());
+                    remoteServerConnection.sendMessage(new FramePlayerMessage(framePlayerMessage.getPlayerId(), builder.build()));
+                }
                 continue;
             }
             if (isGhostCmd(framePlayerMessage)) {

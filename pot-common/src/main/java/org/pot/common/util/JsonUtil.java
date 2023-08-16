@@ -20,7 +20,9 @@ import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.pot.common.relect.ConstructorUtil;
+import org.pot.common.util.file.TextFileUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -120,6 +122,10 @@ public class JsonUtil {
         }
     }
 
+    public static <T> T parseJackJson(File file, Class<T> valueType) throws IOException {
+        return parseJson(TextFileUtil.read(file), valueType);
+    }
+
     public static <T> T parseJackJson(String string, Class<T> valueType) throws IOException {
         return StringUtils.isBlank(string) ? null : MAPPER.readValue(string, valueType);
     }
@@ -127,6 +133,14 @@ public class JsonUtil {
     public static <T> T parseJson(String string, Class<T> valueType) {
         try {
             return parseJackJson(string, valueType);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public static <T> T parseJson(File file, Class<T> valueType) {
+        try {
+            return parseJackJson(file, valueType);
         } catch (IOException e) {
             return null;
         }

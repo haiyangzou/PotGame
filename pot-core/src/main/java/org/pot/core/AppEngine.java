@@ -1,12 +1,8 @@
 package org.pot.core;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.curator.shaded.com.google.common.base.Stopwatch;
-import org.apache.kafka.common.errors.InterruptException;
+import com.google.common.base.Stopwatch;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.pot.common.Constants;
 import org.pot.common.concurrent.executor.AsyncExecutor;
 import org.pot.common.concurrent.executor.ThreadUtil;
@@ -15,17 +11,19 @@ import org.pot.core.engine.EngineConfig;
 import org.pot.core.engine.IEngine;
 import org.pot.core.util.SignalLight;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class AppEngine<T extends EngineConfig> extends Thread implements IEngine<T> {
+public abstract class AppEngine<T extends EngineConfig> extends Thread implements IEngine<T> {
     @Getter
     private final AsyncExecutor asyncExecutor;
     @Getter
     private final T config;
     private final CountDownLatch starLatch = new CountDownLatch(1);
-    private final CountDownLatch stopKLatch = new CountDownLatch(1);
+    private final CountDownLatch stopLatch = new CountDownLatch(1);
     @Getter
     private volatile boolean started = false;
     @Getter
@@ -63,16 +61,33 @@ public class AppEngine<T extends EngineConfig> extends Thread implements IEngine
         } catch (Throwable e) {
             log.error("App Stop Error", e);
         } finally {
-            stopKLatch.countDown();
+            stopLatch.countDown();
+        }
+    }
+
+    void shutdown() throws InterruptedException {
+        log.info("stop");
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        this.shutdown = true;
+        this.stopLatch.await();
+        if (closed) {
+            log.info("over");
+            log.info("Shutdown used time{}:ms", stopwatch.stop().elapsed(TimeUnit.MILLISECONDS));
+        } else {
+            log.error("error");
         }
     }
 
     private void shutdown0() {
-
+        try {
+            doStop();
+        } finally {
+            asyncExecutor.shutdown();
+        }
     }
 
-    private void startup0() {
-
+    private void startup0() throws Throwable {
+        doStart();
     }
 
     private void tick() {
@@ -97,4 +112,7 @@ public class AppEngine<T extends EngineConfig> extends Thread implements IEngine
         }
     }
 
+    protected abstract void doStart() throws Throwable;
+
+    protected abstract void doStop();
 }
