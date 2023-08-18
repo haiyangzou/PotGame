@@ -14,6 +14,7 @@ import org.pot.core.util.SignalLight;
 import org.pot.game.engine.world.WorldModule;
 import org.pot.game.engine.world.WorldModuleType;
 
+import java.util.ConcurrentModificationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -31,6 +32,10 @@ public class WorldManager extends Thread {
 
     public static boolean isWorldThread() {
         return Thread.currentThread() == WorldManager.getInstance();
+    }
+
+    public static void requireWorldThread() {
+        if (!isWorldThread()) throw new ConcurrentModificationException();
     }
 
     public WorldManager() {
@@ -154,6 +159,14 @@ public class WorldManager extends Thread {
             runnable.run();
         } else {
             asyncRunner.submit(runnable);
+        }
+    }
+
+    public <T> CompletableFuture<T> submit(Supplier<T> supplier) {
+        if (isWorldThread()) {
+            return CompletableFuture.completedFuture(supplier.get());
+        } else {
+            return asyncRunner.submit(supplier);
         }
     }
 }

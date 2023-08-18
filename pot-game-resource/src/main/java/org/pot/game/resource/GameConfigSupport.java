@@ -12,6 +12,10 @@ public class GameConfigSupport {
 //        GameConfigValidator.validate(jsonConfigSupport.getJsonConfigs());
     }
 
+    public static <T> T getConfig(Class<T> configClass) {
+        return jsonConfigSupport.getJsonConfig(configClass);
+    }
+
     public static String getBaseDirPath() {
         return jsonConfigSupport.getBaseDirPath();
     }

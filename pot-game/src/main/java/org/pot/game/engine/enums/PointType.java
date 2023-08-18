@@ -3,14 +3,19 @@ package org.pot.game.engine.enums;
 import lombok.Getter;
 import org.pot.common.enums.IntEnum;
 import org.pot.common.util.EnumUtils;
-import org.pot.game.engine.point.PointCityData;
-import org.pot.game.engine.point.PointExtraData;
+import org.pot.game.engine.point.*;
 
 import java.util.Map;
 
 @Getter
 public enum PointType implements IntEnum {
     CITY(1, 2, 2, false, PointCityData.class),
+    WONDER(-1, 1, 1, true, null),
+    LAND(0, 1, 1, false, null),
+    THRONE(10, 3, 3, true, PointThroneData.class),
+    RESOURCE(3, 1, 1, false, PointResourceData.class),
+    MONSTER(5, 1, 1, false, PointMonsterData.class),
+    RALLY(6, 2, 2, false, PointRallyData.class),
     ;
     private final int id;
     private final int iRange;
@@ -29,5 +34,13 @@ public enum PointType implements IntEnum {
 
     public static PointType find(int id) {
         return map.get(id);
+    }
+
+    public int getArea() {
+        return iRange * jRange;
+    }
+
+    public boolean equals(int id) {
+        return this.id == id;
     }
 }

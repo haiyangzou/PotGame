@@ -1,12 +1,15 @@
 package org.pot.game.engine;
 
 import lombok.Getter;
+import org.pot.common.date.DateTimeUtil;
 import org.pot.core.AppEngine;
 import org.pot.core.engine.EngineInstance;
 import org.pot.core.net.netty.FramePlayerMessage;
 import org.pot.core.net.netty.NettyClientEngine;
 import org.pot.core.net.netty.NettyServerEngine;
 import org.pot.game.gate.GameConnManager;
+
+import java.time.LocalDateTime;
 
 public class GameEngine extends AppEngine<GameEngineConfig> {
     @Getter
@@ -26,6 +29,17 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
 
     public long getOpenTime() {
         return GameServerInfo.getOpenTimestamp();
+    }
+
+    public int getOpenedDays() {
+        if (getOpenTime() > System.currentTimeMillis()) {
+            return 0;
+        }
+        return DateTimeUtil.differentDays(getOpenDateTime());
+    }
+
+    public LocalDateTime getOpenDate() {
+        return getopenDateTime().toLocalDate();
     }
 
     @Override

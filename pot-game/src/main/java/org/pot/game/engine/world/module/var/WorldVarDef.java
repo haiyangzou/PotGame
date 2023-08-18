@@ -1,5 +1,6 @@
 package org.pot.game.engine.world.module.var;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.pot.common.util.JsonUtil;
 
 public interface WorldVarDef<VarType> {
@@ -54,6 +55,8 @@ public interface WorldVarDef<VarType> {
     enum StringVar implements WorldVarDef<String> {
         PlayerBornRulePhaseInfo,
         BandResourceRefreshInfo,
+        BlockMonsterRefreshInfo,
+        TimeoutMonsterInfo,
         ;
         private final String key = this.getClass().getSimpleName() + "#" + this.name();
 
@@ -87,6 +90,10 @@ public interface WorldVarDef<VarType> {
         }
 
         public <T> T parseJson(Class<T> valueType) {
+            return JsonUtil.parseJson(value(null), valueType);
+        }
+
+        public <T> T parseJson(TypeReference<T> valueType) {
             return JsonUtil.parseJson(value(null), valueType);
         }
     }
@@ -124,6 +131,41 @@ public interface WorldVarDef<VarType> {
         }
 
         public void set(int v) {
+            update(v);
+        }
+    }
+
+    enum LongVar implements WorldVarDef<Long> {
+        BlackEarthResourceRefreshTime,
+        ;
+        private final String key = this.getClass().getSimpleName() + "#" + this.name();
+
+
+        @Override
+        public String key() {
+            return key;
+        }
+
+        @Override
+        public Long value() {
+            return WorldVarModule.getInstance().getLong(key());
+        }
+
+        @Override
+        public Long value(Long defaultValue) {
+            return WorldVarModule.getInstance().getLong(key(), defaultValue);
+        }
+
+        @Override
+        public void update(Long var) {
+            WorldVarModule.getInstance().putLong(key(), var);
+        }
+
+        public long get(long v) {
+            return value(v);
+        }
+
+        public void set(long v) {
             update(v);
         }
     }

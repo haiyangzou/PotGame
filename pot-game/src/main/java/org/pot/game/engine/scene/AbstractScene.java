@@ -2,8 +2,12 @@ package org.pot.game.engine.scene;
 
 import lombok.Getter;
 import org.pot.game.engine.march.MarchManager;
+import org.pot.game.engine.point.PointExtraData;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public abstract class AbstractScene {
     @Getter
@@ -28,4 +32,27 @@ public abstract class AbstractScene {
     public void init() {
     }
 
+    public WorldPoint getPoint(int x, int y) {
+        return pointManager.getPoint(x, y);
+    }
+
+    public void removePoint(WorldPoint worldPoint) {
+        pointManager.removePoint(worldPoint);
+    }
+
+    public abstract void requireThreadSafe();
+
+    public abstract void submit(Runnable runnable);
+
+    public abstract <T> CompletableFuture<T> submit(Supplier<T> supplier);
+
+    public abstract <T> T execute(Supplier<T> supplier);
+
+    public int putPoint(List<Integer> pointIds, PointExtraData pointExtraData) {
+        return pointManager.allocateRandomLocation(pointIds, pointExtraData);
+    }
+
+    public int putPoint(Integer mainPointId, PointExtraData pointExtraData) {
+        return pointManager.allocateSpecifyLocation(mainPointId, pointExtraData);
+    }
 }

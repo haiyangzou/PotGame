@@ -2,6 +2,7 @@ package org.pot.common.util;
 
 public class PointUtil {
     private static final int POINT_OFFSET = 30000;
+    public static final int INVALID_POINT_ID = -1;
 
     public static int getPointId(int x, int y) {
         return ((x + POINT_OFFSET) << 16 | (y + POINT_OFFSET) & 0xFFFF);

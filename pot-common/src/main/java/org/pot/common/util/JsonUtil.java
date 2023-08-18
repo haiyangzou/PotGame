@@ -130,7 +130,19 @@ public class JsonUtil {
         return StringUtils.isBlank(string) ? null : MAPPER.readValue(string, valueType);
     }
 
+    public static <T> T parseJackJson(String string, TypeReference<T> valueType) throws IOException {
+        return StringUtils.isBlank(string) ? null : MAPPER.readValue(string, valueType);
+    }
+
     public static <T> T parseJson(String string, Class<T> valueType) {
+        try {
+            return parseJackJson(string, valueType);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public static <T> T parseJson(String string, TypeReference<T> valueType) {
         try {
             return parseJackJson(string, valueType);
         } catch (IOException e) {

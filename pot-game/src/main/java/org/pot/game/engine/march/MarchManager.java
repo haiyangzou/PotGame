@@ -17,4 +17,8 @@ public class MarchManager {
     public MarchManager(AbstractScene scene) {
         this.scene = scene;
     }
+
+    public March getMarch(String marchId) {
+        return marchId == null ? null : marchMap.get(marchId);
+    }
 }

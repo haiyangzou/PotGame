@@ -6,10 +6,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.pot.common.Constants;
 import org.pot.common.util.FilenameUtil;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class JsonConfigSupport {
     @Getter
     private final String baseDirPath;
     private static final String DEFAULT_CONFIG_PATH = "resource/";
+    private final Map<Class<? extends JsonConfig>, JsonConfig> configMap = new ConcurrentHashMap<>();
 
     public JsonConfigSupport(String configRootPath) {
         String path = StringUtils.defaultIfBlank(configRootPath, DEFAULT_CONFIG_PATH);
@@ -18,5 +22,9 @@ public class JsonConfigSupport {
 
     public void load() {
 
+    }
+
+    public <T> T getJsonConfig(Class<T> configClass) {
+        return (T) configMap.get(configClass);
     }
 }

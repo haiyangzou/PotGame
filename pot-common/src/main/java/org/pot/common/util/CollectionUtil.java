@@ -13,6 +13,10 @@ public final class CollectionUtil {
         return sort(Lists.newArrayList(list), c);
     }
 
+    public static <E> List<E> copyAndShuffle(Collection<E> list) {
+        return shuffle(Lists.newArrayList(list));
+    }
+
     public static <T> List<T> sort(List<T> list, Comparator<? super T> c) {
         list.sort(c);
         return list;

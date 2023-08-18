@@ -85,4 +85,17 @@ public class WorldVarModule extends AbstractWorldModule {
         varMap.put(key, Integer.toString(value));
         changed = true;
     }
+
+    public long getLong(String key) {
+        return Long.parseLong(varMap.get(key));
+    }
+
+    public long getLong(String key, long defaultValue) {
+        return containsKey(key) ? getLong(key) : defaultValue;
+    }
+
+    public void putLong(String key, long value) {
+        varMap.put(key, Long.toString(value));
+        changed = true;
+    }
 }
