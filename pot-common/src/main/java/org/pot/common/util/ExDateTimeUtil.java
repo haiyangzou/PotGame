@@ -11,4 +11,7 @@ public class ExDateTimeUtil {
         return DateTimeUtil.adjust(DateTimeUnit.DAY, System.currentTimeMillis(), true, 0);
     }
 
+    public static long getPrevDayStart() {
+        return DateTimeUtil.adjust(DateTimeUnit.DAY, System.currentTimeMillis(), true, -1);
+    }
 }

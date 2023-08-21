@@ -5,7 +5,7 @@ import org.pot.game.resource.InitJsonConfigSpec;
 
 import java.util.Map;
 
-public class MonsterRefresh extends InitJsonConfigSpec {
+public class RallyRefresh extends InitJsonConfigSpec {
     @Getter
     private int dayId;
     @Getter

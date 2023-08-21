@@ -1,6 +1,7 @@
 package org.pot.game.engine.march;
 
 import lombok.Getter;
+import org.pot.game.engine.march.war.WarManager;
 import org.pot.game.engine.scene.AbstractScene;
 
 import java.util.Map;
@@ -13,6 +14,8 @@ public class MarchManager {
     private final AbstractScene scene;
     private final Queue<March> pending = new LinkedBlockingDeque<>();
     private final Map<String, March> marchMap = new ConcurrentHashMap<>();
+    @Getter
+    private final WarManager warManager = new WarManager(this);
 
     public MarchManager(AbstractScene scene) {
         this.scene = scene;

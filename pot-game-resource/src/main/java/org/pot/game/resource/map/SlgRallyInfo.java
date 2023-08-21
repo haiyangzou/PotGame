@@ -3,7 +3,7 @@ package org.pot.game.resource.map;
 import lombok.Getter;
 import org.pot.game.resource.InitJsonConfigSpec;
 
-public class SlgMonsterInfo extends InitJsonConfigSpec {
+public class SlgRallyInfo extends InitJsonConfigSpec {
     @Getter
     private int level;
     @Getter

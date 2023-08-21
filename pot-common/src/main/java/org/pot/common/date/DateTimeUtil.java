@@ -2,13 +2,11 @@ package org.pot.common.date;
 
 import org.pot.common.units.TimeUnitsConst;
 import org.pot.common.util.DateTimeUnit;
+import org.pot.common.util.MathUtil;
 import org.pot.common.util.NumberUtil;
 
 import java.sql.Date;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 
 public class DateTimeUtil {
     public static LocalDateTime toLocalDateTime(long date) {
@@ -75,5 +73,16 @@ public class DateTimeUtil {
 
     public static long adjust(final DateTimeUnit dateTimeUnit, final long utcMilli, final boolean startWithZero, final long amount) {
         return toMills(dateTimeUnit.adjust(toLocalDateTime(utcMilli), startWithZero, amount));
+    }
+
+    public static int differentDays(LocalDateTime localDateTime1) {
+        return differentDays(localDateTime1, LocalDateTime.now());
+    }
+
+    public static int differentDays(LocalDateTime localDateTime1, LocalDateTime localDateTime2) {
+        LocalDateTime localDate1 = localDateTime1.toLocalDate().atStartOfDay();
+        LocalDateTime localDate2 = localDateTime2.toLocalDate().atStartOfDay();
+        Duration duration = Duration.between(localDate1, localDate2);
+        return MathUtil.getIntValue(duration.toDays());
     }
 }

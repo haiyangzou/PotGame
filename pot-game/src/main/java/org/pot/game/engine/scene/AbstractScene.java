@@ -36,8 +36,16 @@ public abstract class AbstractScene {
         return pointManager.getPoint(x, y);
     }
 
+    public WorldPoint getPoint(int pointId) {
+        return pointManager.getPoint(pointId);
+    }
+
     public void removePoint(WorldPoint worldPoint) {
         pointManager.removePoint(worldPoint);
+    }
+
+    public void removePoint(int pointId) {
+        pointManager.removePoint(pointId);
     }
 
     public abstract void requireThreadSafe();

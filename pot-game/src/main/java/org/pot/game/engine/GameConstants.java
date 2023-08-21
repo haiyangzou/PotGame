@@ -16,4 +16,11 @@ public interface GameConstants {
             .put(2, 0.0402)
             .put(1, 0.0402)
             .build();
+    //Block的诖误刷新时间间隔
+    long BLOCK_MONSTER_REFRESH_MILLIS = TimeUnit.MINUTES.toMillis(15);
+    //Block的诖误占Block的坐标数的比例,3.2%
+    double BLOCK_MONSTER_PERCENT = 0.032;
+
+    long BLOCK_RALLY_REFRESH_MILLIS = TimeUnit.MINUTES.toMillis(15);
+    double BLOCK_RALLY_PERCENT = 0.044;
 }

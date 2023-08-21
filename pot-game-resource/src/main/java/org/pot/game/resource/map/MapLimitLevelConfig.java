@@ -14,6 +14,10 @@ public class MapLimitLevelConfig extends InitJsonConfig<MapLimitLevel> {
         return getMaxLevel(days, MapLimitLevel::getMonsterLevel);
     }
 
+    public int getMaxRallyLevel(int days) {
+        return getMaxLevel(days, MapLimitLevel::getRallyLevel);
+    }
+
     private static int getMaxLevel(int openedDays, Function<MapLimitLevel, Integer> function) {
         int maxLevel = 1;
         for (MapLimitLevel mapLimitLevel : getInstance().getSpecList()) {

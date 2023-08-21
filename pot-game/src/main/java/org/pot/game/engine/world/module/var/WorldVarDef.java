@@ -56,7 +56,9 @@ public interface WorldVarDef<VarType> {
         PlayerBornRulePhaseInfo,
         BandResourceRefreshInfo,
         BlockMonsterRefreshInfo,
+        BlockRallyRefreshInfo,
         TimeoutMonsterInfo,
+        TimeoutRallyInfo,
         ;
         private final String key = this.getClass().getSimpleName() + "#" + this.name();
 

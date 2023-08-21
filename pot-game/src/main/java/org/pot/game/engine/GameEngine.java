@@ -9,6 +9,7 @@ import org.pot.core.net.netty.NettyClientEngine;
 import org.pot.core.net.netty.NettyServerEngine;
 import org.pot.game.gate.GameConnManager;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class GameEngine extends AppEngine<GameEngineConfig> {
@@ -38,8 +39,12 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
         return DateTimeUtil.differentDays(getOpenDateTime());
     }
 
-    public LocalDateTime getOpenDate() {
-        return getopenDateTime().toLocalDate();
+    public LocalDate getOpenDate() {
+        return getOpenDateTime().toLocalDate();
+    }
+
+    public LocalDateTime getOpenDateTime() {
+        return DateTimeUtil.toLocalDateTime(getOpenTime());
     }
 
     @Override
