@@ -24,7 +24,9 @@ import org.pot.common.util.file.TextFileUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class JsonUtil {
@@ -169,5 +171,24 @@ public class JsonUtil {
 
     public static <T> String toJackSon(T object, TypeReference<T> valueTypeRef) throws JsonProcessingException {
         return MAPPER.writerFor(valueTypeRef).writeValueAsString(object);
+    }
+
+    public static <K, V> HashMap<K, V> parseHashMap(String string, Class<K> keyType, Class<V> valueType) {
+        return parseMap(string, new HashMap<>(), keyType, valueType);
+    }
+
+    public static <K, V, T extends Map<K, V>> T parseMap(String string, T map, Class<K> keyType, Class<V> valueType) {
+        Class<T> mapClass = (Class<T>) map.getClass();
+        return parseMap(string, mapClass, keyType, valueType);
+    }
+
+    public static <K, V, T extends Map<K, V>> T parseMap(String string, Class<T> mapClass, Class<K> keyType, Class<V> valueType) {
+        try {
+            if (StringUtils.isBlank(string)) return null;
+            return MAPPER.readValue(string, MAPPER.getTypeFactory().constructMapType(mapClass, keyType, valueType));
+        } catch (IOException e) {
+            log.error("JsonSon to Map Error", e);
+            return null;
+        }
     }
 }

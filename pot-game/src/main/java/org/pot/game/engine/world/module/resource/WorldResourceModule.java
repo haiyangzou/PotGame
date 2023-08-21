@@ -1,4 +1,4 @@
-package org.pot.game.engine.world.module.map.resource;
+package org.pot.game.engine.world.module.resource;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;

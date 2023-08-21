@@ -1,4 +1,4 @@
-package org.pot.game.engine.world.module.map.monster;
+package org.pot.game.engine.world.module.monster;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Maps;

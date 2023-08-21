@@ -1,4 +1,4 @@
-package org.pot.game.engine.world.module.map.rally;
+package org.pot.game.engine.world.module.rally;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Maps;
