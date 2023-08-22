@@ -1,6 +1,7 @@
 package org.pot.core.config;
 
 import lombok.Getter;
+import org.apache.commons.configuration2.Configuration;
 
 @Getter
 public class NettyConfig {
@@ -10,16 +11,11 @@ public class NettyConfig {
     private int backlog = 1024;
     private String host = "0.0.0.0";
     private int port = 0;
+    private int connectionIdleSeconds = 120;
+    private int connectionRecvQueueMaxSize = 1024;
+    private int connectionEvictSeconds = 10;
 
-    public int getConnectionIdleSeconds() {
-        return 60;
-    }
+    protected void setProperties(Configuration configuration) {
 
-    public int getConnectionRecvQueueMaxSize() {
-        return 1024;
-    }
-
-    public int getConnectionEvictSeconds() {
-        return 10;
     }
 }

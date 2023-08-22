@@ -9,7 +9,7 @@ public class GameDb {
     private static DbSupport LOCAL;
 
     public static void init(EngineConfig engineConfig) {
-
+        LOCAL = new DbSupport(engineConfig.getLocalDbConfig());
     }
 
     public static DbSupport local() {

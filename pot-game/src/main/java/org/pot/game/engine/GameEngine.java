@@ -8,6 +8,7 @@ import org.pot.core.net.netty.FramePlayerMessage;
 import org.pot.core.net.netty.NettyClientEngine;
 import org.pot.core.net.netty.NettyServerEngine;
 import org.pot.game.gate.GameConnManager;
+import org.pot.game.persistence.GameDb;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,7 +50,7 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
 
     @Override
     protected void doStart() throws Throwable {
-
+        GameDb.init(getConfig());
     }
 
     @Override

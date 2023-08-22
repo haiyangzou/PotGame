@@ -16,8 +16,7 @@ public class AccountService extends AbstractCache<Long, UserAccount> {
     @Autowired
     private UserAccountRepository accountRepository;
 
-    public AccountService(
-            CrudRepository<UserAccount, Long> repository) {
+    public AccountService(CrudRepository<UserAccount, Long> repository) {
         super(repository);
     }
 

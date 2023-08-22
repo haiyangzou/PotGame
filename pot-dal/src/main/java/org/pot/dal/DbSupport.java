@@ -1,7 +1,9 @@
 package org.pot.dal;
 
+import com.zaxxer.hikari.HikariConfig;
 import org.apache.commons.math3.primes.Primes;
 import org.pot.common.config.DbConfig;
+import org.pot.common.util.UrlObject;
 import org.pot.dal.async.AsyncDbTaskExecutor;
 import org.pot.dal.async.IAsyncDbTask;
 import org.pot.dal.db.DbExecutor;
@@ -12,7 +14,21 @@ public class DbSupport {
     private final AsyncDbTaskExecutor asyncDbTaskExecutor;
 
     public DbSupport(DbConfig dbConfig) {
-        dbExecutor = new HikariDbExecutor();
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl(dbConfig.getUrl());
+        hikariConfig.setUsername(dbConfig.getUsername());
+        hikariConfig.setPassword(dbConfig.getPassword());
+        hikariConfig.setAutoCommit(dbConfig.isAutoCommit());
+        hikariConfig.setConnectionInitSql(dbConfig.getConnectionInitSql());
+        hikariConfig.setConnectionTestQuery(dbConfig.getConnectionTestSql());
+        hikariConfig.setMinimumIdle(dbConfig.getMinimumIdle());
+        hikariConfig.setMaximumPoolSize(dbConfig.getMaximumPoolSize());
+        hikariConfig.setConnectionTimeout(dbConfig.getConnectionTimeOut());
+        hikariConfig.setLeakDetectionThreshold(dbConfig.getLeakDetectionThreshold());
+        UrlObject urlObject = UrlObject.valueOf(hikariConfig.getJdbcUrl());
+        hikariConfig.setPoolName("HikariPool-" + urlObject.getAddress());
+        urlObject.getParameters().forEach(hikariConfig::addDataSourceProperty);
+        dbExecutor = new HikariDbExecutor(hikariConfig.getJdbcUrl(), hikariConfig);
         this.asyncDbTaskExecutor = new AsyncDbTaskExecutor(Primes.nextPrime(dbConfig.getMinimumIdle()));
     }
 

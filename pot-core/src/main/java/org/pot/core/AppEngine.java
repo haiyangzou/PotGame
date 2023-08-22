@@ -34,7 +34,7 @@ public abstract class AppEngine<T extends EngineConfig> extends Thread implement
     private final List<Ticker> tickers = new CopyOnWriteArrayList<>();
 
     protected AppEngine(Class<T> configClass) throws Exception {
-        this.config = null;
+        this.config = EngineConfig.loadConfiguration(configClass);
         this.asyncExecutor = new AsyncExecutor(getConfig().getAsyExecutorConfig());
     }
 
