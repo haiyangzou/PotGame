@@ -1,23 +1,9 @@
-package org.pot.test;
+package org.pot.test.algorithm;
 
-import org.junit.Test;
 import org.pot.test.struct.ListNode;
 
 public class TwoSum {
-    @Test
-    public void test() {
-        ListNode l1_2 = new ListNode(3);
-        ListNode l1_1 = new ListNode(4, l1_2);
-        ListNode l1 = new ListNode(2, l1_1);
-
-        ListNode l2_2 = new ListNode(4);
-        ListNode l2_1 = new ListNode(6, l2_2);
-        ListNode l2 = new ListNode(5, l2_1);
-        ListNode result = addTwoNumbers(l1, l2);
-        System.out.println(result.val);
-    }
-
-    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         ListNode dummyHead = new ListNode(0);
         ListNode tail = dummyHead;
         int carry = 0;

@@ -1,6 +1,4 @@
-package org.pot.test;
-
-import org.junit.Test;
+package org.pot.test.algorithm;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -16,14 +14,7 @@ import java.util.List;
  * Return the max sliding window.
  */
 public class Sliding {
-    @Test
-    public void test() {
-        int[] nums = new int[]{1, 3, -1, -3, 5, 3, 6, 7};
-        int k = 3;
-        maxSlidingWindow(nums, k);
-    }
-
-    public int[] maxSlidingWindow(int[] nums, int k) {
+    public static int[] maxSlidingWindow(int[] nums, int k) {
         List<Integer> res = new ArrayList<>();
         int left = 0;
         int right = 0;

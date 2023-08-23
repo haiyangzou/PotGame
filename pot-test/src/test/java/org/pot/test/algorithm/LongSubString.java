@@ -1,6 +1,4 @@
-package org.pot.test;
-
-import org.junit.Test;
+package org.pot.test.algorithm;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,14 +8,7 @@ import java.util.Set;
  * substring without repeating characters.
  */
 public class LongSubString {
-
-    @Test
-    public void test() {
-        String s = "abcabcbbefjoiosidfjsodfh";
-        System.out.println(lengthOfLongestSubstring(s));
-    }
-
-    public int lengthOfLongestSubstring(String s) {
+    public static int lengthOfLongestSubstring(String s) {
         Set<Character> queue = new HashSet<>();
         int n = s.length();
         int left = 0;

@@ -1,6 +1,4 @@
-package org.pot.test;
-
-import org.junit.Test;
+package org.pot.test.algorithm;
 
 /**
  * Longest Palindromic Substring
@@ -10,15 +8,10 @@ import org.junit.Test;
  * Explanation: "aba" is also a valid answer.
  */
 public class MedianOfTowSorted {
-    int maxLen = 0;
-    int lo = 0;
+    static int maxLen = 0;
+    static int lo = 0;
 
-    @Test
-    public void test() {
-        System.out.println(longestPalindrome("bacbacbcab"));
-    }
-
-    public String longestPalindrome(String s) {
+    public static String longestPalindrome(String s) {
         char[] input = s.toCharArray();
         if (s.length() < 2) {
             return s;
@@ -31,7 +24,7 @@ public class MedianOfTowSorted {
         return s.substring(lo, lo + maxLen);
     }
 
-    public void expandPalindrome(char[] s, int j, int k) {
+    public static void expandPalindrome(char[] s, int j, int k) {
         while (j >= 0 && k < s.length && s[j] == s[k]) {
             j--;
             k++;
