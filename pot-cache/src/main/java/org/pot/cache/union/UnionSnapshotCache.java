@@ -97,13 +97,19 @@ public class UnionSnapshotCache {
     }
 
     public void refreshUnionSnapshot(long unionId) {
+        boolean present = cache.getIfPresent(unionId) != null;
         cache.invalidate(unionId);
-        cache.refresh(unionId);
+        if (present) {
+            cache.refresh(unionId);
+        }
     }
 
     public void refreshUnionMemberSnapshot(long unionId) {
+        boolean present = memberCache.get(unionId) != null;
         memberCache.invalidate(unionId);
-        memberCache.refresh(unionId);
+        if (present) {
+            memberCache.refresh(unionId);
+        }
     }
 
     public UnionSnapshot getSnapshot(long unionId) {

@@ -3,7 +3,6 @@ package org.pot.test;
 import org.junit.Test;
 import org.pot.test.algorithm.*;
 import org.pot.test.struct.ListNode;
-import test.algorithm.*;
 
 public class LeeCode {
     @Test
@@ -40,6 +39,10 @@ public class LeeCode {
     @Test
     public void zigzagConvert() {
         System.out.println(Zigzag.convert("PAYPALISHIRING", 3));
+    }
 
+    @Test
+    public void reverseInteger() {
+        System.out.println(ReverseInteger.reverse(312));
     }
 }
