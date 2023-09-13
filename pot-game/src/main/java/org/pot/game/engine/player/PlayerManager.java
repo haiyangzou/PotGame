@@ -44,4 +44,20 @@ public class PlayerManager {
     public boolean isPlayerExists(long gameUid) {
         return getPlayerGroup(gameUid).isPlayerExists(gameUid);
     }
+
+    public long getPlayerCount() {
+        long total = 0;
+        for (PlayerGroup group : playerGroups) {
+            total += group.getPlayerCount();
+        }
+        return total;
+    }
+
+    public long getLoadingPlayerCount() {
+        long total = 0;
+        for (PlayerGroup group : playerGroups) {
+            total += group.getLoadingPlayerCount();
+        }
+        return total;
+    }
 }

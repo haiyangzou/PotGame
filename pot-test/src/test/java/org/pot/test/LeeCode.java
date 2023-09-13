@@ -45,4 +45,9 @@ public class LeeCode {
     public void reverseInteger() {
         System.out.println(ReverseInteger.reverse(312));
     }
+
+    @Test
+    public void regularExpression() {
+        RegularExpressionMatching.isMatch("aa", "*a");
+    }
 }

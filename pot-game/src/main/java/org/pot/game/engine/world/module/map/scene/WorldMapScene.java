@@ -15,6 +15,11 @@ public class WorldMapScene extends AbstractScene {
     }
 
     @Override
+    public WorldMapCityRegulation getCityRegulation() {
+        return (WorldMapCityRegulation) cityRegulation;
+    }
+
+    @Override
     public void requireThreadSafe() {
         WorldManager.requireWorldThread();
     }

@@ -66,4 +66,13 @@ public class PlayerGroup extends Thread {
         }
         return finalLoginDataS2S;
     }
+
+    long getLoadingPlayerCount() {
+        return players.values().stream().filter(player -> player.getState().get() == PlayerState.loading).count();
+    }
+
+    long getPlayerCount() {
+        return players.size();
+    }
+
 }

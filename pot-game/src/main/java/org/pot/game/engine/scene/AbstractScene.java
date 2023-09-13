@@ -28,7 +28,6 @@ public abstract class AbstractScene {
         this.pointRegulation = pointRegulation.apply(this);
         this.cityRegulation = cityRegulation.apply(this);
     }
-
     public void init() {
     }
 
@@ -63,4 +62,6 @@ public abstract class AbstractScene {
     public int putPoint(Integer mainPointId, PointExtraData pointExtraData) {
         return pointManager.allocateSpecifyLocation(mainPointId, pointExtraData);
     }
+
+    public abstract CityRegulation getCityRegulation();
 }
