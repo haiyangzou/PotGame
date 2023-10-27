@@ -1,15 +1,20 @@
 package org.pot.common.net.ipv4;
 
-import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.pot.common.util.StringUtil;
+
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Ipv4Util {
     public static List<String> getLocalhostIpv4Address(boolean containsLoopback) throws SocketException {
@@ -17,8 +22,49 @@ public class Ipv4Util {
         return ipv4AddressAndMask.stream().map(Pair::getLeft).collect(Collectors.toList());
     }
 
+    public static int compareIpv4Type(String ipString1, String ipString2) {
+        int t1 = getIpv4Type(ipString1).ordinal();
+        int t2 = getIpv4Type(ipString2).ordinal();
+        int compare = Integer.compare(t1, t2);
+        if (compare != 0) {
+            return compare;
+        }
+        return compareIpv4String(ipString1, ipString2);
+    }
+
+    public static int compareIpv4String(String ipString1, String ipString2) {
+        long ipValue1 = toIpv4Value(ipString1);
+        long ipValue2 = toIpv4Value(ipString2);
+        return Long.compare(ipValue1, ipValue2);
+    }
+
     public static List<Pair<String, String>> getLocalhostIpv4AddressAndMask(boolean containsLoopback) throws SocketException {
         List<Pair<String, String>> ipv4 = new ArrayList<>();
+        Enumeration<NetworkInterface> netInterfaces = NetworkInterface.getNetworkInterfaces();
+        while (netInterfaces.hasMoreElements()) {
+            NetworkInterface networkInterface = netInterfaces.nextElement();
+            if (StringUtils.containsIgnoreCase(networkInterface.getDisplayName(), "Virtual")) {
+                continue;
+            }
+            if (networkInterface.isVirtual() || networkInterface.isUp()) {
+                continue;
+            }
+            if (!containsLoopback && networkInterface.isLoopback()) {
+                continue;
+            }
+            for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
+                if (!containsLoopback && interfaceAddress.getAddress().isLoopbackAddress()) {
+                    continue;
+                }
+                String hostAddress = interfaceAddress.getAddress().getHostAddress();
+                if (!isIpv4Address(hostAddress)) {
+                    continue;
+                }
+                String mask = toMaskString(interfaceAddress.getNetworkPrefixLength());
+                ipv4.add(Pair.of(hostAddress, mask));
+            }
+        }
+        ipv4.sort((o1, o2) -> compareIpv4Type(o1.getLeft(), o2.getLeft()));
         return ipv4;
     }
 
@@ -162,6 +208,13 @@ public class Ipv4Util {
 
     public static String join(List<String> multiIpv4) {
         return StringUtils.trimToEmpty(StringUtils.join(multiIpv4, ","));
+    }
+
+    public static List<String> split(String multiIpv4, Predicate<String> include) {
+        return StringUtil.splitToList(multiIpv4, ",").stream()
+                .filter(s -> include == null || include.test(s))
+                .sorted(Ipv4Util::compareIpv4Type)
+                .collect(Collectors.toList());
     }
 
 }

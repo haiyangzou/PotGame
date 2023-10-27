@@ -22,6 +22,10 @@ public class ClassResourceUtil {
         return result;
     }
 
+    public static InputStream getInputStream(String filePath) {
+        return getInputStream(Thread.currentThread().getContextClassLoader(), filePath);
+    }
+
     public static InputStream getInputStream(ClassLoader classLoader, String filePath) {
         return classLoader.getResourceAsStream(filePath);
     }
