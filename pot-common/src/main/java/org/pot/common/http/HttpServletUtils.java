@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.pot.common.net.ipv4.Ipv4Util;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.TreeMap;
 
 public class HttpServletUtils {
     public static String getRequestIp(HttpServletRequest request) {
@@ -24,5 +26,10 @@ public class HttpServletUtils {
             return ipv4;
         }
         return ip;
+    }
+
+    public static TreeMap<String, String> getParameters(HttpServletRequest request) throws IOException {
+        TreeMap<String, String> params;
+        return null;
     }
 }

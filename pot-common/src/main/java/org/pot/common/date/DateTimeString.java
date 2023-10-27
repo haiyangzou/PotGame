@@ -12,7 +12,7 @@ public enum DateTimeString {
     TIME(true, "HH:mm:ss"),
     DATE_TIME(true, "yyy-MM-dd HH:mm:ss"),
     DATE_NONE_SEPARATOR(true, "yyyMMdd"),
-
+    Date_TIME_MILLIS_ZONE(false, "yyyy-MM-dd HH:mm:ss,SSS Z"),
     DATE(true, "yyy-MM-dd");
 
     private final boolean local;

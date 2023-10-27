@@ -20,6 +20,7 @@
         <module>pot-dal</module>
         <module>pot-test</module>
         <module>pot-strategy</module>
+        <module>pot-hotswap</module>
     </modules>
     <packaging>pom</packaging>
     <name>pot</name>
