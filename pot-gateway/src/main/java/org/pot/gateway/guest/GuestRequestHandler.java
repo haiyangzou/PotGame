@@ -1,15 +1,12 @@
 package org.pot.gateway.guest;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-
-import org.apache.kafka.common.protocol.types.Field.Bool;
+import com.google.protobuf.Message;
+import lombok.Getter;
 import org.pot.core.engine.Handler;
 import org.pot.core.engine.HandlerDefinition;
 
-import com.google.protobuf.Message;
-
-import lombok.Getter;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 @HandlerDefinition
 public abstract class GuestRequestHandler<RequestType extends Message> implements Handler<Guest, RequestType, Boolean> {
@@ -17,7 +14,8 @@ public abstract class GuestRequestHandler<RequestType extends Message> implement
     private final String classSimpleName;
     private final Class<RequestType> requestType;
 
-    public GuestRequestHandler(Class<RequestType> requestType) {
+    @SuppressWarnings("unchecked")
+    public GuestRequestHandler() {
         this.classSimpleName = this.getClass().getSimpleName();
         Type superClass = this.getClass().getGenericSuperclass();
         if (superClass instanceof Class<?>) {

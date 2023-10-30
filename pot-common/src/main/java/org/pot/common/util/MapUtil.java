@@ -21,6 +21,10 @@ public class MapUtil {
         return newHashMapWithCapacity(DEFAULT_MAP_INITIAL_CAPACITY);
     }
 
+    public static <K, V> HashMap<K, V> newHashMap(K key, V value) {
+        return put(newHashMap(), key, value);
+    }
+
     public static <K, V> HashMap<K, V> newHashMapWithCapacity(int initialCapacity) {
         return new HashMap<>(initialCapacity);
     }

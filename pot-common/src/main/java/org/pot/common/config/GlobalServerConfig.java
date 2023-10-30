@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 public class GlobalServerConfig extends EndPointConfig {
     protected int httpPort;
     protected String userLoginUrl = StringUtils.EMPTY;
+    protected String userReconnectUrl = StringUtils.EMPTY;
     protected String httpUrlPrefix = StringUtils.EMPTY;
     protected String gameServerListUrl = StringUtils.EMPTY;
 
@@ -27,6 +28,8 @@ public class GlobalServerConfig extends EndPointConfig {
     private void initialize() {
         this.httpUrlPrefix = "http://" + host + ":" + httpPort;
         this.userLoginUrl = httpUrlPrefix + "/user/login";
+        this.userReconnectUrl = httpUrlPrefix + "/user/reconnect";
         this.gameServerListUrl = httpUrlPrefix + "/gameServer/getList";
+
     }
 }

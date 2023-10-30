@@ -1,6 +1,7 @@
 package org.pot.game.engine;
 
 import lombok.Getter;
+import org.pot.cache.rank.RankCacheConfig;
 import org.pot.common.Constants;
 import org.pot.core.engine.EngineConfig;
 
@@ -10,5 +11,6 @@ public class GameEngineConfig extends EngineConfig {
     private long worldTickIntervalMillis = Constants.RUN_INTERVAL_MS;
     private long playerTickIntervalMillis = Constants.RUN_INTERVAL_MS;
     private long playerSessionRecvQueueMaxSize = 500;
+    private RankCacheConfig rankCacheConfig;
 
 }

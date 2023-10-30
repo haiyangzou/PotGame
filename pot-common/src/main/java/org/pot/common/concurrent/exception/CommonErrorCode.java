@@ -11,6 +11,7 @@ public enum CommonErrorCode implements IErrorCode {
     LOGIN_FAIL(1016),
     ALREADY_LOGIN(1017),
     SHUTDOWN_KICK(1020),
+    RECONNECT_FAIL(1029),
     ;
     public final int errorCode;
 
