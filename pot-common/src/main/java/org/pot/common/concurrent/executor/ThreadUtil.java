@@ -16,6 +16,7 @@ import java.util.function.Supplier;
 
 @Slf4j
 public class ThreadUtil {
+    public static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
     public static ElapsedTimeMonitor elapsedTimeMonitor = ElapsedTimeMonitor.ofDefaultWarm(ThreadUtil.class.getName(),
             "ms");
     public static final UncaughtExceptionHandler DEFAULT_EXCEPTION_HANDER = (thread, exception) -> log

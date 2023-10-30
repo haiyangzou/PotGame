@@ -1,14 +1,12 @@
 package org.pot.gateway.guest;
 
+import com.google.protobuf.Message;
+import lombok.Getter;
 import org.pot.common.concurrent.exception.CommonErrorCode;
 import org.pot.common.concurrent.exception.IErrorCode;
 import org.pot.common.concurrent.exception.ServiceException;
 import org.pot.core.net.netty.FrameCmdMessage;
 import org.pot.message.protocol.ProtocolSupport;
-
-import com.google.protobuf.Message;
-
-import lombok.Getter;
 
 public class GuestTask implements Runnable {
     @Getter
@@ -47,6 +45,7 @@ public class GuestTask implements Runnable {
             throwable = ex;
             errorCode = CommonErrorCode.INVALID_REQUEST;
         }
+        //发送Ack
         guest.sendMessage(ProtocolSupport.buildProtoAckMsg(protoType));
         if (errorCode != null) {
             GuestLogger.writeErrorLog(guest, createTime, startTime, frameCmdMessage, guestRequestHandler, errorCode,

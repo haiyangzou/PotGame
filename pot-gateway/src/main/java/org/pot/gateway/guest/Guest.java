@@ -1,5 +1,7 @@
 package org.pot.gateway.guest;
 
+import com.google.protobuf.Message;
+import lombok.Getter;
 import org.pot.common.concurrent.exception.CommonErrorCode;
 import org.pot.common.concurrent.exception.IErrorCode;
 import org.pot.core.net.connection.IConnection;
@@ -7,10 +9,6 @@ import org.pot.core.net.netty.FrameCmdMessage;
 import org.pot.message.protocol.DisConnectCode;
 import org.pot.message.protocol.ErrorCode;
 import org.pot.message.protocol.ProtocolSupport;
-
-import com.google.protobuf.Message;
-
-import lombok.Getter;
 
 public class Guest {
     @Getter
@@ -47,7 +45,7 @@ public class Guest {
         disconnect(DisConnectCode.newBuilder().setErrorCode(errorCode).build());
     }
 
-    void disconnect(Message message) {
+    public void disconnect(Message message) {
         connection.disconnect(new FrameCmdMessage(message));
     }
 

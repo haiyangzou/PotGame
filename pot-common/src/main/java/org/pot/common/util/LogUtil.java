@@ -1,4 +1,4 @@
-package org.pot.core.util;
+package org.pot.common.util;
 
 import org.slf4j.helpers.MessageFormatter;
 

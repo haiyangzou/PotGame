@@ -1,6 +1,7 @@
 package org.pot.common.util;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -8,6 +9,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class RandomUtil {
+    public static String uuid() {
+        return StringUtils.remove(UUID.randomUUID().toString(), "-");
+    }
+
     public static long randomLong(long bound) {
         return ThreadLocalRandom.current().nextLong(bound);
     }

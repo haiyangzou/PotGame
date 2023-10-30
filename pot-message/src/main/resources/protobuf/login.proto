@@ -42,3 +42,28 @@ message NewServerInfoDto{
   int32 serverId = 1;
   int64 openTime = 2;
 }
+//客户端版本信息
+message AppVersionInfoS2C{
+  int32 appUpdatePolicy = 1; //客户端更新策略，0=无更新，1=补丁更新，2=推荐更新，3 =强制更新
+  string appUpdateVersion = 2; //客户端更新版本
+  string appUpdateUrl = 3; //客户端更新地址
+}
+message LoginNoticeC2S{
+  int32 serverId = 1;
+  string account = 2;
+  string language = 3;
+}
+message NoticeUrlInfo{
+  string url = 1;
+  string content = 2;
+}
+message NoticeDto{
+  int64 id = 1;
+  string maintainNoticeTitle = 2;
+  string maintainNoticeDetail = 3;
+  int32 maintainRemainingTime = 4;
+  repeated NoticeUrlInfo urls = 6;
+}
+message LoginNoticeS2C{
+  repeated NoticeDto notices = 1;
+}
