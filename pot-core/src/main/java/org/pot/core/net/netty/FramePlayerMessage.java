@@ -16,6 +16,11 @@ public class FramePlayerMessage extends FrameCmdMessage {
         this.playerId = playerId;
     }
 
+    public FramePlayerMessage(long playerId, FrameCmdMessage frameCmdMessage) {
+        super(frameCmdMessage.getProtoName(), frameCmdMessage.getProtoData());
+        this.playerId = playerId;
+    }
+
     public FramePlayerMessage(long playerId, FramePlayerMessage framePlayerMessage) {
         super(framePlayerMessage.getProtoName(), framePlayerMessage.getProtoData());
         this.playerId = playerId;

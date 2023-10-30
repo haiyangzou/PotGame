@@ -35,6 +35,19 @@ message LoginDataS2S{
   int32 newRoleReason = 24;
   int64 banEndTime = 25;
 }
+message LoginRespS2C{
+  string account = 1;
+  int64 accountUid = 2;
+  int32 serverId = 3;
+  int64 gameUid = 4;
+  bool isNewRole = 5;
+  int64 serverTime = 6;
+  int32 guidePolicy = 7;
+  int32 x = 8;
+  int32 y = 9;
+  int64 power = 10;
+
+}
 message LogoutReqC2S{
   int64 gameUid = 1;
 }
@@ -66,4 +79,13 @@ message NoticeDto{
 }
 message LoginNoticeS2C{
   repeated NoticeDto notices = 1;
+}
+message LoginReConnectTokenKeyS2C{
+  string tokenKey = 1;
+}
+message LoginReconnectC2S{
+  string tokenKey = 1;
+}
+message LoginReconnectRespS2C{
+  LoginRespS2C loginRespS2C = 1;
 }

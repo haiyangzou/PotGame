@@ -9,6 +9,8 @@ public enum CommonErrorCode implements IErrorCode {
     LOGIN_KICK(1019),
     SERVER_MAINTAIN(1004),
     LOGIN_FAIL(1016),
+    ALREADY_LOGIN(1017),
+    SHUTDOWN_KICK(1020),
     ;
     public final int errorCode;
 
