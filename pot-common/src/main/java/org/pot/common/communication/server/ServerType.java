@@ -8,7 +8,9 @@ import org.pot.common.util.EnumUtils;
 import java.util.Map;
 
 public enum ServerType implements IntEnum {
-    GAME_SERVER(0);
+    GAME_SERVER(0),
+    SLAVE_SERVER(3),
+    ;
     @Getter
     private final int value;
 

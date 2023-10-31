@@ -7,7 +7,13 @@ import org.pot.core.engine.EngineInstance;
 import org.pot.core.net.netty.FramePlayerMessage;
 import org.pot.core.net.netty.NettyClientEngine;
 import org.pot.core.net.netty.NettyServerEngine;
+import org.pot.dal.redis.ReactiveRedis;
+import org.pot.game.engine.player.PlayerManager;
+import org.pot.game.engine.rank.RankManager;
+import org.pot.game.engine.switchcontrol.SwitchManager;
 import org.pot.game.gate.GameConnManager;
+import org.pot.game.gate.GhostUtil;
+import org.pot.game.gate.TunnelManager;
 import org.pot.game.persistence.GameDb;
 
 import java.time.LocalDate;
@@ -51,6 +57,14 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
     @Override
     protected void doStart() throws Throwable {
         GameDb.init(getConfig());
+        ReactiveRedis.init(getConfig().getLocalRedisConfig(), getConfig().getGlobalRedisConfig(), getConfig().getRankRedisConfig());
+        SwitchManager.getInstance().init();
+        PlayerManager.getInstance().init();
+        RankManager.getInstance().init();
+        WorldManager.getInstance().init();
+        GhostUtil.load();
+        SwitchManager.getInstance().startup();
+        TunnelManager.init();
     }
 
     @Override

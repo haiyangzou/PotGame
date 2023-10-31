@@ -1,5 +1,7 @@
 package org.pot.common.concurrent.executor;
 
+import org.pot.common.util.MathUtil;
+
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -9,6 +11,11 @@ public class StandardExecutor extends ThreadPoolExecutor {
     private final String name;
     private final int maxSubmittedTaskCount;
     private final AtomicInteger submittedTasksCount;
+
+    public StandardExecutor(String poolName) {
+        // constructor implementation
+        this(MathUtil.divideAndCeil(ThreadUtil.AVAILABLE_PROCESSORS, 2), poolName);
+    }
 
     public StandardExecutor(int coreThread, String poolName) {
         // constructor implementation
@@ -31,13 +38,13 @@ public class StandardExecutor extends ThreadPoolExecutor {
     }
 
     public StandardExecutor(int queueCapacity, int coreThread, int maxThreads, long keepAliveTime, TimeUnit unit,
-            String poolName) {
+                            String poolName) {
         // constructor implementationF
         this(queueCapacity, coreThread, maxThreads, keepAliveTime, unit, poolName, true);
     }
 
     public StandardExecutor(int queueCapacity, int coreThread, int maxThreads, long keepAliveTime, TimeUnit unit,
-            String poolName, boolean daemon) {
+                            String poolName, boolean daemon) {
         // constructor implementationF
         super(Math.max(1, coreThread), Math.max(1, maxThreads), keepAliveTime, unit, new LinkedBlockingQueue<>(),
                 ThreadUtil.newThreadFactory(poolName + "-%d", daemon));

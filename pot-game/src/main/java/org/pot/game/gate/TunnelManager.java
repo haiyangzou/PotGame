@@ -1,18 +1,62 @@
 package org.pot.game.gate;
 
+import lombok.extern.slf4j.Slf4j;
+import org.pot.cache.server.ServerListCache;
+import org.pot.common.communication.server.GameServer;
 import org.pot.common.communication.server.Server;
 import org.pot.common.communication.server.ServerId;
+import org.pot.common.communication.server.ServerType;
+import org.pot.game.engine.GameEngine;
+import org.pot.game.engine.GameServerInfo;
 import org.pot.message.protocol.login.LoginDataS2S;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class TunnelManager {
     public static final TunnelManager instance = new TunnelManager();
     private final Map<ServerId, Tunnel> tunnelMap = new ConcurrentHashMap<>();
+    private static volatile ScheduledFuture<?> future;
 
     public TunnelManager() {
 
+    }
+
+    private static void connect() {
+        if (!GameServerInfo.isGameServer()) return;
+        try {
+            for (Server server : ServerListCache.instance().getServerList(ServerType.SLAVE_SERVER)) {
+                if (instance.openTunnel(server) != null) {
+                    log.info("Open Tunnel For Slave,{},{},{},{}", server.getTypeName(), server.getServerName(), server.getServerId(), server.getHost());
+                }
+            }
+        } catch (Throwable throwable) {
+            log.error("TunnelManager Connect Error", throwable);
+        }
+    }
+
+    public Tunnel openTunnel(GameServer gameServer) {
+        return openTunnel(gameServer.toServer());
+    }
+
+    public Tunnel openTunnel(Server server) {
+        Tunnel tunnel = tunnelMap.computeIfAbsent(server.getServerIdObject(), k -> new Tunnel(server));
+        return tunnel.isRunning() && !tunnel.isClosed() ? tunnel : null;
+    }
+
+    public void closeTunnel(ServerId serverId) {
+        Tunnel tunnel = tunnelMap.get(serverId);
+        if (tunnel != null) {
+            tunnel.close();
+        }
+    }
+
+    public static void init() {
+        if (!GameServerInfo.isGameServer()) return;
+        future = GameEngine.getInstance().getAsyncExecutor().scheduleAtFixedRate(TunnelManager::connect, 0, 1, TimeUnit.MINUTES);
     }
 
     public boolean reconnect(PlayerSession playerSession, LoginDataS2S loginDataS2S) {

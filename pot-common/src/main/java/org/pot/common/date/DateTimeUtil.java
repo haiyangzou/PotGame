@@ -79,6 +79,11 @@ public class DateTimeUtil {
         return differentDays(localDateTime1, LocalDateTime.now());
     }
 
+    public static int differentDays(long utcMilli1, long utcMilli2) {
+        if (utcMilli1 == utcMilli2) return 0;
+        return differentDays(toLocalDateTime(utcMilli1), toLocalDateTime(utcMilli2));
+    }
+
     public static int differentDays(LocalDateTime localDateTime1, LocalDateTime localDateTime2) {
         LocalDateTime localDate1 = localDateTime1.toLocalDate().atStartOfDay();
         LocalDateTime localDate2 = localDateTime2.toLocalDate().atStartOfDay();

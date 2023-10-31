@@ -26,6 +26,8 @@ public class RedisConfig {
     private boolean testWhenExhausted = false;
     private long maxWaitMillis = 1000;
     private long timeBetweenEvictionRunsMills = 600000;
+    private int maxRedirects = 6;
+    private int topologyRefreshSeconds = 6;
 
     public RedisConfig(String nodes, String host) {
         this.nodes = nodes;

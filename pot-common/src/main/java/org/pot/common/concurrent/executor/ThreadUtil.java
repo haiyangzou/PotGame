@@ -94,4 +94,12 @@ public class ThreadUtil {
             ThreadUtil.await(await, unit, future::isDone);
         }
     }
+
+    public static void sleep(long timeout, TimeUnit unit) {
+        try {
+            unit.sleep(timeout);
+        } catch (InterruptedException e) {
+            log.error("thread sleep was interrupted", e);
+        }
+    }
 }

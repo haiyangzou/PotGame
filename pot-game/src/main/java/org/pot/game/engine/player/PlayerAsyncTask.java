@@ -1,7 +1,9 @@
 package org.pot.game.engine.player;
 
 import lombok.extern.slf4j.Slf4j;
+import org.pot.common.Constants;
 import org.pot.common.concurrent.exception.ExceptionUtil;
+import org.pot.common.concurrent.executor.ThreadUtil;
 import org.pot.game.engine.GameEngine;
 import org.pot.game.engine.world.module.map.scene.WorldMapScene;
 
@@ -93,6 +95,22 @@ public final class PlayerAsyncTask {
             runnable.accept(player);
             player.setSkipLoadTimeCheckOnce();
             log.info("");
+        }
+    }
+
+    synchronized static void shutdown() {
+        ThreadUtil.cancel(Constants.AWAIT_MS, TimeUnit.MILLISECONDS, future);
+        int count = 0;
+        while (!tasks.isEmpty() && ++count <= COUNT) {
+            long size = tasks.size();
+            Task task;
+            while (size-- > 0 && (task = tasks.poll()) != null) {
+                if (!execute(task)) tasks.offer(task);
+            }
+            ThreadUtil.sleep(PERIOD_MS, TimeUnit.MILLISECONDS);
+        }
+        for (Task task : tasks) {
+            log.error("Player async task shutdown {} times not finish", task.count.get());
         }
     }
 }

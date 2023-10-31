@@ -3,7 +3,6 @@ package org.pot.cache.rank;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.collections4.MapUtils;
 import org.pot.cache.player.PlayerCaches;
 import org.pot.cache.rank.codec.RankItemCodec;
 import org.pot.cache.union.UnionCaches;
@@ -33,7 +32,7 @@ public class RankData {
     private final RankCache rankCache;
     private final RunSignal loadSignal;
     private final RunSignal truncateSignal;
-    private final ScheduledFuture<?> flusherFuture;
+    final ScheduledFuture<?> flusherFuture;
     final ChangeRankAndLoadFlusher flusher;
     private final Semaphore flushSemaphore = new Semaphore(1);
     private final Set<Long> rankInfoDeleting = Sets.newConcurrentHashSet();
@@ -128,6 +127,11 @@ public class RankData {
 
         public ChangeRankAndLoadFlusher(boolean alive) {
             this.alive = alive;
+        }
+
+        public ChangeRankAndLoadFlusher shutdown() {
+            this.alive = false;
+            return this;
         }
 
         @Override

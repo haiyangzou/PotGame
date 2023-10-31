@@ -34,4 +34,8 @@ public class GameServer implements Comparable<GameServer>, Serializable {
         this.port = server.getPort();
         this.unionServerId = unionServerId;
     }
+
+    public Server toServer() {
+        return new Server(ServerType.GAME_SERVER.getId(), serverId, serverName, host, port, httpPort, rpcPort, getOpenTime(), targetServerId);
+    }
 }

@@ -14,4 +14,8 @@ public class ExDateTimeUtil {
     public static long getPrevDayStart() {
         return DateTimeUtil.adjust(DateTimeUnit.DAY, System.currentTimeMillis(), true, -1);
     }
+
+    public static boolean isSameDay(long timeMilli1, long timeMilli2) {
+        return DateTimeUtil.differentDays(timeMilli1, timeMilli2) == 0;
+    }
 }

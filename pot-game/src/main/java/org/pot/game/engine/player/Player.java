@@ -85,4 +85,11 @@ public class Player {
         this.skipLoadTimeCheckOnce = true;
     }
 
+    public void onNewDay() {
+
+    }
+
+    public void onNewWeek() {
+
+    }
 }

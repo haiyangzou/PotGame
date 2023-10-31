@@ -4,6 +4,7 @@ import org.pot.cache.player.name.PlayerNameCache;
 import org.pot.cache.player.snapshot.PlayerSnapShot;
 import org.pot.cache.player.snapshot.PlayerSnapShotCache;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
+
 import java.util.function.Function;
 
 public class PlayerCaches {
@@ -11,9 +12,9 @@ public class PlayerCaches {
     private static PlayerSnapShotCache playerSnapShot;
 
     public static void init(PlayerCacheConfig cacheConfig,
-            ReactiveStringRedisTemplate redisTemplate,
-            Function<Long, PlayerSnapShot> memory,
-            Function<Long, PlayerSnapShot> database) {
+                            ReactiveStringRedisTemplate redisTemplate,
+                            Function<Long, PlayerSnapShot> memory,
+                            Function<Long, PlayerSnapShot> database) {
 
         PlayerCaches.playerNameCache = new PlayerNameCache(redisTemplate);
         // Initialize a new instance of PlayerSnapshotCache
@@ -27,5 +28,12 @@ public class PlayerCaches {
 
     public static PlayerSnapShotCache snapShot() {
         return playerSnapShot;
+    }
+
+    public synchronized static void shutdown() {
+        if (playerSnapShot != null) {
+            playerSnapShot.close();
+            playerSnapShot = null;
+        }
     }
 }

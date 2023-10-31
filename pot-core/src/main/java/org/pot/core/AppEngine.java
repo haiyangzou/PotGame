@@ -7,6 +7,9 @@ import org.pot.common.Constants;
 import org.pot.common.concurrent.executor.AsyncExecutor;
 import org.pot.common.concurrent.executor.ThreadUtil;
 import org.pot.common.function.Ticker;
+import org.pot.common.task.PeriodTask;
+import org.pot.common.task.PeriodicTaskManager;
+import org.pot.common.task.ScheduledTaskManager;
 import org.pot.core.engine.EngineConfig;
 import org.pot.core.engine.IEngine;
 import org.pot.core.util.SignalLight;
@@ -32,10 +35,21 @@ public abstract class AppEngine<T extends EngineConfig> extends Thread implement
     private volatile boolean closed = false;
 
     private final List<Ticker> tickers = new CopyOnWriteArrayList<>();
+    private final PeriodicTaskManager periodicTaskManager = new PeriodicTaskManager(Constants.RUN_SLOW_MS);
+    private final ScheduledTaskManager scheduledTaskManager = new ScheduledTaskManager(Constants.RUN_SLOW_MS);
 
     protected AppEngine(Class<T> configClass) throws Exception {
         this.config = EngineConfig.loadConfiguration(configClass);
+        this.addTicker(scheduledTaskManager, periodicTaskManager);
         this.asyncExecutor = new AsyncExecutor(getConfig().getAsyExecutorConfig());
+    }
+
+    public void addTicker(Ticker... tickers) {
+        for (Ticker ticker : tickers) {
+            if (!this.tickers.contains(ticker)) {
+                this.tickers.add(ticker);
+            }
+        }
     }
 
     @Override
@@ -97,6 +111,12 @@ public abstract class AppEngine<T extends EngineConfig> extends Thread implement
             } catch (Throwable e) {
                 log.error("App Ticker Error:{}", ticker.getTickerName(), e);
             }
+        }
+    }
+
+    public void addPeriodicTask(PeriodTask... tasks) {
+        for (PeriodTask task : tasks) {
+            periodicTaskManager.addTask(task);
         }
     }
 

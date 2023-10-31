@@ -1,16 +1,30 @@
 package org.pot.common.util;
 
+import com.google.common.collect.ImmutableMap;
+
 import javax.annotation.Nullable;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.function.Function;
 
 public class MapUtil {
     private static final int DEFAULT_MAP_INITIAL_CAPACITY = 1 << 8;
 
     public static <K, V> TreeMap<K, V> newTreeMap(@Nullable Comparator<? super K> comparator, K key, V value) {
         return put(new TreeMap<>(comparator), key, value);
+    }
+
+    public static <E, K, V> TreeMap<K, V> toTreeMap(@Nullable Comparator<? super K> comparator, Collection<E> values, Function<E, K> keyFunction, Function<E, V> valueFunction) {
+        TreeMap<K, V> map = new TreeMap<>(comparator);
+        values.forEach(v -> map.put(keyFunction.apply(v), valueFunction.apply(v)));
+        return map;
+    }
+
+    public static <K, MK, MV> Map<K, Map<MK, MV>> immutableMapMap(Map<K, Map<MK, MV>> map) {
+        Map<K, Map<MK, MV>> temp = new LinkedHashMap<>();
+        for (Map.Entry<K, Map<MK, MV>> kMapEntry : map.entrySet()) {
+            temp.put(kMapEntry.getKey(), ImmutableMap.copyOf(kMapEntry.getValue()));
+        }
+        return ImmutableMap.copyOf(temp);
     }
 
     public static <K, V> HashMap<K, V> newHashMap(K k1, V v1, K k2, V v2) {

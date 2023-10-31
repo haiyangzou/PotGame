@@ -1,5 +1,6 @@
 package org.pot.game.engine.player;
 
+import lombok.Getter;
 import org.pot.common.concurrent.exception.CommonErrorCode;
 import org.pot.common.concurrent.executor.AsyncRunner;
 import org.pot.game.gate.PlayerSession;
@@ -7,19 +8,20 @@ import org.pot.message.protocol.login.LoginDataS2S;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 public class PlayerGroup extends Thread {
     private final Map<Long, Player> players = new ConcurrentHashMap<>();
     private final AsyncRunner asyncRunner;
     private volatile long nextPingTime = -1L;
     private volatile boolean shutdown = false;
+    @Getter
     private boolean closed = false;
     private final int index;
     private final String PING;
     private final String TICK;
     private final String TICK_P;
     private final String ASYNC_RUNNER;
-
     public PlayerGroup(int index) {
         this.index = index;
         String name = this.getClass().getSimpleName() + "-" + this.index;
@@ -75,4 +77,15 @@ public class PlayerGroup extends Thread {
         return players.size();
     }
 
+    void foreachRunningPlayer(Consumer<Player> consumer) {
+        for (Player player : players.values()) {
+            if (player.getState().get() == PlayerState.running) {
+                player.submit(() -> consumer.accept(player));
+            }
+        }
+    }
+
+    void close() {
+        shutdown = true;
+    }
 }

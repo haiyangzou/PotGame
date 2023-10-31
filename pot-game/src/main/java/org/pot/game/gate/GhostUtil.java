@@ -5,6 +5,10 @@ public class GhostUtil {
         //TODO async DB
     }
 
+    public static void load() {
+
+    }
+
     public static void delete(long playerUid) {
 
     }
