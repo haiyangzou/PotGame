@@ -1,6 +1,7 @@
 package org.pot.common.util;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -11,6 +12,12 @@ public class MapUtil {
 
     public static <K, V> TreeMap<K, V> newTreeMap(@Nullable Comparator<? super K> comparator, K key, V value) {
         return put(new TreeMap<>(comparator), key, value);
+    }
+
+    public static <K, V> LinkedHashMap<K, V> toLinkedHashMap(Collection<V> values, Function<V, K> keyFunction) {
+        LinkedHashMap<K, V> map = Maps.newLinkedHashMapWithExpectedSize(values.size());
+        values.forEach(v -> map.put(keyFunction.apply(v), v));
+        return map;
     }
 
     public static <E, K, V> TreeMap<K, V> toTreeMap(@Nullable Comparator<? super K> comparator, Collection<E> values, Function<E, K> keyFunction, Function<E, V> valueFunction) {

@@ -15,6 +15,7 @@ import org.pot.game.gate.GameConnManager;
 import org.pot.game.gate.GhostUtil;
 import org.pot.game.gate.TunnelManager;
 import org.pot.game.persistence.GameDb;
+import org.pot.game.resource.GameConfigSupport;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -57,6 +58,7 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
     @Override
     protected void doStart() throws Throwable {
         GameDb.init(getConfig());
+        GameConfigSupport.init(null);
         ReactiveRedis.init(getConfig().getLocalRedisConfig(), getConfig().getGlobalRedisConfig(), getConfig().getRankRedisConfig());
         SwitchManager.getInstance().init();
         PlayerManager.getInstance().init();

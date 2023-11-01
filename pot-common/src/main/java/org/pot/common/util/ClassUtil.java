@@ -55,17 +55,22 @@ public class ClassUtil {
     }
 
     public static <T, A extends Annotation> Set<Class<? extends T>> getSubTypeOf(final Class scope, final Class<T> type,
-            Predicate<Class<? extends T>> filter) {
+                                                                                 Predicate<Class<? extends T>> filter) {
         return getSubTypeOf(scope.getPackage(), type, null, filter);
     }
 
     public static <T, A extends Annotation> Set<Class<? extends T>> getSubTypeOf(final Package scope,
-            final Class<T> type, Class<A> annotation, Predicate<Class<? extends T>> filter) {
+                                                                                 final Class<T> type, Class<A> annotation, Predicate<Class<? extends T>> filter) {
         return getSubTypeOf(scope.getName(), type, null, filter);
     }
 
+    public static <T, A extends Annotation> Set<Class<? extends T>> getSubTypeOf(final Class scope,
+                                                                                 final Class<T> type, Class<A> annotation, Predicate<Class<? extends T>> filter) {
+        return getSubTypeOf(scope.getPackage(), type, annotation, filter);
+    }
+
     public static <T, A extends Annotation> Set<Class<? extends T>> getSubTypeOf(final String scope,
-            final Class<T> type, Class<A> annotation, Predicate<Class<? extends T>> filter) {
+                                                                                 final Class<T> type, Class<A> annotation, Predicate<Class<? extends T>> filter) {
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.setExpandSuperTypes(true);
         configurationBuilder.setScanners(new SubTypesScanner());

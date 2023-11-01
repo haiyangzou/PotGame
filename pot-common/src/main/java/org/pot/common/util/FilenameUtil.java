@@ -23,4 +23,12 @@ public class FilenameUtil {
         return formatPath(new File(file));
     }
 
+    public static boolean isSubversionFile(File file) {
+        if (file == null) {
+            return false;
+        }
+        String fullFileName = FilenameUtils.separatorsToSystem(FilenameUtils.normalize(file.getAbsolutePath()));
+        return StringUtils.contains(fullFileName, ".svn");
+    }
+
 }

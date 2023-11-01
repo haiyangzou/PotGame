@@ -1,15 +1,11 @@
-package org.pot.core.util;
+package org.pot.common.file;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.*;
 import java.util.List;
 import java.util.function.Predicate;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -79,7 +75,7 @@ public class FileUtil {
     /**
      * 查找该目录下的所有的 endName 文件
      *
-     * @param sourceFile ,单文件或者目录
+     * @param sourceFile     ,单文件或者目录
      * @param sourceFileList 返回目录所包含的所有文件包括子目录
      * @param endName
      * @param condition
@@ -113,9 +109,9 @@ public class FileUtil {
     }
 
     public static String readTxtFile(String filePath) {
-    	return readTxtFile(filePath, "UTF-8");
+        return readTxtFile(filePath, "UTF-8");
     }
-    
+
     public static String readTxtFile(String filePath, String encoding) {
         try {
             File file = new File(filePath);
@@ -124,12 +120,12 @@ public class FileUtil {
                 try (
                         InputStreamReader read = new InputStreamReader(
                                 new FileInputStream(file), encoding) //考虑到编码格式
-                        ) {
+                ) {
                     BufferedReader bufferedReader = new BufferedReader(read);
                     String lineTxt = null;
                     sb = new StringBuilder();
                     while ((lineTxt = bufferedReader.readLine()) != null) {
-                        sb.append(lineTxt).append(Symbol.ENTER);
+                        sb.append(lineTxt).append("\n");
                     }
                 }
                 return sb.toString();
@@ -165,7 +161,7 @@ public class FileUtil {
         }
         return path;
     }
-    
+
     /**
      * 删除文件，可以是文件或文件夹
      *
@@ -253,5 +249,16 @@ public class FileUtil {
         } else {
             return false;
         }
+    }
+
+    public static boolean exists(String filePath) {
+        if (StringUtils.isBlank(filePath)) {
+            return false;
+        }
+        return exists(new File(filePath));
+    }
+
+    public static boolean exists(File file) {
+        return file != null && file.exists();
     }
 }

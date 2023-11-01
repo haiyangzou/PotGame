@@ -1,6 +1,6 @@
 package org.pot.game.resource;
 
-import org.pot.game.resource.config.json.JsonConfigSupport;
+import org.pot.config.json.JsonConfigSupport;
 
 public class GameConfigSupport {
     private static volatile JsonConfigSupport jsonConfigSupport;

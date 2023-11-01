@@ -1,4 +1,4 @@
-package org.pot.game.resource.config.json;
+package org.pot.config.json;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

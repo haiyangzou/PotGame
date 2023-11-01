@@ -1,10 +1,12 @@
-package org.pot.core.util;
+package org.pot.common.file;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedList;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * 路径相关的工具
+ *
  * @author zouhaiyang
  */
 public class PathUtil {
