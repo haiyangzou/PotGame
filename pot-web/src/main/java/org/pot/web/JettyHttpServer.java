@@ -12,6 +12,7 @@ import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.pot.common.Constants;
 import org.pot.common.PotPackage;
+import org.pot.common.concurrent.executor.ThreadUtil;
 import org.pot.common.config.JettyConfig;
 import org.pot.common.util.ClassUtil;
 import org.pot.common.util.MapUtil;
@@ -104,6 +105,12 @@ public class JettyHttpServer extends Thread implements IHttpServer {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void startup() {
+        this.start();
+        ThreadUtil.await(Constants.AWAIT_MS, TimeUnit.MILLISECONDS, this.server::isStarted);
     }
 
     @Override

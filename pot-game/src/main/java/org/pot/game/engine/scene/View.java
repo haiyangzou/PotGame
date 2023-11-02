@@ -3,9 +3,9 @@ package org.pot.game.engine.scene;
 import com.google.protobuf.Message;
 import lombok.Getter;
 import org.pot.common.util.MathUtil;
+import org.pot.core.net.protocol.MessageSender;
 import org.pot.game.engine.player.Player;
 import org.pot.game.engine.player.PlayerManager;
-import org.pot.message.protocol.MessageSender;
 
 public class View implements MessageSender {
     @Getter

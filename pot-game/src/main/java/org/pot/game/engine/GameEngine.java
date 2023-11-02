@@ -8,6 +8,7 @@ import org.pot.common.concurrent.executor.ThreadUtil;
 import org.pot.common.date.DateTimeUtil;
 import org.pot.core.AppEngine;
 import org.pot.core.engine.EngineInstance;
+import org.pot.core.engine.IHttpServer;
 import org.pot.core.net.netty.FramePlayerCodec;
 import org.pot.core.net.netty.FramePlayerMessage;
 import org.pot.core.net.netty.NettyClientEngine;
@@ -22,6 +23,7 @@ import org.pot.game.gate.GhostUtil;
 import org.pot.game.gate.TunnelManager;
 import org.pot.game.persistence.GameDb;
 import org.pot.game.resource.GameConfigSupport;
+import org.pot.web.JettyHttpServer;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,6 +36,9 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
     private NettyServerEngine<FramePlayerMessage> nettyServerEngine;
     @Getter
     private GameConnManager gameConnManager;
+
+    @Getter
+    private IHttpServer httpServer;
 
     public static GameEngine getInstance() {
         return (GameEngine) EngineInstance.getInstance();
@@ -77,9 +82,15 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
         WorldManager.getInstance().init();
         GhostUtil.load();
         SwitchManager.getInstance().startup();
+        initHttpServer();
         initNettyClientEngine();
         initNettyServerEngine();
         TunnelManager.init();
+    }
+
+    private void initHttpServer() {
+        httpServer = new JettyHttpServer(getConfig().getJettyConfig());
+        httpServer.startup();
     }
 
     private void initNettyClientEngine() {

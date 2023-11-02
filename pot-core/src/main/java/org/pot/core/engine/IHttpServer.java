@@ -3,7 +3,7 @@ package org.pot.core.engine;
 import java.util.Map;
 
 public interface IHttpServer {
-    void start();
+    void startup();
 
     void shutdown();
 
