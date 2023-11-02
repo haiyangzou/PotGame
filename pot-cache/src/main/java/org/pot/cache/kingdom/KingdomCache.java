@@ -27,6 +27,13 @@ public class KingdomCache {
         }
     }
 
+    public synchronized static void shutdown() {
+        if (instance != null) {
+            instance.close();
+            instance = null;
+        }
+    }
+
     public static KingdomCache instance() {
         return instance;
     }
@@ -50,7 +57,7 @@ public class KingdomCache {
         this.loadTimeMap = CacheMap.of(cacheConfig.getMaxSize());
         this.executor = new AsyncExecutor(UnionSnapshotCache.class.getSimpleName(), cacheConfig.getThreads());
         this.refreshFuture = this.executor.scheduleAtFixedRate(new CacheRefresher(),
-                cacheConfig.getFlushSecons(), cacheConfig.getFlushSecons(), TimeUnit.SECONDS);
+                cacheConfig.getRefreshSeconds(), cacheConfig.getRefreshSeconds(), TimeUnit.SECONDS);
 
     }
 

@@ -2,6 +2,7 @@ package org.pot.game.engine;
 
 import lombok.Getter;
 import org.apache.commons.configuration2.Configuration;
+import org.pot.cache.kingdom.KingdomCacheConfig;
 import org.pot.cache.player.PlayerCacheConfig;
 import org.pot.cache.rank.RankCacheConfig;
 import org.pot.common.Constants;
@@ -18,10 +19,11 @@ public class GameEngineConfig extends EngineConfig {
     private long playerSessionSendQueueMaxSize = 500;
     private RankCacheConfig rankCacheConfig;
     private PlayerCacheConfig playerCacheConfig;
+    private KingdomCacheConfig kingdomCacheConfig;
     private int playerGroupSize = 10;
 
     @Override
     protected void setProperties(Configuration config) {
-
+        kingdomCacheConfig = KingdomCacheConfig.loadCacheConfig(config);
     }
 }

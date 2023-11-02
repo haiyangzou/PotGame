@@ -101,4 +101,14 @@ public class PlayerManager {
         });
         PlayerCaches.shutdown();
     }
+
+    public void waitingForAddMaintainShield() {
+        //添加维护保护罩
+
+    }
+
+    public void waitingForConsumeReceivedRequest() {
+
+    }
+
 }

@@ -23,6 +23,21 @@ public class ReactiveRedis {
         }
     }
 
+    public static void close() {
+        if (local != null) {
+            ((LettuceConnectionFactory) local.getConnectionFactory()).destroy();
+            local = null;
+        }
+        if (global != null) {
+            ((LettuceConnectionFactory) global.getConnectionFactory()).destroy();
+            global = null;
+        }
+        if (rank != null) {
+            ((LettuceConnectionFactory) rank.getConnectionFactory()).destroy();
+            rank = null;
+        }
+    }
+
     public static ReactiveStringRedisTemplate global() {
         return global;
     }
