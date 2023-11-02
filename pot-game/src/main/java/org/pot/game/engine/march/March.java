@@ -2,6 +2,7 @@ package org.pot.game.engine.march;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.pot.common.databind.json.JsonObject;
+import org.pot.message.protocol.world.WorldMarchInfo;
 
 import java.io.Serializable;
 
@@ -20,4 +21,6 @@ public interface March extends JsonObject, Serializable {
     void onInitPlayerData();
 
     int getTargetPoint();
+
+    WorldMarchInfo.Builder buildWorldMarchInfo(final long viewerId);
 }

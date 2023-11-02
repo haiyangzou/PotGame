@@ -1,0 +1,71 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package = "org.pot.message.protocol.world";
+option java_multiple_files = true;
+message WorldPointStruct{
+  int32 sid = 1;
+  int32 x = 2;
+  int32 y = 3;
+  int32 pid = 4;
+}
+message WorldMapViewC2S{
+  int32 viewLevel = 1;
+  int32 width = 2;
+  int32 height = 3;
+  WorldPointStruct center = 4;
+  bool openView = 5;
+}
+message WorldMapViewS2C{
+  int32 viewLevel = 1;
+  int32 width = 2;
+  int32 height = 3;
+  WorldPointStruct center = 4;
+  repeated WorldPointInfo worldPointInfos = 5;
+}
+message WorldPointInfo{
+  int64 timestamp = 1;
+  WorldPointStruct point = 2;
+  int32 type = 3;
+}
+message UnionTerritoryView{
+  repeated int32 union = 1;
+  int32 sid = 2;
+}
+message AddUnionTerritoryViewS2C{
+  repeated UnionTerritoryView unionTerritoryView = 1;
+  int32 sid = 2;
+}
+message MarchHero{
+  int32 heroId = 1;
+  int32 heroLevel = 2;
+  int32 heroStartLevel = 3;
+  int32 heroStrengthenLevel = 4;
+  string heroSkin = 5;
+}
+message MarchSoldier{
+  int32 soldierId = 1;
+  int32 soldierAmount = 2;
+}
+message WorldMarchInfo{
+  string uid = 1;
+  int32 state = 2;
+  int32 type = 3;
+  repeated MarchHero heroes = 4;
+  repeated MarchSoldier soldiers = 5;
+  WorldPointStruct startPoint = 6;
+  int32 startPointType = 7;
+  WorldPointStruct endPoint = 8;
+  int32 endPointType = 9;
+  int64 createTime = 10;
+  int64 endTime = 12;
+  int64 initEndTime = 13;
+  int32 skinId = 14;
+  int64 ownerId = 15;
+  string ownerName = 16;
+
+
+}
+message AddWorldMarchInfoS2C{
+  repeated WorldMarchInfo marchs = 1;
+  int32 sid = 2;
+}

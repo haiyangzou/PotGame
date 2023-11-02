@@ -5,10 +5,7 @@ import org.apache.commons.configuration2.CompositeConfiguration;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
-import org.pot.common.config.DbConfig;
-import org.pot.common.config.ExecutorConfig;
-import org.pot.common.config.GlobalServerConfig;
-import org.pot.common.config.RedisConfig;
+import org.pot.common.config.*;
 import org.pot.common.net.ipv4.FireWall;
 import org.pot.common.relect.ConstructorUtil;
 import org.pot.core.Launcher;
@@ -27,6 +24,8 @@ public class EngineConfig extends NettyConfig {
     private RedisConfig localRedisConfig;
     private RedisConfig globalRedisConfig;
     private RedisConfig rankRedisConfig;
+    private JettyConfig jettyConfig;
+    private RemoteServerConfig remoteServerConfig;
 
     public static <T extends EngineConfig> T loadConfiguration(Class<T> clazz) throws Exception {
         File propertiesFile = new File(Launcher.Env.getConfigFile());

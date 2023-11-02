@@ -13,6 +13,8 @@ public abstract class AbstractScene {
     @Getter
     protected final String name;
     @Getter
+    protected final ViewManger viewManger;
+    @Getter
     protected final MarchManager marchManager;
     @Getter
     protected final PointManager pointManager;
@@ -23,12 +25,15 @@ public abstract class AbstractScene {
 
     public AbstractScene(String name, Function<AbstractScene, CityRegulation> cityRegulation, Function<AbstractScene, PointRegulation> pointRegulation) {
         this.name = name;
+        this.viewManger = new ViewManger(this);
         this.marchManager = new MarchManager(this);
         this.pointManager = new PointManager(this);
         this.pointRegulation = pointRegulation.apply(this);
         this.cityRegulation = cityRegulation.apply(this);
     }
+
     public void init() {
+
     }
 
     public WorldPoint getPoint(int x, int y) {

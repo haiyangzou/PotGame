@@ -11,6 +11,10 @@ public class MathUtil {
         return number < min ? min : number > max ? max : number;
     }
 
+    public static int limit(final int number, final int min, final int max) {
+        return number < min ? min : number > max ? max : number;
+    }
+
     public static int divideAndCeil(final int a, final int b) {
         return (a / b) + (a % b > 0 ? 1 : 0);
     }

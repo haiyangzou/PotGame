@@ -11,6 +11,7 @@ public class GlobalServerConfig extends EndPointConfig {
     protected String userReconnectUrl = StringUtils.EMPTY;
     protected String httpUrlPrefix = StringUtils.EMPTY;
     protected String gameServerListUrl = StringUtils.EMPTY;
+    protected String serverInfoUrl = StringUtils.EMPTY;
 
     public static GlobalServerConfig loadGlobalServerConfig(Configuration config) {
         String host = config.getString("global.server.host", null);

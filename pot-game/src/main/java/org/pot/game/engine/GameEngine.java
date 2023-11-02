@@ -8,6 +8,7 @@ import org.pot.common.concurrent.executor.ThreadUtil;
 import org.pot.common.date.DateTimeUtil;
 import org.pot.core.AppEngine;
 import org.pot.core.engine.EngineInstance;
+import org.pot.core.net.netty.FramePlayerCodec;
 import org.pot.core.net.netty.FramePlayerMessage;
 import org.pot.core.net.netty.NettyClientEngine;
 import org.pot.core.net.netty.NettyServerEngine;
@@ -76,7 +77,21 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
         WorldManager.getInstance().init();
         GhostUtil.load();
         SwitchManager.getInstance().startup();
+        initNettyClientEngine();
+        initNettyServerEngine();
         TunnelManager.init();
+    }
+
+    private void initNettyClientEngine() {
+        this.nettyClientEngine = new NettyClientEngine<>(getConfig(), FramePlayerCodec::new);
+        this.nettyServerEngine.start();
+    }
+
+    private void initNettyServerEngine() {
+        this.gameConnManager = new GameConnManager();
+        this.nettyServerEngine = new NettyServerEngine<>(getConfig(), FramePlayerCodec::new);
+        this.nettyServerEngine.getConnectionManager().setListener(gameConnManager);
+        this.nettyServerEngine.start();
     }
 
     @Override

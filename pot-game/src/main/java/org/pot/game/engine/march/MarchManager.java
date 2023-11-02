@@ -6,9 +6,7 @@ import org.pot.game.engine.WorldManager;
 import org.pot.game.engine.march.war.WarManager;
 import org.pot.game.engine.scene.AbstractScene;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -113,4 +111,7 @@ public class MarchManager {
         listeners.add(marchListener);
     }
 
+    public Collection<March> getMarches() {
+        return Collections.unmodifiableCollection(marchMap.values());
+    }
 }

@@ -20,7 +20,7 @@ import org.pot.core.net.connection.IConnection;
 import java.util.function.Function;
 
 @Slf4j
-public abstract class NettyClientEngine<M extends FrameMessage> extends NettyServerEngine<M> {
+public class NettyClientEngine<M extends FrameMessage> extends NettyBaseEngine<M> {
     private Bootstrap clientBootstrap;
     private EventLoopGroup eventLoopGroup;
 

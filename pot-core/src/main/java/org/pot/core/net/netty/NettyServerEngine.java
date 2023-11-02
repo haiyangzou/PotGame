@@ -1,7 +1,10 @@
 package org.pot.core.net.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.NetUtil;
@@ -17,7 +20,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @Slf4j
-public abstract class NettyServerEngine<M extends FrameMessage> extends NettyBaseEngine<M> {
+public class NettyServerEngine<M extends FrameMessage> extends NettyBaseEngine<M> {
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
     private List<Channel> serverChannels;

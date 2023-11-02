@@ -49,4 +49,9 @@ public abstract class PointExtraData implements JsonObject, Serializable {
     public void removeMarchId(String marchId) {
         marchIdList.remove(marchId);
     }
+
+    public boolean isClientVisible() {
+        return true;
+    }
+
 }

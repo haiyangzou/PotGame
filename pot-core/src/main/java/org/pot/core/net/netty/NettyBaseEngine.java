@@ -1,24 +1,24 @@
 package org.pot.core.net.netty;
 
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import lombok.Getter;
-
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-
 import org.pot.common.concurrent.executor.ScheduledExcutor;
 import org.pot.core.config.NettyConfig;
 import org.pot.core.net.connection.ConnectionManager;
 import org.pot.core.net.connection.EvictConnectionTask;
 
-import io.netty.channel.ChannelInitializer;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 public abstract class NettyBaseEngine<M extends FrameMessage> extends ChannelInitializer<SocketChannel> {
     @Getter
     protected final NettyConfig config;
     @Getter
     protected final ConnectionManager<M> connectionManager;
+    @Getter
+    protected final NetEngineStatus netEngineStatus = new NetEngineStatus();
 
     protected final ScheduledExcutor executor = ScheduledExcutor.newScheduledExecutor(1,
             EvictConnectionTask.class.getName());

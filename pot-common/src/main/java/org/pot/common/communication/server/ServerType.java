@@ -9,6 +9,7 @@ import java.util.Map;
 
 public enum ServerType implements IntEnum {
     GAME_SERVER(0),
+    GATE_SERVER(1),
     SLAVE_SERVER(3),
     ;
     @Getter

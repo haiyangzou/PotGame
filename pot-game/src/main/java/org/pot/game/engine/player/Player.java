@@ -1,5 +1,6 @@
 package org.pot.game.engine.player;
 
+import com.google.protobuf.Message;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.common.concurrent.executor.AsyncRunner;
@@ -91,5 +92,13 @@ public class Player {
 
     public void onNewWeek() {
 
+    }
+
+    public void sendMessage(Message message) {
+        PlayerSession atomic = playerSession;
+        if (atomic != null) {
+            if (atomic.send(message)) {
+            }
+        }
     }
 }

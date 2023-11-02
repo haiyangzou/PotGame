@@ -14,6 +14,8 @@ public class NettyConfig {
     private int connectionIdleSeconds = 120;
     private int connectionRecvQueueMaxSize = 1024;
     private int connectionEvictSeconds = 10;
+    private int compressThreshold = 2048;
+    private int maxFrameLength = 1024 * 1024;
 
     protected void setProperties(Configuration configuration) {
 
