@@ -57,4 +57,13 @@ public enum WorldModuleType {
     public <T extends WorldModule> T getModule() {
         return (T) instance;
     }
+
+    public static WorldModule[] getModules() {
+        WorldModuleType[] moduleTypes = WorldModuleType.values();
+        WorldModule[] modules = new WorldModule[moduleTypes.length];
+        for (int i = 0; i < modules.length; i++) {
+            modules[i] = moduleTypes[i].instance;
+        }
+        return modules;
+    }
 }

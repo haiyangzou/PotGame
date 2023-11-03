@@ -8,7 +8,6 @@ import org.pot.game.engine.world.WorldModuleType;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -22,9 +21,8 @@ public class WorldVarModule extends AbstractWorldModule {
     private volatile boolean changed = false;
 
     @Override
-    public CompletableFuture<?> init() {
+    public void init() {
 
-        return null;
     }
 
     @Override

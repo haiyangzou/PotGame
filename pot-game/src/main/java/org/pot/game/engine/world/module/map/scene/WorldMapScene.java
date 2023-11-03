@@ -1,7 +1,7 @@
 package org.pot.game.engine.world.module.map.scene;
 
-import org.pot.game.engine.WorldManager;
 import org.pot.game.engine.scene.AbstractScene;
+import org.pot.game.engine.world.WorldManager;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;

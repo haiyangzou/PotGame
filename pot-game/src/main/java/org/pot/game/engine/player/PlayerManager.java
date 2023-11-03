@@ -1,5 +1,6 @@
 package org.pot.game.engine.player;
 
+import com.google.protobuf.Message;
 import lombok.Getter;
 import org.pot.cache.player.PlayerCaches;
 import org.pot.common.Constants;
@@ -23,6 +24,10 @@ public class PlayerManager {
     private PlayerGroup[] playerGroups;
 
     public PlayerManager() {
+    }
+
+    public void sendMessage(long gameUid, Message message) {
+        getPlayerGroup(gameUid).sendMessage(gameUid, message);
     }
 
     public static Player fetchPlayer(long gameUid) {

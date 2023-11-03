@@ -2,9 +2,10 @@ package org.pot.game.engine.march;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.pot.game.engine.WorldManager;
+import org.pot.game.engine.enums.MarchState;
 import org.pot.game.engine.march.war.WarManager;
 import org.pot.game.engine.scene.AbstractScene;
+import org.pot.game.engine.world.WorldManager;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,7 +23,6 @@ public class MarchManager {
     private final List<MarchListener> listeners = new CopyOnWriteArrayList<>();
     private final Queue<String> changed = new LinkedBlockingDeque<>();
     private final Map<Long, CopyOnWriteArrayList<String>> playerMarchMap = new ConcurrentHashMap<>();
-
 
     public MarchManager(AbstractScene scene) {
         this.scene = scene;
@@ -97,6 +97,44 @@ public class MarchManager {
         } catch (Throwable ex) {
             log.error("March add Error", ex);
         }
+    }
+
+    private void tick() {
+        March march;
+        while ((march = pending.poll()) != null) {
+            innerAddMarch(march);
+        }
+        List<String> removes = new ArrayList<>();
+        for (March value : marchMap.values()) {
+            march = value;
+            if (march.getState() == MarchState.HOMED) {
+                removes.add(march.getId());
+            } else {
+                try {
+                    march.tick();
+                    if (march.getState() == MarchState.HOMED) {
+                        removes.add(march.getId());
+                    }
+                } catch (Throwable ex) {
+                    removes.add(march.getId());
+                    march.onError();
+                }
+            }
+        }
+        String changedMarchId;
+        int size = changed.size();
+        Set<String> set = new HashSet<>();
+        while (size-- > 0 && (changedMarchId = changed.poll()) != null) {
+            march = marchMap.get(changedMarchId);
+            if (march != null && !set.contains(changedMarchId)) {
+                innerUpdateMarch(march);
+                set.add(changedMarchId);
+            }
+        }
+        for (String marchId : removes) {
+            innerRemoveMarch(marchId);
+        }
+        scene.getMarchRegulation().tick();
     }
 
     private void innerUpdateMarch(March march) {

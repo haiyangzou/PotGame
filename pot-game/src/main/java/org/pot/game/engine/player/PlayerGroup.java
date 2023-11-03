@@ -1,5 +1,6 @@
 package org.pot.game.engine.player;
 
+import com.google.protobuf.Message;
 import lombok.Getter;
 import org.pot.common.concurrent.exception.CommonErrorCode;
 import org.pot.common.concurrent.executor.AsyncRunner;
@@ -22,6 +23,7 @@ public class PlayerGroup extends Thread {
     private final String TICK;
     private final String TICK_P;
     private final String ASYNC_RUNNER;
+
     public PlayerGroup(int index) {
         this.index = index;
         String name = this.getClass().getSimpleName() + "-" + this.index;
@@ -87,5 +89,12 @@ public class PlayerGroup extends Thread {
 
     void close() {
         shutdown = true;
+    }
+
+    void sendMessage(long gameUid, Message message) {
+        Player player = players.get(gameUid);
+        if (player != null) {
+            player.sendMessage(message);
+        }
     }
 }

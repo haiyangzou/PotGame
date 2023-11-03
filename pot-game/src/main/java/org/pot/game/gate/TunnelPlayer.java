@@ -4,10 +4,10 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.common.concurrent.exception.IErrorCode;
 import org.pot.common.util.RunSignal;
-import org.pot.game.engine.WorldManager;
 import org.pot.game.engine.player.Player;
 import org.pot.game.engine.player.PlayerData;
 import org.pot.game.engine.player.PlayerManager;
+import org.pot.game.engine.world.WorldManager;
 
 import java.util.Objects;
 

@@ -1,7 +1,7 @@
 package org.pot.game.engine.switchcontrol;
 
-import org.pot.game.engine.WorldManager;
 import org.pot.game.engine.switchcontrol.listener.WorldSwitchListener;
+import org.pot.game.engine.world.WorldManager;
 
 import java.util.Collections;
 import java.util.List;

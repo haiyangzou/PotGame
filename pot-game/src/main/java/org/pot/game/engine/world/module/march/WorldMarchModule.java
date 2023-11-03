@@ -8,7 +8,6 @@ import org.pot.game.engine.world.module.map.scene.WorldMapScene;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public class WorldMarchModule extends AbstractWorldModule implements MarchListener {
     @Override
@@ -27,12 +26,11 @@ public class WorldMarchModule extends AbstractWorldModule implements MarchListen
     }
 
     @Override
-    public CompletableFuture<?> init() {
+    public void init() {
         List<March> marches = new ArrayList<>();
         MarchManager marchManager = WorldMapScene.singleton.getMarchManager();
         marches.forEach(marchManager::addMarch);
         marchManager.addListener(this);
-        return null;
     }
 
     @Override

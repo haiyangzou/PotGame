@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
@@ -41,10 +40,9 @@ public class WorldMonsterModule extends AbstractWorldModule implements PointList
     private final RunSignal saveSignal = new RunSignal(TimeUnit.MINUTES.toMillis(5));
 
     @Override
-    public CompletableFuture<?> init() {
+    public void init() {
         WorldMapScene.singleton.getPointManager().addListener(this);
         loadMonsterInfo();
-        return null;
     }
 
     private void loadMonsterInfo() {

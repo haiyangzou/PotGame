@@ -18,7 +18,6 @@ import org.pot.game.engine.world.module.map.clean.WorldMapCleaner;
 import org.pot.game.engine.world.module.map.scene.WorldMapScene;
 
 import java.util.Collection;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 public class WorldMapModule extends AbstractWorldModule {
@@ -38,11 +37,10 @@ public class WorldMapModule extends AbstractWorldModule {
             new RunSignal(TimeUnit.MINUTES.toMillis(1)), new RunSignal(TimeUnit.MINUTES.toMillis(1)));
 
     @Override
-    public CompletableFuture<?> init() {
+    public void init() {
         PlayerBornRule.getInstance().init();
         WorldMapScene.singleton.init();
         cleaner.init();
-        return null;
     }
 
     @Override

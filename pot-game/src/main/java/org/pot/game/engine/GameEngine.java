@@ -6,6 +6,7 @@ import org.pot.common.Constants;
 import org.pot.common.PotPackage;
 import org.pot.common.concurrent.executor.ThreadUtil;
 import org.pot.common.date.DateTimeUtil;
+import org.pot.common.id.UniqueIdUtil;
 import org.pot.core.AppEngine;
 import org.pot.core.engine.EngineInstance;
 import org.pot.core.engine.IHttpServer;
@@ -18,6 +19,7 @@ import org.pot.game.engine.log.LogManager;
 import org.pot.game.engine.player.PlayerManager;
 import org.pot.game.engine.rank.RankManager;
 import org.pot.game.engine.switchcontrol.SwitchManager;
+import org.pot.game.engine.world.WorldManager;
 import org.pot.game.gate.GameConnManager;
 import org.pot.game.gate.GhostUtil;
 import org.pot.game.gate.TunnelManager;
@@ -65,6 +67,10 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
 
     public LocalDateTime getOpenDateTime() {
         return DateTimeUtil.toLocalDateTime(getOpenTime());
+    }
+
+    public long nextId() {
+        return UniqueIdUtil.newUniqueId(GameServerInfo.getServerIdObject());
     }
 
     @Override

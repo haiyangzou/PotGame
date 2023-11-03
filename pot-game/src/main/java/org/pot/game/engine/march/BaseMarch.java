@@ -1,6 +1,12 @@
 package org.pot.game.engine.march;
 
+import org.pot.game.engine.enums.MarchType;
+
 public abstract class BaseMarch implements March {
+    public BaseMarch(MarchManager marchManager, MarchType type, int sourcePoint, int targetPoint) {
+
+    }
+
     @Override
     public String getId() {
         return null;

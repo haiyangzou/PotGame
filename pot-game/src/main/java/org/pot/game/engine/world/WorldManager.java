@@ -1,8 +1,11 @@
-package org.pot.game.engine;
+package org.pot.game.engine.world;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.common.Constants;
+import org.pot.common.concurrent.exception.CommonErrorCode;
+import org.pot.common.concurrent.exception.ExceptionUtil;
+import org.pot.common.concurrent.exception.IErrorCode;
 import org.pot.common.concurrent.exception.ServiceException;
 import org.pot.common.concurrent.executor.AsyncRunner;
 import org.pot.common.concurrent.executor.DelayRunner;
@@ -11,8 +14,7 @@ import org.pot.common.util.ExDateTimeUtil;
 import org.pot.common.util.StringUtil;
 import org.pot.core.util.NewDay;
 import org.pot.core.util.SignalLight;
-import org.pot.game.engine.world.WorldModule;
-import org.pot.game.engine.world.WorldModuleType;
+import org.pot.game.engine.GameEngine;
 
 import java.util.ConcurrentModificationException;
 import java.util.concurrent.CompletableFuture;
@@ -126,11 +128,7 @@ public class WorldManager extends Thread {
         for (WorldModule module : modules) {
             try {
                 log.info(StringUtil.format("init world module{}", module.getTickerName()));
-                CompletableFuture<?> await = module.init();
-                if (await == null) {
-                    continue;
-                }
-                ThreadUtil.await(Constants.AWAIT_MS, Constants.AWAIT_TIMEOUT_MS, TimeUnit.MILLISECONDS, await::isDone, StringUtil.format("init world module:{} ...", module.getTickerName()));
+                module.init();
             } catch (Throwable cause) {
                 throw new ServiceException(StringUtil.format("init world module{} error", module.getTickerName()), cause);
             }
@@ -152,6 +150,29 @@ public class WorldManager extends Thread {
         for (WorldModule module : modules) {
             module.onDailyReset(ExDateTimeUtil.getCurDayStart());
         }
+    }
+
+    public void submit(final WorldPlayerRequest worldPlayerRequest) {
+        final long submitTime = System.currentTimeMillis();
+        String caller = ExceptionUtil.computeCaller(worldPlayerRequest, this.getClass());
+        submit(() -> {
+            IErrorCode errorCode;
+            Throwable throwable = null;
+            long startTime = System.currentTimeMillis();
+            try {
+                errorCode = worldPlayerRequest.handle();
+            } catch (ServiceException ex) {
+                throwable = ex;
+                errorCode = ex.getErrorCode();
+            } catch (Throwable ex) {
+                throwable = ex;
+                errorCode = CommonErrorCode.UNKNOWN_ERROR;
+            }
+            if (errorCode != null) {
+                worldPlayerRequest.sendError(errorCode);
+                worldPlayerRequest.rollbackOnError(errorCode);
+            }
+        });
     }
 
     public void submit(Runnable runnable) {

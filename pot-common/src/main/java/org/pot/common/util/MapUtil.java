@@ -20,6 +20,12 @@ public class MapUtil {
         return map;
     }
 
+    public static <E, K, V> HashMap<K, V> toHashMap(Collection<E> values, Function<E, K> keyFunction, Function<E, V> valueFunction) {
+        HashMap<K, V> map = Maps.newLinkedHashMapWithExpectedSize(values.size());
+        values.forEach(v -> map.put(keyFunction.apply(v), valueFunction.apply(v)));
+        return map;
+    }
+
     public static <E, K, V> TreeMap<K, V> toTreeMap(@Nullable Comparator<? super K> comparator, Collection<E> values, Function<E, K> keyFunction, Function<E, V> valueFunction) {
         TreeMap<K, V> map = new TreeMap<>(comparator);
         values.forEach(v -> map.put(keyFunction.apply(v), valueFunction.apply(v)));

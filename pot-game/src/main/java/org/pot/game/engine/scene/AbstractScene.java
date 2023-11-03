@@ -69,4 +69,6 @@ public abstract class AbstractScene {
     }
 
     public abstract CityRegulation getCityRegulation();
+
+    public abstract MarchRegulation getMarchRegulation();
 }

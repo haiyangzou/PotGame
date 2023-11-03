@@ -21,7 +21,6 @@ import org.pot.game.resource.map.ResourceRefreshConfig;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -38,9 +37,8 @@ public class WorldResourceModule extends AbstractWorldModule {
     private final RunSignal saveSignal = new RunSignal(TimeUnit.MINUTES.toMillis(5));
 
     @Override
-    public CompletableFuture<?> init() {
+    public void init() {
         loadResourceInfo();
-        return null;
     }
 
     @Override
