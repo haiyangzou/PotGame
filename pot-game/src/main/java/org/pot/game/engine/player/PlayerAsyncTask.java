@@ -64,7 +64,7 @@ public final class PlayerAsyncTask {
     private static void run() {
         long inMemPlayerCount = PlayerManager.getInstance().getPlayerCount();
         long loadPlayerCount = PlayerManager.getInstance().getLoadingPlayerCount();
-        long memCalcCount = 5000 - (inMemPlayerCount - WorldMapScene.instance.getCityRegulation().getCleaner().getCleanMax());
+        long memCalcCount = 5000 - (inMemPlayerCount - WorldMapScene.singleton.getCityRegulation().getCleaner().getCleanMax());
         long loadCalcCount = 1000 - loadPlayerCount;
         int size = (int) Math.min(memCalcCount, loadCalcCount);
         if (size > 0 && tasks.size() > 0) {

@@ -74,23 +74,23 @@ public class WorldResourceModule extends AbstractWorldModule {
     }
 
     private void refreshResource(String prefix, List<Integer> pointIds, double percent, Supplier<PointResourceData> resourceDataSupplier) {
-        List<WorldPoint> currentResourcePoints = WorldMapScene.instance.getPointManager().getMainPoints(pointIds, PointType.RESOURCE);
+        List<WorldPoint> currentResourcePoints = WorldMapScene.singleton.getPointManager().getMainPoints(pointIds, PointType.RESOURCE);
         currentResourcePoints.removeIf(worldPoint -> {
             PointResourceData resourceData = worldPoint.getExtraData(PointResourceData.class);
             return resourceData.getOccupier() > 0 || !resourceData.getMarchIdList().isEmpty();
         });
         //移除世界上的空閒的資源田
-        currentResourcePoints.forEach(WorldMapScene.instance::removePoint);
+        currentResourcePoints.forEach(WorldMapScene.singleton::removePoint);
         //獲取坐標中可建造的做標書
-        int canBuildPointCount = WorldMapScene.instance.getPointManager().getCanBuildPointCount(pointIds);
-        int currentCount = WorldMapScene.instance.getPointManager().getMainPoints(pointIds, PointType.RESOURCE).size();
+        int canBuildPointCount = WorldMapScene.singleton.getPointManager().getCanBuildPointCount(pointIds);
+        int currentCount = WorldMapScene.singleton.getPointManager().getMainPoints(pointIds, PointType.RESOURCE).size();
         canBuildPointCount = canBuildPointCount + (currentCount + PointType.RESOURCE.getArea());
         int totalCount = (int) (canBuildPointCount * percent / PointType.RESOURCE.getArea());
         int refreshCount = Math.max(0, totalCount - currentCount);
         int realCount = 0;
         for (int i = 0; i < refreshCount; i++) {
             PointResourceData resourceData = resourceDataSupplier.get();
-            int mainPointId = WorldMapScene.instance.putPoint(pointIds, resourceData);
+            int mainPointId = WorldMapScene.singleton.putPoint(pointIds, resourceData);
             if (mainPointId == PointUtil.INVALID_POINT_ID) {
                 break;
             } else {

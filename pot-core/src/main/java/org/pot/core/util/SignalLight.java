@@ -1,8 +1,6 @@
 package org.pot.core.util;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
+import lombok.extern.slf4j.Slf4j;
 import org.pot.common.Constants;
 import org.pot.common.concurrent.exception.ExceptionUtil;
 import org.pot.common.concurrent.executor.ThreadUtil;
@@ -11,7 +9,9 @@ import org.pot.common.function.Ticker;
 import org.pot.common.structure.ElapsedTimeMonitor;
 import org.pot.common.units.TimeUnitsConst;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 @Slf4j
 public class SignalLight extends Thread {
@@ -30,6 +30,19 @@ public class SignalLight extends Thread {
         lightMap.computeIfAbsent(name, key -> System.currentTimeMillis());
     }
 
+    public static void setOff(final String name, final long slow) {
+        Long start = lightMap.remove(name);
+        check(name, slow, start);
+        deadLigthMap.remove(name);
+        if (start != null) {
+            final long elapsed = System.currentTimeMillis() - start;
+            if (elapsed > slow) {
+                String caller = ExceptionUtil.computeCaller(name, SignalLight.class);
+                elapsedTimeMonitor.recordElapsedTime(name, elapsed, caller);
+            }
+        }
+    }
+
     public static void setOff(final String name) {
         Long start = lightMap.remove(name);
         check(name, Constants.RUN_SLOW_MS, start);
@@ -41,6 +54,30 @@ public class SignalLight extends Thread {
                 elapsedTimeMonitor.recordElapsedTime(name, elapsed, caller);
             }
         }
+    }
+
+    public static <T> void watch(final String name, T param, Consumer<T> consumer) {
+        watch(name, Constants.RUN_SLOW_MS, param, consumer);
+    }
+
+    public static <T> void watch(final String name, final long slow, Runnable runnable) {
+        setOn(name);
+        try {
+            runnable.run();
+        } finally {
+            setOff(name, slow);
+        }
+
+    }
+
+    public static <T> void watch(final String name, final long slow, T param, Consumer<T> consumer) {
+        setOn(name);
+        try {
+            consumer.accept(param);
+        } finally {
+            setOff(name, slow);
+        }
+
     }
 
     public static void watch(final String name, Runnable runnable) {

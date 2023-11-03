@@ -3,6 +3,7 @@ package org.pot.game.engine.world;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.common.relect.ConstructorUtil;
+import org.pot.game.engine.world.module.instance.InstanceModule;
 import org.pot.game.engine.world.module.map.WorldMapModule;
 import org.pot.game.engine.world.module.march.WorldMarchModule;
 import org.pot.game.engine.world.module.monster.WorldMonsterModule;
@@ -18,6 +19,7 @@ public enum WorldModuleType {
     WORLD_RALLY(WorldRallyModule.class),
     WORLD_MONSTER(WorldMonsterModule.class),
     WORLD_RESOURCE(WorldResourceModule.class),
+    INSTANCE(InstanceModule.class),
     ;
     private final WorldModule instance;
     @Getter
@@ -50,5 +52,9 @@ public enum WorldModuleType {
                 return null;
             }
         }
+    }
+
+    public <T extends WorldModule> T getModule() {
+        return (T) instance;
     }
 }

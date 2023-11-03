@@ -67,7 +67,7 @@ public class WorldMapCleaner {
             return;
         }
         if (checkCLeanSignal.signal()) {
-            long capacity = WorldMapScene.instance.getPointManager().countPointType(PointType.CITY);
+            long capacity = WorldMapScene.singleton.getPointManager().countPointType(PointType.CITY);
             if (capacity > cleanMax) {
                 log.info("Cleaner Capacity Over Max,capacity={},cleaning={},cleanMin={},cleanMax={},cleanInterval={}",
                         capacity, cleaning, cleanMin, cleanMax, cleanInterval);
@@ -125,7 +125,7 @@ public class WorldMapCleaner {
                 }
                 cleanBlock(rule, blockCleanInfo);
                 iterator.remove();
-                long capacity = WorldMapScene.instance.getPointManager().countPointType(PointType.CITY);
+                long capacity = WorldMapScene.singleton.getPointManager().countPointType(PointType.CITY);
                 log.debug("Cleaner Finish Block");
                 if (capacity > cleanMin) {
                     satisfy = true;
@@ -134,14 +134,14 @@ public class WorldMapCleaner {
             }
             if (CollectionUtil.isEmpty(blockCleans)) {
                 cleanMap.remove(rule.getId());
-                long capacity = WorldMapScene.instance.getPointManager().countPointType(PointType.CITY);
+                long capacity = WorldMapScene.singleton.getPointManager().countPointType(PointType.CITY);
                 log.debug("Cleaner Finish Block");
                 if (capacity > cleanMin) {
                     satisfy = true;
                 }
             }
             if (satisfy) {
-                long capacity = WorldMapScene.instance.getPointManager().countPointType(PointType.CITY);
+                long capacity = WorldMapScene.singleton.getPointManager().countPointType(PointType.CITY);
                 log.info("Cleaner Finish Cause Capacity Enough,capacity={},ruleLv={},cleaning={},cleanMin={},cleanMax={},cleanInterval={}",
                         capacity, rule.getLv(), cleaning, cleanMin, cleanMax, cleanInterval);
                 cleanMap.clear();
@@ -154,7 +154,7 @@ public class WorldMapCleaner {
 
     private void cleanBlock(CleanPlayerRule rule, WorldMapBlockCleanInfo blockCleanInfo) {
         List<Integer> blockPointIds = WorldMapPointRegulation.getBlock(blockCleanInfo.getBlockId()).getPointIds();
-        List<WorldPoint> blockCities = WorldMapScene.instance.getPointManager().getMainPoints(blockPointIds, PointType.CITY);
+        List<WorldPoint> blockCities = WorldMapScene.singleton.getPointManager().getMainPoints(blockPointIds, PointType.CITY);
         for (WorldPoint blockCity : blockCities) {
             final PointCityData pointCityData = blockCity.getExtraData(PointCityData.class);
             if (pointCityData == null) continue;

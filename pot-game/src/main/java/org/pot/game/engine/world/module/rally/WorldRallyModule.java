@@ -42,7 +42,7 @@ public class WorldRallyModule extends AbstractWorldModule implements PointListen
 
     @Override
     public CompletableFuture<?> init() {
-        WorldMapScene.instance.getPointManager().addListener(this);
+        WorldMapScene.singleton.getPointManager().addListener(this);
         loadRallyInfo();
         return null;
     }
@@ -75,7 +75,7 @@ public class WorldRallyModule extends AbstractWorldModule implements PointListen
         long now = System.currentTimeMillis();
         List<Integer> removes = new ArrayList<>();
         for (Integer pointId : timeoutRallyPointIds) {
-            WorldPoint point = WorldMapScene.instance.getPoint(pointId);
+            WorldPoint point = WorldMapScene.singleton.getPoint(pointId);
             if (point == null) {
                 removes.add(pointId);
                 continue;
@@ -86,8 +86,8 @@ public class WorldRallyModule extends AbstractWorldModule implements PointListen
                 continue;
             }
             if (now > pointRallyData.getTimeout() && pointRallyData.getMarchIdList().isEmpty()) {
-                if (!WorldMapScene.instance.getMarchManager().getWarManager().existLairWar(pointId)) {
-                    WorldMapScene.instance.removePoint(pointId);
+                if (!WorldMapScene.singleton.getMarchManager().getWarManager().existLairWar(pointId)) {
+                    WorldMapScene.singleton.removePoint(pointId);
                     removes.add(pointId);
                 }
             }
@@ -159,7 +159,7 @@ public class WorldRallyModule extends AbstractWorldModule implements PointListen
 
     private void clearBockRally(int mapRefreshDayId, int blockBandId, Integer blockId) {
         List<Integer> blockPointIds = WorldMapPointRegulation.getBlock(blockId).getPointIds();
-        List<WorldPoint> currentRallyPoints = WorldMapScene.instance.getPointManager().getMainPoints(blockPointIds, PointType.RALLY);
+        List<WorldPoint> currentRallyPoints = WorldMapScene.singleton.getPointManager().getMainPoints(blockPointIds, PointType.RALLY);
         currentRallyPoints.removeIf(worldPoint -> {
 
             PointRallyData pointRallyData = worldPoint.getExtraData(PointRallyData.class);
@@ -167,14 +167,14 @@ public class WorldRallyModule extends AbstractWorldModule implements PointListen
                 if (pointRallyData.getMarchIdList().isEmpty()) {
                     return true;
                 }
-                if (!WorldMapScene.instance.getMarchManager().getWarManager().existLairWar(worldPoint.getId())) {
+                if (!WorldMapScene.singleton.getMarchManager().getWarManager().existLairWar(worldPoint.getId())) {
                     return true;
                 }
             }
             return false;
         });
         //移除世界上的空閒的資源田
-        currentRallyPoints.forEach(WorldMapScene.instance::removePoint);
+        currentRallyPoints.forEach(WorldMapScene.singleton::removePoint);
         log.info("clear block rally");
     }
 
@@ -191,8 +191,8 @@ public class WorldRallyModule extends AbstractWorldModule implements PointListen
         List<Integer> blockPointIds = WorldMapPointRegulation.getBlock(blockId).getPointIds();
 
         //獲取坐標中可建造的做標書
-        int canBuildPointCount = WorldMapScene.instance.getPointManager().getCanBuildPointCount(blockPointIds);
-        int currentCount = WorldMapScene.instance.getPointManager().getMainPoints(blockPointIds, PointType.RALLY).size();
+        int canBuildPointCount = WorldMapScene.singleton.getPointManager().getCanBuildPointCount(blockPointIds);
+        int currentCount = WorldMapScene.singleton.getPointManager().getMainPoints(blockPointIds, PointType.RALLY).size();
 
         canBuildPointCount = canBuildPointCount + (currentCount + PointType.RALLY.getArea());
         double percent = GameConstants.BLOCK_RALLY_PERCENT;
@@ -205,7 +205,7 @@ public class WorldRallyModule extends AbstractWorldModule implements PointListen
                 break;
             }
             PointRallyData rallyData = new PointRallyData(rallyId);
-            int mainPointId = WorldMapScene.instance.putPoint(blockPointIds, rallyData);
+            int mainPointId = WorldMapScene.singleton.putPoint(blockPointIds, rallyData);
             if (mainPointId == PointUtil.INVALID_POINT_ID) {
                 break;
             } else {

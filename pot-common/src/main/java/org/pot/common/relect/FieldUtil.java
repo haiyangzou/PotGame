@@ -1,19 +1,24 @@
 package org.pot.common.relect;
 
+import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.google.common.collect.ImmutableList;
-
 public final class FieldUtil {
     private static final Map<Class<?>, List<Field>> cach1 = new ConcurrentHashMap<>();
     private static final Map<Class<?>, List<Field>> cach2 = new ConcurrentHashMap<>();
 
-    public static List<Field> getAllFields(final Class<?> cls) {
+    public static Field[] getAllFields(final Class<?> cls) {
+        List<Field> allFieldsList = getAllFieldsList(cls);
+        return (Field[]) allFieldsList.toArray(ArrayUtils.EMPTY_FIELD_ARRAY);
+    }
+
+    public static List<Field> getAllFieldsList(final Class<?> cls) {
         return cach1.computeIfAbsent(cls, FieldUtil::getAllFields0);
     }
 

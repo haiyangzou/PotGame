@@ -1,12 +1,12 @@
 package org.pot.cache.player.snapshot;
 
+import com.github.benmanes.caffeine.cache.LoadingCache;
+import com.google.common.collect.Sets;
+import lombok.extern.slf4j.Slf4j;
 import org.pot.cache.player.PlayerCacheConfig;
 import org.pot.common.concurrent.executor.AsyncExecutor;
 import org.pot.core.util.RedisUtils;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
-import com.github.benmanes.caffeine.cache.LoadingCache;
-import com.google.common.collect.Sets;
-import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
 import java.util.Iterator;
@@ -141,7 +141,7 @@ public class PlayerSnapShotCache {
         return null;
     }
 
-    private void putSnapshot(PlayerSnapShot playerSnapShot) {
+    public void putSnapshot(PlayerSnapShot playerSnapShot) {
         playerSnapShot.setFlushMarker(this::markChanged);
         cache.put(playerSnapShot.getUid(), playerSnapShot);
         markChanged(playerSnapShot.getUid());

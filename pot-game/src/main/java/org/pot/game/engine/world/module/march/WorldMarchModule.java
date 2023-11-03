@@ -29,7 +29,7 @@ public class WorldMarchModule extends AbstractWorldModule implements MarchListen
     @Override
     public CompletableFuture<?> init() {
         List<March> marches = new ArrayList<>();
-        MarchManager marchManager = WorldMapScene.instance.getMarchManager();
+        MarchManager marchManager = WorldMapScene.singleton.getMarchManager();
         marches.forEach(marchManager::addMarch);
         marchManager.addListener(this);
         return null;

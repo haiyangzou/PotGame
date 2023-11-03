@@ -1,12 +1,10 @@
 package org.pot.game.engine.world;
 
-import java.util.concurrent.CompletableFuture;
-
 public class AbstractWorldModule implements WorldModule {
 
     @Override
-    public CompletableFuture<?> init() {
-        return null;
+    public void init() {
+
     }
 
     @Override

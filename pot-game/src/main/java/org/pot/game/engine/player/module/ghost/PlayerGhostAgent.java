@@ -8,7 +8,10 @@ import org.pot.game.engine.player.Player;
 import org.pot.game.engine.player.PlayerAgentAdapter;
 import org.pot.game.engine.player.PlayerData;
 import org.pot.game.gate.GhostUtil;
+import org.pot.game.gate.TunnelUtil;
 import org.pot.game.gate.TunnelVisaData;
+import org.pot.game.persistence.entity.PlayerGhostEntity;
+import org.pot.message.protocol.tunnel.GhostUpdateCmd;
 
 @Slf4j
 @Getter
@@ -28,7 +31,7 @@ public class PlayerGhostAgent extends PlayerAgentAdapter {
 
     public void destroy() {
         destroyed = true;
-        GhostUtil.save();
+        GhostUtil.save(toEntity());
     }
 
     public void delete() {
@@ -40,4 +43,21 @@ public class PlayerGhostAgent extends PlayerAgentAdapter {
         });
     }
 
+    public void update(PlayerData playerData) {
+        if (!isGhost()) return;
+        if (destroyed) return;
+        GhostUtil.save(toEntity());
+        GhostUpdateCmd.Builder builder = GhostUpdateCmd.newBuilder().setPlayerId(player.getUid());
+        builder.setPlayerData(TunnelUtil.savePlayerData(playerData));
+        player.sendMessage(builder.build());
+    }
+
+    public PlayerGhostEntity toEntity() {
+        if (visaData == null) {
+            return null;
+        }
+        PlayerGhostEntity entity = new PlayerGhostEntity();
+        entity.setPlayerId(player.getUid());
+        return entity;
+    }
 }

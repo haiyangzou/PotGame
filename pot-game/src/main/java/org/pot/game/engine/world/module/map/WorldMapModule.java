@@ -40,14 +40,14 @@ public class WorldMapModule extends AbstractWorldModule {
     @Override
     public CompletableFuture<?> init() {
         PlayerBornRule.getInstance().init();
-        WorldMapScene.instance.init();
+        WorldMapScene.singleton.init();
         cleaner.init();
         return null;
     }
 
     @Override
     public void initPlayerData() {
-        PointManager pointManager = WorldMapScene.instance.getPointManager();
+        PointManager pointManager = WorldMapScene.singleton.getPointManager();
         for (WorldPoint point : pointManager.getPoints()) {
             if (!point.isMainPoint()) continue;
             if (point.getRawExtraData() == null) continue;
@@ -74,14 +74,14 @@ public class WorldMapModule extends AbstractWorldModule {
     }
 
     private void validatePoint(int index) {
-        PointRegulation regulation = WorldMapScene.instance.getPointRegulation();
+        PointRegulation regulation = WorldMapScene.singleton.getPointRegulation();
         int yStep = MathUtil.divideAndCeil(regulation.getMaxY(), validateSignals.size());
         int yStart = index * yStep;
         int yEnd = yStart + yStep;
         for (int x = 0; x < regulation.getMaxX(); x++) {
             for (int y = yStart; y < yEnd; y++) {
                 if (regulation.isValidCoordinate(x, y)) {
-                    WorldPoint p = WorldMapScene.instance.getPoint(x, y);
+                    WorldPoint p = WorldMapScene.singleton.getPoint(x, y);
                     if (p != null) {
                         p.validate();
                     }
@@ -93,7 +93,7 @@ public class WorldMapModule extends AbstractWorldModule {
     private void save(boolean async) {
         PlayerBornRule.getInstance().save();
         cleaner.save();
-        PointManager pointManager = WorldMapScene.instance.getPointManager();
+        PointManager pointManager = WorldMapScene.singleton.getPointManager();
         Collection<WorldPoint> worldPoints = pointManager.getPoints();
         if (worldPoints.isEmpty()) return;
         Runnable runnable = () -> {

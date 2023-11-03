@@ -7,7 +7,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public class WorldMapScene extends AbstractScene {
-    public static final WorldMapScene instance = new WorldMapScene();
+    public static final WorldMapScene singleton = new WorldMapScene();
 
     public WorldMapScene() {
         super(WorldMapScene.class.getSimpleName(), WorldMapCityRegulation::new, WorldMapPointRegulation::new);

@@ -42,7 +42,7 @@ public class WorldMonsterModule extends AbstractWorldModule implements PointList
 
     @Override
     public CompletableFuture<?> init() {
-        WorldMapScene.instance.getPointManager().addListener(this);
+        WorldMapScene.singleton.getPointManager().addListener(this);
         loadMonsterInfo();
         return null;
     }
@@ -75,7 +75,7 @@ public class WorldMonsterModule extends AbstractWorldModule implements PointList
         long now = System.currentTimeMillis();
         List<Integer> removes = new ArrayList<>();
         for (Integer pointId : timeoutMonsterPointIds) {
-            WorldPoint point = WorldMapScene.instance.getPoint(pointId);
+            WorldPoint point = WorldMapScene.singleton.getPoint(pointId);
             if (point == null) {
                 removes.add(pointId);
                 continue;
@@ -86,7 +86,7 @@ public class WorldMonsterModule extends AbstractWorldModule implements PointList
                 continue;
             }
             if (now > pointMonsterData.getTimeout() && pointMonsterData.getMarchIdList().isEmpty()) {
-                WorldMapScene.instance.removePoint(pointId);
+                WorldMapScene.singleton.removePoint(pointId);
                 removes.add(pointId);
             }
         }
@@ -157,13 +157,13 @@ public class WorldMonsterModule extends AbstractWorldModule implements PointList
 
     private void clearBockMonster(int mapRefreshDayId, int blockBandId, Integer blockId) {
         List<Integer> blockPointIds = WorldMapPointRegulation.getBlock(blockId).getPointIds();
-        List<WorldPoint> currentMonsterPoints = WorldMapScene.instance.getPointManager().getMainPoints(blockPointIds, PointType.MONSTER);
+        List<WorldPoint> currentMonsterPoints = WorldMapScene.singleton.getPointManager().getMainPoints(blockPointIds, PointType.MONSTER);
         currentMonsterPoints.removeIf(worldPoint -> {
             PointMonsterData monsterData = worldPoint.getExtraData(PointMonsterData.class);
             return monsterData != null && monsterData.getMarchIdList().isEmpty();
         });
         //移除世界上的空閒的資源田
-        currentMonsterPoints.forEach(WorldMapScene.instance::removePoint);
+        currentMonsterPoints.forEach(WorldMapScene.singleton::removePoint);
         log.info("clear block monster");
     }
 
@@ -180,8 +180,8 @@ public class WorldMonsterModule extends AbstractWorldModule implements PointList
         List<Integer> blockPointIds = WorldMapPointRegulation.getBlock(blockId).getPointIds();
 
         //獲取坐標中可建造的做標書
-        int canBuildPointCount = WorldMapScene.instance.getPointManager().getCanBuildPointCount(blockPointIds);
-        int currentCount = WorldMapScene.instance.getPointManager().getMainPoints(blockPointIds, PointType.MONSTER).size();
+        int canBuildPointCount = WorldMapScene.singleton.getPointManager().getCanBuildPointCount(blockPointIds);
+        int currentCount = WorldMapScene.singleton.getPointManager().getMainPoints(blockPointIds, PointType.MONSTER).size();
 
         canBuildPointCount = canBuildPointCount + (currentCount + PointType.MONSTER.getArea());
         double percent = GameConstants.BLOCK_MONSTER_PERCENT;
@@ -194,7 +194,7 @@ public class WorldMonsterModule extends AbstractWorldModule implements PointList
                 break;
             }
             PointMonsterData monster = new PointMonsterData(monsterId);
-            int mainPointId = WorldMapScene.instance.putPoint(blockPointIds, monster);
+            int mainPointId = WorldMapScene.singleton.putPoint(blockPointIds, monster);
             if (mainPointId == PointUtil.INVALID_POINT_ID) {
                 break;
             } else {

@@ -38,6 +38,11 @@ public class GameServerInfo {
         return getServerIdObject().serverType == ServerType.GAME_SERVER;
     }
 
+    public static boolean isSlaveServer() {
+        return getServerIdObject().serverType == ServerType.SLAVE_SERVER;
+    }
+
+
     public static ServerId getServerIdObject() {
         return server.getServerIdObject();
     }

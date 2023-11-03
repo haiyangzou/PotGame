@@ -26,7 +26,7 @@ public class WorldBlock {
         List<Integer> temp = new ArrayList<>();
         for (int xCoordinate = x; xCoordinate < x + WorldMapPointRegulation.BLOCK_LENGTH_X; xCoordinate++) {
             for (int yCoordinate = y; yCoordinate < y + WorldMapPointRegulation.BLOCK_LENGTH_Y; yCoordinate++) {
-                if (WorldMapScene.instance.getPointRegulation().isValidCoordinate(xCoordinate, yCoordinate)) {
+                if (WorldMapScene.singleton.getPointRegulation().isValidCoordinate(xCoordinate, yCoordinate)) {
                     temp.add(PointUtil.getPointId(xCoordinate, yCoordinate));
                 }
             }
