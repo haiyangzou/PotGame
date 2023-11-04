@@ -19,6 +19,12 @@ public class SecurityUtil {
     private static volatile RSAPublicKey rsaPublicKey;
     private static volatile RSAPrivateKey rsaPrivateKey;
 
+
+    public static String encryptIdea(final String data) {
+//        return IdeaCipher.encrypt(data);
+        return "";
+    }
+
     public static byte[] decryptRsa(final byte[] data) throws Exception {
         return RsaCipher.decrypt(RSA_KEY_MODE, RSA_PADDING_ALGORITHM, rsaPrivateKey, data);
     }

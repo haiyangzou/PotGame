@@ -7,6 +7,27 @@ message LoginReqC2S{
   string account = 2;
   string device = 3;
   int32 serverId = 4;
+  int64 gameUid = 5;
+  string debugSerialCode = 6;
+  string appId = 7;
+  string appName = 8;
+  string appVersion =9;
+  string appPackage = 10;
+  string channel= 11;
+  string platform = 12;
+  string deviceLanguage=13;
+  string network = 14;
+  string phoneModel = 15;
+  string deviceInfo=16;
+  string deviceOS=17;
+  string osVersion =18;
+  string timestamp = 19;
+  string sign = 20;
+  string appsFlyerId=21;
+  string advertisingId = 22;
+  string cid= 23;
+  string version =24;
+
 }
 message LoginDataS2S{
   LoginReqC2S loginReqC2S = 1;

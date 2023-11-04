@@ -6,6 +6,7 @@ import com.maxmind.geoip2.model.CountryResponse;
 import com.maxmind.geoip2.record.Country;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.pot.common.net.ipv4.Ipv4Util;
 
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -13,6 +14,7 @@ import java.net.InetAddress;
 @Slf4j
 public class GeoIpUtil {
     private static volatile DatabaseReader database = null;
+    private static final String Unknown = "Unknown";
 
     static {
         loadDatabase();
@@ -41,6 +43,19 @@ public class GeoIpUtil {
             }
         }
     }
+
+    public static String getCountryIsoCode(String ip) {
+        return getCountryIsoCode(ip, Unknown);
+    }
+
+    public static String getCountryIsoCode(String ip, String defaultCode) {
+        if (Ipv4Util.isLocalNetworkIpv4Address(ip)) {
+            return defaultCode;
+        }
+        Country country = getCountry(ip);
+        return country == null || country.getIsoCode() == null ? defaultCode : country.getIsoCode();
+    }
+
 
     public static Country getCountry(String ip) {
         CountryResponse countryResponse = getCountryResponse(ip);

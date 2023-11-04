@@ -32,6 +32,12 @@ public class MapUtil {
         return map;
     }
 
+    public static <K, V> Map<K, V> immutableMap(Collection<V> values, Function<V, K> keyFunction) {
+        HashMap<K, V> map = Maps.newLinkedHashMapWithExpectedSize(values.size());
+        values.forEach(v -> map.put(keyFunction.apply(v), v));
+        return ImmutableMap.copyOf(map);
+    }
+
     public static <K, MK, MV> Map<K, Map<MK, MV>> immutableMapMap(Map<K, Map<MK, MV>> map) {
         Map<K, Map<MK, MV>> temp = new LinkedHashMap<>();
         for (Map.Entry<K, Map<MK, MV>> kMapEntry : map.entrySet()) {

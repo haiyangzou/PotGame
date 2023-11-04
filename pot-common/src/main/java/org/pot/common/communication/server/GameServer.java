@@ -38,4 +38,8 @@ public class GameServer implements Comparable<GameServer>, Serializable {
     public Server toServer() {
         return new Server(ServerType.GAME_SERVER.getId(), serverId, serverName, host, port, httpPort, rpcPort, getOpenTime(), targetServerId);
     }
+
+    public long getOpenTimeStamp() {
+        return openTime == null ? 0 : openTime.getTime();
+    }
 }
