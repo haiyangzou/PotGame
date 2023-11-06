@@ -16,6 +16,11 @@ public abstract class Compressor {
 
     }
 
+    public byte[] decompressBase64StringToBytes(String string) throws IOException, DataFormatException {
+        final byte[] compressBytes = Base64Util.decode(string);
+        return decompress(compressBytes);
+    }
+
     public abstract byte[] compress(final byte[] bytes) throws IOException, DataFormatException;
 
     public abstract byte[] decompress(final byte[] bytes) throws IOException, DataFormatException;

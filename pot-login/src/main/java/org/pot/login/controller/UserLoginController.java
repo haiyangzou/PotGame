@@ -1,14 +1,18 @@
 package org.pot.login.controller;
 
+import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.pot.common.communication.server.GameServer;
 import org.pot.common.concurrent.exception.CommonErrorCode;
+import org.pot.common.concurrent.exception.IErrorCode;
 import org.pot.common.concurrent.exception.ServiceException;
 import org.pot.common.http.HttpSecurityCodec;
 import org.pot.common.http.HttpServletUtils;
 import org.pot.dal.redis.lock.RedisLock;
 import org.pot.dal.redis.lock.RedisLockFactory;
 import org.pot.login.beans.UserLoginInfo;
+import org.pot.login.beans.VersionInfo;
 import org.pot.login.cache.GameServerDaoCache;
 import org.pot.login.service.LoginNoticeService;
 import org.pot.login.service.UserLoginService;
@@ -97,6 +101,35 @@ public class UserLoginController {
             log.error("user login occur an error.");
         }
 
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/reconnect", method = {RequestMethod.GET, RequestMethod.POST})
+    public String reconnect(HttpServletRequest request, HttpServletResponse response,
+                            @RequestParam(value = "token") String token) {
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        String ip = HttpServletUtils.getRequestIp(request);
+        LoginDataS2S loginDataS2S = null;
+        String result = "";
+        try {
+            loginDataS2S = userTokenService.getTokenData(token);
+            if (loginDataS2S != null) {
+                VersionInfo versionInfo = userLoginService.getVersionInfo(loginDataS2S.getLoginReqC2S());
+                if (versionInfo.getErrorCode() != null) {
+                    LoginDataS2S.Builder builder = loginDataS2S.toBuilder();
+                    builder.setAppUpdatePolicy(versionInfo.getAppUpdatePolicy());
+                    builder.setAppUpdateVersion(versionInfo.getAppUpdateVersion());
+                    builder.setAppUpdateUrl(versionInfo.getAppUpdateUrl());
+                    builder.setErrorCOde(IErrorCode.getErrorCode(versionInfo.getErrorCode()));
+                    builder.setErrorMessage(StringUtils.stripToEmpty(versionInfo.getErrorMessage()));
+                    loginDataS2S = builder.build();
+                }
+                result = HttpSecurityCodec.encode(loginDataS2S.toByteArray());
+            }
+        } catch (Throwable throwable) {
+            log.error("user login occur an error.");
+        }
         return result;
     }
 }

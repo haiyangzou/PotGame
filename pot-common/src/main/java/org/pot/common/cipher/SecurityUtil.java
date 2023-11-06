@@ -18,11 +18,14 @@ public class SecurityUtil {
 
     private static volatile RSAPublicKey rsaPublicKey;
     private static volatile RSAPrivateKey rsaPrivateKey;
+    private static volatile byte[] ideaSecretKey;
 
+    public static String decryptIdea(final String data) {
+        return IdeaCipher.decrypt(ideaSecretKey, data);
+    }
 
     public static String encryptIdea(final String data) {
-//        return IdeaCipher.encrypt(data);
-        return "";
+        return IdeaCipher.encrypt(ideaSecretKey, data);
     }
 
     public static byte[] decryptRsa(final byte[] data) throws Exception {
