@@ -25,8 +25,8 @@ public class StrategyService {
 
     public void putStrategyInfo(Map<String, Object> map, String requestIp, String deviceOS, String deviceName,
                                 String resVersion, String appVersion, String appPackageName) {
-        StrategyVersion strategyVersion = StrategyUtil.getVersion(resVersion);
-        if (strategyVersion == null) strategyVersion = StrategyUtil.getVersion(appVersion);
+        StrategyVersion strategyVersion = StrategyUtil.getVersion(resVersion, appPackageName);
+        if (strategyVersion == null) strategyVersion = StrategyUtil.getVersion(appVersion, appPackageName);
         if (strategyVersion != null && AppVersionUtil.isExamining(strategyVersion, deviceOS)) {
             map.put("app_store_examine", true);
             map.put("resource_url", StringUtils.stripToEmpty(strategyVersion.getExamineResourceUrl()));

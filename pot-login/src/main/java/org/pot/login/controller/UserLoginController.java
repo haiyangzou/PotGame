@@ -53,8 +53,9 @@ public class UserLoginController {
         String result = "";
         try {
             final LoginReqC2S loginReqC2S = LoginReqC2S.parseFrom(HttpSecurityCodec.decode(data));
+            final boolean isDebugRole = true;
             final int serverId = gameServerDaoCache.selectOne(loginReqC2S.getServerId()) == null ? 0 : loginReqC2S.getServerId();
-            userLoginInfo = new UserLoginInfo(loginReqC2S, serverId, userIp);
+            userLoginInfo = new UserLoginInfo(loginReqC2S, isDebugRole, serverId, userIp);
             Throwable loginThrowable = null;
             final String account = userLoginInfo.getLoginReqC2S().getAccount();
             final RedisLock mutex = RedisLockFactory.getRedisLock(account, globalReactiveRedisTemplate);
@@ -62,11 +63,11 @@ public class UserLoginController {
                 mutex.lock();
                 userLoginService.loginUser(userLoginInfo);
             } catch (ServiceException ex) {
-                userLoginInfo.setIErrorCode(ex.getErrorCode());
+                userLoginInfo.setErrorCode(ex.getErrorCode());
                 userLoginInfo.setErrorMessage(ex.getMessage());
                 loginThrowable = ex;
             } catch (Throwable ex) {
-                userLoginInfo.setIErrorCode(CommonErrorCode.LOGIN_FAIL);
+                userLoginInfo.setErrorCode(CommonErrorCode.LOGIN_FAIL);
                 userLoginInfo.setErrorMessage("user login occur an error");
                 loginThrowable = ex;
             } finally {

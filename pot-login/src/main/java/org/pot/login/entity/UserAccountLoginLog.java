@@ -1,9 +1,10 @@
-package org.pot.login.domain.object;
+package org.pot.login.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.pot.login.domain.object.UserAccount;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,7 +13,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserAccountReg implements Serializable {
+public class UserAccountLoginLog implements Serializable {
     private Long accountUid;
     private String account;
     private String device;
@@ -35,7 +36,7 @@ public class UserAccountReg implements Serializable {
     private Date createTime;
     private Date updateTime;
 
-    public UserAccountReg(UserAccount userAccount) {
+    public UserAccountLoginLog(UserAccount userAccount) {
         this.accountUid = userAccount.getUid();
         this.account = userAccount.getAccount();
         this.device = userAccount.getDevice();

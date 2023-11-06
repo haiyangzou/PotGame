@@ -1,23 +1,24 @@
 package org.pot.login.domain.object;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
 
-@Entity
-@Table(name = "account")
-@Getter
-@Setter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserRole implements Serializable {
-	@Id
-	private long id;
-	private long account_id;
-	private long openid;
-	private long created_at;
-	private long updated_at;
-	private long status;
+    private Long uid;
+    private Long accountUid;
+    private Integer serverId;
+    private Integer banFlag;
+    private Long banEndTime;
+    private Long lastLoginTime;
+    private Date createTime;
+    private Date updateTime;
 }

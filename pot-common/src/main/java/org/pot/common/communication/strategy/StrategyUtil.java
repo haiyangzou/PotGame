@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 public class StrategyUtil {
     @Setter
     @Getter
-    private static volatile Map<String, StrategyVersion> versionMap = Collections.emptyMap();
+    private static volatile Map<String, Map<String, StrategyVersion>> versionMap = Collections.emptyMap();
     @Setter
     @Getter
     private static volatile List<StrategyVersion> versionList = Collections.emptyList();
@@ -32,14 +32,19 @@ public class StrategyUtil {
     @Getter
     private static volatile List<StrategyIp> ipList = Collections.emptyList();
 
-    public static StrategyVersion getVersion(String version) {
+    public static StrategyVersion getVersion(String version, String packageName) {
         if (StringUtils.isBlank(version)) {
             return null;
         }
-        Map<String, StrategyVersion> map = versionMap;
+        Map<String, Map<String, StrategyVersion>> map = versionMap;
         if (map != null) {
-            StrategyVersion strategyVersion = map.get(version);
-            if (strategyVersion != null) return strategyVersion;
+            Map<String, StrategyVersion> package2versionMap = map.get(version);
+            if (package2versionMap != null) {
+                StrategyVersion strategy = package2versionMap.get(packageName);
+                if (strategy != null) return strategy;
+                strategy = package2versionMap.get("");
+                if (strategy != null) return strategy;
+            }
         }
         List<StrategyVersion> list = versionList;
         for (StrategyVersion strategyVersion : list) {
