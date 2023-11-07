@@ -1,20 +1,51 @@
 package org.pot.common.util;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.pot.common.util.file.FileType;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeElementsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.Set;
 import java.util.function.Predicate;
 
 public class ClassUtil {
+    public static Collection<Class<?>> getClasses(final String scope) {
+        ConfigurationBuilder configuration = new ConfigurationBuilder();
+        configuration.setExpandSuperTypes(true);
+        configuration.setUrls(ClasspathHelper.forPackage(scope));
+        configuration.setInputsFilter(new FilterBuilder.Include(FileType.CLASS.getPatternString()));
+        configuration.setScanners(new TypeElementsScanner().publicOnly(false).includeFields(false).includeAnnotations(false).includeMethods(false));
+        final Reflections reflections = new Reflections(configuration);
+        Set<String> classNames = reflections.getStore().keys(TypeElementsScanner.class.getSimpleName());
+        Set<Class<?>> classes = Sets.newHashSetWithExpectedSize(classNames.size());
+        for (String className : classNames) {
+            if (!StringUtils.startsWith(className, scope)) {
+                continue;
+            }
+            try {
+                long time = System.currentTimeMillis();
+                classes.add(ClassUtils.getClass(className));
+                long elapsed = System.currentTimeMillis() - time;
+                if (elapsed > 111L) {
+
+                }
+            } catch (ClassNotFoundException e) {
+
+            }
+        }
+        return classes;
+    }
+
     public static String getAbbreviatedName(Class<?> type) {
         return getAbbreviatedName(type.getName(), 1);
     }

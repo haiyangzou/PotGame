@@ -22,6 +22,7 @@
         <module>pot-strategy</module>
         <module>pot-hotswap</module>
         <module>pot-config</module>
+        <module>pot-remote</module>
     </modules>
     <packaging>pom</packaging>
     <name>pot</name>
