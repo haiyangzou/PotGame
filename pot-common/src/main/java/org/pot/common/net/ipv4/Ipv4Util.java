@@ -217,4 +217,8 @@ public class Ipv4Util {
                 .collect(Collectors.toList());
     }
 
+    public static List<String> split(String multiIpv4) {
+        return split(multiIpv4, null);
+    }
+
 }

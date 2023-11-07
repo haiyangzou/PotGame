@@ -55,7 +55,7 @@ public class PlayerSnapShotCache {
         this.memory = memory;
         this.database = database;
         this.flusherFuture = this.executor.scheduleAtFixedRate(new ChangeDataFlusher(true),
-                cacheConfig.getFlushSecons(), cacheConfig.getFlushSecons(), TimeUnit.SECONDS);
+                cacheConfig.getFlushSeconds(), cacheConfig.getFlushSeconds(), TimeUnit.SECONDS);
 
     }
 
