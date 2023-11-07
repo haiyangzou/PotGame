@@ -18,6 +18,10 @@ public class GameServer implements Comparable<GameServer>, Serializable {
     private Integer targetServerId;
     private Integer unionServerId;
     private String gameVersion;
+    private Date maintainEndTime;
+    private Integer totalMaxCount;
+    private Integer dayMaxCount;
+    private Integer hourMaxCount;
 
     @Override
     public int compareTo(GameServer o) {
@@ -41,5 +45,22 @@ public class GameServer implements Comparable<GameServer>, Serializable {
 
     public long getOpenTimeStamp() {
         return openTime == null ? 0 : openTime.getTime();
+    }
+
+    public long getMaintainEndTimestamp() {
+        return maintainEndTime == null ? 0 : maintainEndTime.getTime();
+    }
+
+    public int getServerStatus() {
+        final long now = System.currentTimeMillis();
+        final long openTimeStamp = getOpenTimeStamp();
+        final long maintainEndTimestamp = getMaintainEndTimestamp();
+        if (now < openTimeStamp) {
+            return 0;
+        } else if (now < maintainEndTimestamp) {
+            return 2;
+        } else {
+            return 1;
+        }
     }
 }
