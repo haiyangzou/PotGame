@@ -9,6 +9,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class RandomUtil {
+    public static <E> E naturalRandomOne(List<E> objects) {
+        return CollectionUtil.isEmpty(objects) ? null : objects.get(randomInt(objects.size()));
+    }
+
     public static String uuid() {
         return StringUtils.remove(UUID.randomUUID().toString(), "-");
     }

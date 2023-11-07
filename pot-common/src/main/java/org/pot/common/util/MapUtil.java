@@ -1,5 +1,6 @@
 package org.pot.common.util;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
@@ -9,6 +10,14 @@ import java.util.function.Function;
 
 public class MapUtil {
     private static final int DEFAULT_MAP_INITIAL_CAPACITY = 1 << 8;
+
+    public static <K, V> Map<K, List<V>> immutableMapList(Map<K, List<V>> map) {
+        Map<K, List<V>> temp = new LinkedHashMap<>();
+        for (Map.Entry<K, List<V>> kListEntry : map.entrySet()) {
+            temp.put(kListEntry.getKey(), ImmutableList.copyOf(kListEntry.getValue()));
+        }
+        return ImmutableMap.copyOf(temp);
+    }
 
     public static <K, V> TreeMap<K, V> newTreeMap(@Nullable Comparator<? super K> comparator, K key, V value) {
         return put(new TreeMap<>(comparator), key, value);

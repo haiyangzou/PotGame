@@ -9,6 +9,7 @@ import org.pot.common.communication.strategy.StrategyIp;
 import org.pot.common.communication.strategy.StrategyUtil;
 import org.pot.common.communication.strategy.StrategyVersion;
 import org.pot.common.util.AppVersionUtil;
+import org.pot.strategy.beans.GatewayAddress;
 import org.pot.strategy.config.StrategyConfiguration;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,8 @@ import java.util.function.Predicate;
 public class StrategyService {
     @Resource
     StrategyConfiguration strategyConfiguration;
+
+    private volatile GatewayAddress gatewayAddress = new GatewayAddress();
 
     public void putStrategyInfo(Map<String, Object> map, String requestIp, String deviceOS, String deviceName,
                                 String resVersion, String appVersion, String appPackageName) {
@@ -57,6 +60,7 @@ public class StrategyService {
         map.put("resource_url", StringUtils.stripToEmpty(strategyConfiguration.getClientResourceUrl()));
         map.put("gateway_host", StringUtils.stripToEmpty(strategyConfiguration.getClientGatewayHost()));
         map.put("gateway_port", strategyConfiguration.getClientGatewayPort());
+        map.put("gateway_ipv4", gatewayAddress.getNearestGatewayIpv4(requestIp));
         putUpdateInfo(map, deviceOS, resVersion, appVersion, appPackageName, v -> AppVersionUtil.isReleased(v) && AppVersionUtil.isApproved(v, deviceOS));
     }
 
