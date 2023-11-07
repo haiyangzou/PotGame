@@ -13,6 +13,20 @@ public class RandomUtil {
         return CollectionUtil.isEmpty(objects) ? null : objects.get(randomInt(objects.size()));
     }
 
+    public static int randomBetweenInt(int min, int max) {
+        return (int) randomBetweenLong(min, max);
+    }
+
+    public static long randomBetweenLong(long min, long max) {
+        if (min <= 0 || max <= 0) {
+            throw new IllegalArgumentException("must be positive");
+        }
+        if (min >= max) {
+            return min;
+        }
+        return randomLong(max - min + 1) + min;
+    }
+
     public static String uuid() {
         return StringUtils.remove(UUID.randomUUID().toString(), "-");
     }

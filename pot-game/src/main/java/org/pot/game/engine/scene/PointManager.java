@@ -199,4 +199,14 @@ public class PointManager {
     public List<Integer> getCanBuildPoints(List<Integer> pointIds) {
         return pointIds.stream().filter(this::isCanBuild).collect(Collectors.toList());
     }
+
+    public PointType getPointType(int pointId) {
+        WorldPoint worldPoint = getPoint(pointId);
+        return worldPoint == null ? PointType.NONE : worldPoint.getType();
+    }
+
+    public PointExtraData getPointExtraData(int pointId) {
+        WorldPoint worldPoint = getPoint(pointId);
+        return worldPoint == null ? null : worldPoint.getRawExtraData();
+    }
 }

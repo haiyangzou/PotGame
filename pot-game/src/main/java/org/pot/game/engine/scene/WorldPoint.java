@@ -82,13 +82,13 @@ public class WorldPoint implements Serializable {
         return buildWorldPointStruct(GameServerInfo.getServerId(), getX(), getY());
     }
 
-    public WorldPointStruct buildWorldPointStruct(int sid, int pid) {
+    public static WorldPointStruct buildWorldPointStruct(int sid, int pid) {
         int x = PointUtil.getPointX(pid);
         int y = PointUtil.getPointY(pid);
         return buildWorldPointStruct(sid, x, y);
     }
 
-    public WorldPointStruct buildWorldPointStruct(int sid, int x, int y) {
+    public static WorldPointStruct buildWorldPointStruct(int sid, int x, int y) {
         return buildWorldPointStruct(sid, PointUtil.getPointId(x, y));
     }
 

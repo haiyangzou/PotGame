@@ -9,6 +9,7 @@ import java.util.Map;
 
 @Getter
 public enum PointType implements IntEnum {
+    NONE(-99, 1, 1, false, null),
     CITY(1, 2, 2, false, PointCityData.class),
     WONDER(-1, 1, 1, true, null),
     LAND(0, 1, 1, false, null),

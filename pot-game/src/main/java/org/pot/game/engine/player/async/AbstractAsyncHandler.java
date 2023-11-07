@@ -1,9 +1,12 @@
 package org.pot.game.engine.player.async;
 
 import com.google.protobuf.Message;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.common.Constants;
+import org.pot.common.concurrent.exception.CommonErrorCode;
 import org.pot.common.concurrent.exception.IErrorCode;
+import org.pot.common.concurrent.exception.ServiceException;
 import org.pot.common.util.LogUtil;
 import org.pot.common.util.NumberUtil;
 import org.pot.core.net.netty.FramePlayerMessage;
@@ -14,29 +17,54 @@ import org.pot.game.engine.player.PlayerRequestHandler;
 import org.pot.message.protocol.ProtocolPrinter;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 @Slf4j
-@SuppressWarnings("unchecked")
-public abstract class AbstractAsyncHandler<T extends PlayerRequestHandler, RequestType extends Message> {
-    protected Class<? extends PlayerRequestHandler> getHandlerType() {
-        return (Class<? extends PlayerRequestHandler>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+
+public abstract class AbstractAsyncHandler<HandlerType extends PlayerRequestHandler<RequestType>, RequestType extends Message> {
+    @Getter
+    private final String classSimpleName;
+    @Getter
+    private final Class<HandlerType> handlerType;
+    @Getter
+    private final Class<RequestType> requestType;
+
+    @SuppressWarnings("unchecked")
+    public AbstractAsyncHandler() {
+        this.classSimpleName = this.getClass().getSimpleName();
+        Type superClass = this.getClass().getGenericSuperclass();
+        if (superClass instanceof Class<?>) {
+            throw new IllegalArgumentException("Actual Type Error:" + this.getClass().getName());
+        }
+        this.handlerType = (Class<HandlerType>) ((ParameterizedType) superClass).getActualTypeArguments()[0];
+        this.requestType = (Class<RequestType>) ((ParameterizedType) superClass).getActualTypeArguments()[1];
     }
 
-    public void async(T handler, Player player, FramePlayerMessage framePlayerMessage) {
+    public void async(HandlerType handler, Player player, FramePlayerMessage framePlayerMessage) {
         long start = System.currentTimeMillis();
         GameEngine.getInstance().getAsyncExecutor().execute(() -> {
             long runTime = System.currentTimeMillis();
+            Throwable throwable = null;
+            IErrorCode beforeErrorCode = null;
             try {
-                IErrorCode beforeErrorCode = beforeProcess(player, framePlayerMessage.getProto());
-                if (beforeErrorCode != null) {
-                    if (!(beforeErrorCode instanceof AsyncErrorCode)) {
-                        player.errorProcess(beforeErrorCode, null, framePlayerMessage, handler, start);
-                    }
-                    return;
-                }
-            } catch (Exception e) {
-
+                beforeErrorCode = beforeProcess(player, framePlayerMessage.getProto());
+            } catch (ServiceException e) {
+                throwable = e;
+                beforeErrorCode = e.getErrorCode();
+            } catch (Throwable ex) {
+                throwable = ex;
+                beforeErrorCode = CommonErrorCode.UNKNOWN_ERROR;
             }
+            if (throwable != null) {
+                log.error("Async handler beforeProcess");
+            }
+            if (beforeErrorCode != null) {
+                if (!(beforeErrorCode instanceof AsyncErrorCode)) {
+                    player.errorProcess(beforeErrorCode, null, framePlayerMessage, handler, start);
+                }
+                return;
+            }
+
             player.submit(() -> {
                 player.onHandle(start, handler, framePlayerMessage);
                 long handleEndTime = System.currentTimeMillis();

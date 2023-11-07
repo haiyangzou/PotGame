@@ -1,6 +1,7 @@
 package org.pot.game.engine.march;
 
 import org.pot.common.util.MapUtil;
+import org.pot.common.util.RandomUtil;
 import org.pot.game.engine.march.bean.MarchHeroBean;
 import org.pot.game.engine.march.bean.MarchSoldierBean;
 import org.pot.game.engine.march.bean.MarchTroopBean;
@@ -17,6 +18,13 @@ public class MarchUtil {
         List<MarchHeroBean> heroBeans = transformHeroBean(player, heroList);
         List<MarchSoldierBean> soldierBeans = transformSoldierBean(player, soldierList);
         return new MarchTroopBean(heroBeans, soldierBeans);
+    }
+
+    public static long calcMarchStartMillis() {
+        long now = System.currentTimeMillis();
+        long div = now % 1000L;
+        int dif = 100;
+        return div < dif ? now : (now / 1000L * 1000L) + RandomUtil.randomBetweenInt(1, dif);
     }
 
     public static List<MarchSoldierBean> transformSoldierBean(Player player, Map<Integer, Long> soldierMap) {
