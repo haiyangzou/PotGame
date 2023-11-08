@@ -10,6 +10,7 @@ import org.pot.game.engine.enums.MarchType;
 import org.pot.game.engine.enums.PointType;
 import org.pot.game.engine.march.bean.MarchTroopBean;
 import org.pot.game.engine.point.PointExtraData;
+import org.pot.game.engine.scene.AbstractScene;
 import org.pot.message.protocol.world.WorldMarchInfo;
 
 import java.io.Serializable;
@@ -19,6 +20,10 @@ import java.util.List;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
 public interface March extends JsonObject, Serializable {
+    default AbstractScene getScene() {
+        return getManager().getScene();
+    }
+
     void setSourcePoint(int sourcePoint);
 
     void setType(MarchType type);
@@ -116,6 +121,10 @@ public interface March extends JsonObject, Serializable {
     int getRallyType();
 
     void setParentMarchId(String parentMarchId);
+
+    default void setParentMarch(March parentMarch) {
+        this.setParentMarchId(parentMarch == null ? null : parentMarch.getId());
+    }
 
     String getParentMarchId();
 

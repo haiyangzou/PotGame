@@ -88,4 +88,14 @@ public abstract class PointRegulation {
 
     public abstract boolean isCanBuild(int pointId);
 
+    protected abstract void onAddPoint(WorldPoint worldPoint);
+
+    protected abstract void save(boolean async);
+
+    protected abstract void tick();
+
+    protected abstract void onRemovePoint(PointType pointType, int mainX, int mainY, List<Integer> pointIds);
+
+    public abstract double inBlackEarthDistance(int startPoint, int endPoint);
+
 }

@@ -4,12 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.pot.game.engine.enums.MarchState;
 import org.pot.game.engine.enums.MarchType;
-import org.pot.game.engine.enums.PointType;
 import org.pot.game.engine.march.BaseMarch;
 import org.pot.game.engine.march.MarchManager;
 import org.pot.game.engine.march.bean.MarchTroopBean;
 import org.pot.game.engine.march.dead.DeadSoldier;
-import org.pot.game.engine.point.PointExtraData;
 import org.pot.game.resource.common.Reward;
 import org.pot.message.protocol.world.WorldMarchInfo;
 
@@ -68,43 +66,5 @@ public class WorldHuntMarch extends BaseMarch {
         }
     }
 
-    @Override
-    public MarchState getState() {
-        return null;
-    }
 
-    @Override
-    public MarchType getType() {
-        return null;
-    }
-
-    @Override
-    public void onError() {
-
-    }
-
-    @Override
-    public int getSourcePoint() {
-        return 0;
-    }
-
-    @Override
-    public PointType getSourcePointType() {
-        return null;
-    }
-
-    @Override
-    public PointExtraData getSourcePointExtraData() {
-        return null;
-    }
-
-    @Override
-    public PointExtraData getTargetPointExtraData() {
-        return null;
-    }
-
-    @Override
-    public void fireUpdate() {
-        this.manager.updateMarch(this.id);
-    }
 }

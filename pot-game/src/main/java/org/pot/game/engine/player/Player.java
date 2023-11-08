@@ -13,11 +13,13 @@ import org.pot.core.net.netty.FramePlayerMessage;
 import org.pot.core.util.SignalLight;
 import org.pot.game.engine.player.async.AbstractAsyncHandler;
 import org.pot.game.engine.player.async.AsyncHandlerManager;
+import org.pot.game.engine.player.common.PlayerCommonAgent;
 import org.pot.game.engine.player.component.PlayerEventComponent;
 import org.pot.game.engine.player.component.PlayerSceneComponent;
 import org.pot.game.engine.player.module.PlayerAgentsInitializer;
 import org.pot.game.engine.player.module.event.PlayerEventsInitializer;
 import org.pot.game.engine.player.module.ghost.PlayerGhostAgent;
+import org.pot.game.engine.player.union.PlayerUnionAgent;
 import org.pot.game.gate.PlayerSession;
 import org.pot.game.persistence.entity.PlayerProfileEntity;
 import org.pot.game.util.PlayerSnapshotUtil;
@@ -39,6 +41,8 @@ public class Player {
     private volatile LoginDataS2S loginDataS2S;
     public final PlayerEventComponent eventComponent = new PlayerEventComponent(this);
     public final PlayerSceneComponent sceneComponent = new PlayerSceneComponent(this);
+    public final PlayerCommonAgent commonAgent = new PlayerCommonAgent(this);
+    public final PlayerUnionAgent unionAgent = new PlayerUnionAgent(this);
     @Getter
     public final List<PlayerAgentAdapter> agentAdapterList;
     @Getter
@@ -69,6 +73,10 @@ public class Player {
                 data -> log.info("Uid Load Player Success,uid={}", data.getUid()),
                 data -> log.info("UId Load Player Fail !uid={}", data.getUid())
         );
+    }
+
+    public String getName() {
+        return profile.getName();
     }
 
     public Player(PlayerSession playerSession, PlayerData playerData) {

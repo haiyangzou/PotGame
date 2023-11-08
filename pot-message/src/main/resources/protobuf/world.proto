@@ -57,13 +57,26 @@ message WorldMarchInfo{
   WorldPointStruct endPoint = 8;
   int32 endPointType = 9;
   int64 createTime = 10;
+  int64 startTime = 11;
   int64 endTime = 12;
   int64 initEndTime = 13;
   int32 skinId = 14;
   int64 ownerId = 15;
   string ownerName = 16;
-
-
+  int64 ownerUnionId = 17;
+  string ownerUnionIcon = 18;
+  string ownerUnionName = 19;
+  string ownerUnionShortName = 20;
+  int64 power = 21;
+  int64 capacity = 22;
+  int32 linType = 23;
+  bool isRecalled = 24;
+  int64 rallyId = 25;
+  int32 rallyType = 26;
+  int32 headIconId = 27;
+  int32 headFrameId = 28;
+  bytes headImage = 29;
+  int32 ownerLevel = 30;
 }
 message AddWorldMarchInfoS2C{
   repeated WorldMarchInfo marchs = 1;

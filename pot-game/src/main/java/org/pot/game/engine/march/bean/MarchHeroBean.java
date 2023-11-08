@@ -14,4 +14,8 @@ public class MarchHeroBean {
         builder.setHeroId(heroId);
         return builder.build();
     }
+
+    public long getPower() {
+        return 0;
+    }
 }
