@@ -11,8 +11,10 @@ import org.pot.common.function.Operation;
 import org.pot.common.util.LogUtil;
 import org.pot.core.util.SignalLight;
 import org.pot.dal.async.IAsyncDbTask;
+import org.pot.dal.dao.SqlSession;
 import org.pot.game.persistence.GameDb;
 import org.pot.game.persistence.entity.PlayerProfileEntity;
+import org.pot.game.persistence.mapper.PlayerProfileEntityMapper;
 import org.pot.message.protocol.login.LoginDataS2S;
 
 import java.io.Serializable;
@@ -47,7 +49,8 @@ public class PlayerData implements Serializable {
     }
 
     private void update(Operation onSuccess, Operation onFail) {
-
+        SqlSession sqlSession = GameDb.local().getSqlSession(uid);
+        sqlSession.getMapper(PlayerProfileEntityMapper.class).insertOnDuplicateKeyUpdate(profile);
     }
 
     public void asyncLoad(Consumer<PlayerData> onSuccess, Consumer<PlayerData> onFail) {

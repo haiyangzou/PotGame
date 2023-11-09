@@ -6,12 +6,18 @@ import org.pot.common.config.DbConfig;
 import org.pot.common.util.UrlObject;
 import org.pot.dal.async.AsyncDbTaskExecutor;
 import org.pot.dal.async.IAsyncDbTask;
+import org.pot.dal.dao.SessionMapper;
+import org.pot.dal.dao.SqlSession;
 import org.pot.dal.db.DbExecutor;
 import org.pot.dal.db.HikariDbExecutor;
 
 public class DbSupport {
     private final DbExecutor dbExecutor;
     private final AsyncDbTaskExecutor asyncDbTaskExecutor;
+
+    public SqlSession getSqlSession(long id) {
+        return new SqlSession(id, dbExecutor, asyncDbTaskExecutor);
+    }
 
     public DbSupport(DbConfig dbConfig) {
         HikariConfig hikariConfig = new HikariConfig();
@@ -35,4 +41,10 @@ public class DbSupport {
     public void submit(IAsyncDbTask task) {
         asyncDbTaskExecutor.submit(task);
     }
+
+    public <Mapper extends SessionMapper> Mapper getMapper(Class<Mapper> mapperInterface) {
+
+        return null;
+    }
+
 }
