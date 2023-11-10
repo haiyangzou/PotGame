@@ -15,9 +15,12 @@ import org.pot.core.net.connection.IConnection;
 import org.pot.core.net.netty.FramePlayerMessage;
 import org.pot.core.net.netty.NettyClientEngine;
 import org.pot.core.util.SignalLight;
+import org.pot.dal.dao.SqlSession;
 import org.pot.game.engine.GameEngine;
 import org.pot.game.engine.player.Player;
 import org.pot.game.engine.player.PlayerManager;
+import org.pot.game.persistence.GameDb;
+import org.pot.game.persistence.mapper.PlayerTunnelEntityMapper;
 import org.pot.message.protocol.ServerNetPing;
 import org.pot.message.protocol.login.LoginDataS2S;
 import org.pot.message.protocol.tunnel.*;
@@ -26,6 +29,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class Tunnel extends Thread {
@@ -97,6 +101,10 @@ public class Tunnel extends Thread {
     }
 
     void quit(long playerUid) {
+        TunnelPlayer tunnelPlayer = runningTunnelPlayerMap.get(playerUid);
+        if (tunnelPlayer != null) {
+            tunnelPlayer.getVisaData().setTimeout(System.currentTimeMillis());
+        }
     }
 
     boolean isTunnelling(long playerUid) {
@@ -160,7 +168,17 @@ public class Tunnel extends Thread {
     }
 
     private void save() {
-
+        SqlSession sqlSession = GameDb.local().getSqlSession(PlayerTunnelEntityMapper.class);
+        sqlSession.submitWithoutResult(PlayerTunnelEntityMapper.class,
+                m -> m.batchInsertOnDuplicateKeyUpdate(runningTunnelPlayerMap.values().stream().map(TunnelPlayer::toEntity).collect(Collectors.toList())),
+                () -> log.info("save tunnel player success."),
+                () -> log.error("save tunnel player failed.")
+        );
+        sqlSession.submitWithoutResult(PlayerTunnelEntityMapper.class,
+                m -> m.deleteNotInKeyList(runningTunnelPlayerMap.values().stream().map(TunnelPlayer::toEntity).collect(Collectors.toList())),
+                () -> log.info("delete tunnel player success."),
+                () -> log.error("delete tunnel player failed.")
+        );
     }
 
     private void connect() {
@@ -218,8 +236,24 @@ public class Tunnel extends Thread {
         } else if (framePlayerMessage.isProtoType(GhostFinishCmd.class)) {
             finish(tunnelPlayer, framePlayerMessage.getProto());
         } else if (framePlayerMessage.isProtoType(GhostEnterErrorCmd.class)) {
+            tunnelPlayer.disconnect(CommonErrorCode.CONNECT_FAIL);
+            recover(tunnelPlayer);
+        } else if (framePlayerMessage.isProtoType(GhostEnterSuccessCmd.class)) {
+            tunnelPlayer.setState(TunnelPlayerState.RUN);
+            SqlSession sqlSession = GameDb.local().getSqlSession(PlayerTunnelEntityMapper.class);
+            sqlSession.submitWithoutResult(PlayerTunnelEntityMapper.class,
+                    m -> m.insertOnDuplicateKeyUpdate(tunnelPlayer.toEntity()),
+                    () -> log.info("save tunnel player success."),
+                    () -> log.error("save tunnel player failed.")
+            );
+        } else if (framePlayerMessage.isProtoType(GhostExitErrorCmd.class)) {
+            tunnelPlayer.disconnect(CommonErrorCode.CONNECT_FAIL);
+            recover(tunnelPlayer);
+        } else if (framePlayerMessage.isProtoType(GhostReconnectErrorCmd.class)) {
+            tunnelPlayer.disconnect(CommonErrorCode.CONNECT_FAIL);
             recover(tunnelPlayer);
         }
+
     }
 
     private boolean isGhostCmd(FramePlayerMessage framePlayerMessage) {
@@ -311,6 +345,17 @@ public class Tunnel extends Thread {
                     log.debug("Tunnel Player Preparing,PlayerUid={}", tunnelPlayer.getPlayerUid());
                 } else if (tunnelPlayer.getState() == TunnelPlayerState.READY) {
                     IConnection<FramePlayerMessage> remoteServerConnection = connection;
+                    if (remoteServerConnection == null || remoteServerConnection.isClosed()) {
+                        tunnelPlayer.disconnect(CommonErrorCode.SERVER_MAINTAIN);
+                        recover(tunnelPlayer);
+                        continue;
+                    }
+                    SqlSession sqlSession = GameDb.local().getSqlSession(PlayerTunnelEntityMapper.class);
+                    sqlSession.submitWithoutResult(PlayerTunnelEntityMapper.class,
+                            m -> m.batchInsertOnDuplicateKeyUpdate(runningTunnelPlayerMap.values().stream().map(TunnelPlayer::toEntity).collect(Collectors.toList())),
+                            () -> log.info("Tunnel Player Ready save success."),
+                            () -> log.error("Tunnel Player Ready save failed.")
+                    );
                     try {
                         GhostEnterCmd.Builder builder = GhostEnterCmd.newBuilder();
                         builder.setPlayerId(tunnelPlayer.getPlayerUid());
@@ -357,6 +402,11 @@ public class Tunnel extends Thread {
         tunnelPlayer.recover();
         runningTunnelPlayerMap.remove(tunnelPlayer.getPlayerUid());
         //save db
+        SqlSession sqlSession = GameDb.local().getSqlSession(PlayerTunnelEntityMapper.class);
+        sqlSession.submitWithoutResult(PlayerTunnelEntityMapper.class,
+                m -> m.delete(tunnelPlayer.getPlayerUid()),
+                () -> log.info("Tunnel Player Ready save success."),
+                () -> log.error("Tunnel Player Ready save failed."));
     }
 
     private void update(TunnelPlayer tunnelPlayer, GhostUpdateCmd ghostUpdateCmd) {
@@ -414,7 +464,13 @@ public class Tunnel extends Thread {
         tunnelPlayer.setState(TunnelPlayerState.READY);
         tunnelPlayer.getVisaData().setTargetServerId(server.getServerIdObject());
         runningTunnelPlayerMap.putIfAbsent(tunnelPlayer.getPlayerUid(), tunnelPlayer);
-        //TODO save db
+        SqlSession sqlSession = GameDb.local().getSqlSession(PlayerTunnelEntityMapper.class);
+        sqlSession.submitWithoutResult(
+                PlayerTunnelEntityMapper.class,
+                m -> m.insertOnDuplicateKeyUpdate(tunnelPlayer.toEntity()),
+                () -> log.info("redirect tunnel player success"),
+                () -> log.error("")
+        );
         return true;
     }
 }

@@ -19,6 +19,10 @@ public class DbSupport {
         return new SqlSession(id, dbExecutor, asyncDbTaskExecutor);
     }
 
+    public SqlSession getSqlSession(Object singleton) {
+        return new SqlSession(singleton.hashCode(), dbExecutor, asyncDbTaskExecutor);
+    }
+
     public DbSupport(DbConfig dbConfig) {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(dbConfig.getUrl());

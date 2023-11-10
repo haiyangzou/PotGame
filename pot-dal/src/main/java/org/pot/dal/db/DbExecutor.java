@@ -1,5 +1,7 @@
 package org.pot.dal.db;
 
+import org.pot.dal.dao.param.ParamSetter;
+
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
@@ -25,5 +27,8 @@ public interface DbExecutor {
 
     int executeUpdate(String sql);
 
+    int executeUpdate(String sql, ParamSetter paramSetter);
+
+    int executeUpdate(String sql, Object... params);
 
 }

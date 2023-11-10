@@ -6,14 +6,39 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.helpers.MessageFormatter;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class StringUtil {
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
     public static String getLineSeparator() {
         return LINE_SEPARATOR;
+    }
+
+    public static <T> String join(Iterable<T> iterable, String separator, Function<T, String> function) {
+        return join(iterable, null, separator, function);
+    }
+
+    public static <T> String join(Iterable<T> iterable, Predicate<T> predicate, String separator, Function<T, String> function) {
+        return join(iterable.iterator(), predicate, separator, function);
+    }
+
+    public static <T> String join(Iterator<T> iterable, Predicate<T> predicate, String separator, Function<T, String> function) {
+        if (iterable == null || !iterable.hasNext()) {
+            return StringUtils.EMPTY;
+        }
+        StringJoiner joiner = new StringJoiner(separator);
+        while (iterable.hasNext()) {
+            T obj = iterable.next();
+            if (obj != null && (predicate == null || predicate.test(obj))) {
+                joiner.add(function.apply(obj));
+            }
+        }
+        return joiner.toString();
     }
 
     public static <S> String[] toStringArray(S[] original, Function<S, String> caster) {

@@ -1,4 +1,5 @@
 package org.pot.dal.async;
 
-public class IAsyncDbTaskCallBack {
+public interface IAsyncDbTaskCallBack {
+    void callback();
 }

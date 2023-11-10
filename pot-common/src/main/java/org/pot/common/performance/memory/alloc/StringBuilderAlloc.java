@@ -8,4 +8,8 @@ public class StringBuilderAlloc {
     public static StringBuilder newSmallString() {
         return newString(32);
     }
+
+    public static StringBuilder newSmallString(String str) {
+        return newSmallString().append(str);
+    }
 }

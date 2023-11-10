@@ -50,6 +50,16 @@ public class TableMetas {
             }
         }
 
+        public int countPrimaryKeyColumn() {
+            int count = 0;
+            for (ColumnMeta c : column) {
+                if (c.isPrimaryKey()) {
+                    count++;
+                }
+            }
+            return count;
+        }
+
         @Override
 
         public Iterator<ColumnMeta> iterator() {

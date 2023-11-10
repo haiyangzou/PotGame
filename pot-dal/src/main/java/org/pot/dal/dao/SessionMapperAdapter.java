@@ -76,7 +76,7 @@ public abstract class SessionMapperAdapter<Entity> implements SessionMapper<Enti
 
     @Override
     public int insertOnDuplicateKeyUpdate(Entity entity) {
-        return 0;
+        return entityEntityMapper.insertOnDuplicateKeyUpdate(sqlSession, entity);
     }
 
     @Override
@@ -99,7 +99,19 @@ public abstract class SessionMapperAdapter<Entity> implements SessionMapper<Enti
         return null;
     }
 
+    protected Entity executeQueryObject(String sql) {
+        return sqlSession.executeQueryObject(this, sql);
+    }
+
+    protected Entity executeQueryObject(String sql, Object... params) {
+        return sqlSession.executeQueryObject(this, sql, params);
+    }
+
     protected int executeUpdate(String sql) {
         return sqlSession.executeUpdate(sql);
+    }
+
+    protected int executeUpdate(String sql, Object... params) {
+        return sqlSession.executeUpdate(sql, params);
     }
 }

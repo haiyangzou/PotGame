@@ -5,13 +5,18 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.pot.cache.player.PlayerCaches;
+import org.pot.common.binary.Base64Util;
+import org.pot.common.compressor.Compressor;
+import org.pot.common.compressor.GzipCompressor;
 import org.pot.common.concurrent.exception.ExceptionUtil;
 import org.pot.common.concurrent.exception.ServiceException;
 import org.pot.common.function.Operation;
+import org.pot.common.serialization.SerializeUtil;
 import org.pot.common.util.LogUtil;
 import org.pot.core.util.SignalLight;
 import org.pot.dal.async.IAsyncDbTask;
 import org.pot.dal.dao.SqlSession;
+import org.pot.game.engine.GameServerInfo;
 import org.pot.game.persistence.GameDb;
 import org.pot.game.persistence.entity.PlayerProfileEntity;
 import org.pot.game.persistence.mapper.PlayerProfileEntityMapper;
@@ -35,6 +40,7 @@ public class PlayerData implements Serializable {
     }
 
     public void asyncUpdate(Operation onSuccess, Operation onFail) {
+        String caller = ExceptionUtil.getCaller(this.getClass(), Player.class, PlayerGroup.class, PlayerManager.class);
         GameDb.local().submit(new IAsyncDbTask() {
             @Override
             public long getId() {
@@ -43,14 +49,20 @@ public class PlayerData implements Serializable {
 
             @Override
             public void execute() {
-                update(onSuccess, onFail);
+                update(caller, onSuccess, onFail);
             }
         });
     }
 
-    private void update(Operation onSuccess, Operation onFail) {
-        SqlSession sqlSession = GameDb.local().getSqlSession(uid);
-        sqlSession.getMapper(PlayerProfileEntityMapper.class).insertOnDuplicateKeyUpdate(profile);
+    private void update(String caller, Operation onSuccess, Operation onFail) {
+        try {
+            SqlSession sqlSession = GameDb.local().getSqlSession(uid);
+            sqlSession.getMapper(PlayerProfileEntityMapper.class).insertOnDuplicateKeyUpdate(profile);
+            if (onSuccess != null) onSuccess.operate();
+        } catch (Throwable ex) {
+            log.error("Update Player Error!uid={},caller={},dump={}", uid, caller, dump(), ex);
+            if (onFail != null) onFail.operate();
+        }
     }
 
     public void asyncLoad(Consumer<PlayerData> onSuccess, Consumer<PlayerData> onFail) {
@@ -84,7 +96,14 @@ public class PlayerData implements Serializable {
     }
 
     public void insert(String caller, Operation onSuccess, Operation onFail) {
-
+        try {
+            SqlSession sqlSession = GameDb.local().getSqlSession(uid);
+            sqlSession.getMapper(PlayerProfileEntityMapper.class).insert(profile);
+            if (onSuccess != null) onSuccess.operate();
+        } catch (Throwable ex) {
+            log.error("Insert Player Error!uid={},caller={},dump={}", uid, caller, dump(), ex);
+            if (onFail != null) onFail.operate();
+        }
     }
 
     public void asyncDelete(Operation onSuccess, Operation onFail) {
@@ -93,11 +112,40 @@ public class PlayerData implements Serializable {
     }
 
     public void delete(String caller, Operation onSuccess, Operation onFail) {
-
+        if (profile.getServerId() == GameServerInfo.getServerId()) {
+            if (onFail != null) onFail.operate();
+            return;
+        }
+        try {
+            SqlSession sqlSession = GameDb.local().getSqlSession(uid);
+            sqlSession.getMapper(PlayerProfileEntityMapper.class).delete(profile);
+            if (onSuccess != null) onSuccess.operate();
+        } catch (Throwable ex) {
+            log.error("Delete Player Error!uid={},caller={},dump={}", uid, caller, dump(), ex);
+            if (onFail != null) onFail.operate();
+        }
     }
 
     public void load(String caller, Consumer<PlayerData> onSuccess, Consumer<PlayerData> onFail) {
-
+        try {
+            SqlSession sqlSession = GameDb.local().getSqlSession(uid);
+            profile = sqlSession.getMapper(PlayerProfileEntityMapper.class).select(uid);
+            if (profile == null) {
+                loadSuccess = false;
+                loadOver = true;
+                if (onFail != null) {
+                    onFail.accept(this);
+                }
+            }
+            loadSuccess = true;
+            loadOver = true;
+            if (onSuccess != null) onSuccess.accept(this);
+        } catch (Throwable ex) {
+            log.error("Load Player Error!uid={},caller={},dump={}", uid, caller, dump(), ex);
+            loadOver = true;
+            loadSuccess = false;
+            if (onFail != null) onFail.accept(this);
+        }
     }
 
     public PlayerProfileEntity onRegister(LoginDataS2S loginDataS2S) {
@@ -115,4 +163,13 @@ public class PlayerData implements Serializable {
         return temp;
     }
 
+    public String dump() {
+        try {
+            byte[] bytes = SerializeUtil.serialize(this);
+            Compressor compressor = new GzipCompressor();
+            return Base64Util.encode(compressor.compress(bytes));
+        } catch (Throwable ex) {
+            return StringUtils.EMPTY;
+        }
+    }
 }

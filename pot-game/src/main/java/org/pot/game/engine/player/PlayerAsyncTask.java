@@ -4,8 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.pot.common.Constants;
 import org.pot.common.concurrent.exception.ExceptionUtil;
 import org.pot.common.concurrent.executor.ThreadUtil;
+import org.pot.dal.dao.SqlSession;
 import org.pot.game.engine.GameEngine;
 import org.pot.game.engine.world.module.map.scene.WorldMapScene;
+import org.pot.game.persistence.GameDb;
+import org.pot.game.persistence.entity.PlayerProfileEntity;
+import org.pot.game.persistence.mapper.PlayerProfileEntityMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +45,12 @@ public final class PlayerAsyncTask {
             if (!execute(task)) tasks.offer(task);
         } else {
             if (checkDatabaseWhenPlayerNotExists) {
-
+                SqlSession sqlSession = GameDb.local().getSqlSession(PlayerAsyncTask.class);
+                PlayerProfileEntity playerProfileEntity = sqlSession.getMapper(PlayerProfileEntityMapper.class).select(playerId);
+                if (playerProfileEntity == null) {
+                    log.error("Player async task submit player is not in this server");
+                    return;
+                }
             }
             tasks.offer(new Task(playerId, runnable));
         }

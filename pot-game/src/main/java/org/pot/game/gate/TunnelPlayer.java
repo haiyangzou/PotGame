@@ -8,6 +8,7 @@ import org.pot.game.engine.player.Player;
 import org.pot.game.engine.player.PlayerData;
 import org.pot.game.engine.player.PlayerManager;
 import org.pot.game.engine.world.WorldManager;
+import org.pot.game.persistence.entity.PlayerTunnelEntity;
 
 import java.util.Objects;
 
@@ -102,5 +103,17 @@ public class TunnelPlayer {
     public boolean isOnline() {
         PlayerSession atomic = this.playerSession;
         return atomic != null && atomic.isOnline();
+    }
+
+    PlayerTunnelEntity toEntity() {
+        PlayerTunnelEntity entity = new PlayerTunnelEntity();
+        entity.setPlayerId(playerUid);
+        entity.setPlayerData(TunnelUtil.saveDatabasePlayerData(playerData));
+        entity.setState(state.name());
+        entity.setVisaData(TunnelUtil.saveDatabaseVisaData(visaData));
+        entity.setSourceServerId(visaData.getSourceServerId().id);
+        entity.setTargetServerTypeId(visaData.getTargetServerId().serverType.getId());
+        entity.setTargetServerId(visaData.getTargetServerId().id);
+        return entity;
     }
 }

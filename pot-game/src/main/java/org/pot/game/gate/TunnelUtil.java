@@ -1,6 +1,7 @@
 package org.pot.game.gate;
 
 import com.google.protobuf.ByteString;
+import org.pot.common.binary.Base64Util;
 import org.pot.common.compressor.Lz4Compressor;
 import org.pot.common.serialization.SerializeUtil;
 import org.pot.common.util.JsonUtil;
@@ -16,10 +17,19 @@ public class TunnelUtil {
         return ByteString.copyFrom(compressor.compress(bytes));
     }
 
+    public static String saveDatabasePlayerData(PlayerData playerData) {
+        byte[] bytes = SerializeUtil.serialize(playerData);
+        return Base64Util.encode(compressor.compress(bytes));
+    }
+
     public static ByteString saveVisaData(TunnelVisaData visaData) {
         String json = JsonUtil.toJson(visaData);
         byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
         return ByteString.copyFrom(compressor.compress(bytes));
+    }
+
+    public static String saveDatabaseVisaData(TunnelVisaData visaData) {
+        return JsonUtil.toJson(visaData);
     }
 
     public static PlayerData loadPlayerData(ByteString bytesString) {
