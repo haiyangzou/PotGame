@@ -1,5 +1,7 @@
 package org.pot.dal.db;
 
+import lombok.NonNull;
+import org.pot.dal.dao.param.BatchParamSetter;
 import org.pot.dal.dao.param.ParamSetter;
 
 import java.sql.Connection;
@@ -31,4 +33,7 @@ public interface DbExecutor {
 
     int executeUpdate(String sql, Object... params);
 
+    int[] executeBatch(String... sql);
+
+    int[] executeBatch(String sql, @NonNull BatchParamSetter batchParamSetter);
 }

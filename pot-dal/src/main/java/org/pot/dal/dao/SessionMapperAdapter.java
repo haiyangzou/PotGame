@@ -61,17 +61,18 @@ public abstract class SessionMapperAdapter<Entity> implements SessionMapper<Enti
 
     @Override
     public Entity select(Object... params) {
-        return null;
+        SqlAndParams sqlAndParams = SqlEntityReflection.getSelect(entityClass, params);
+        return executeQueryObject(sqlAndParams.getSql(), sqlAndParams.getParams());
     }
 
     @Override
     public int insert(Entity entity) {
-        return 0;
+        return entityEntityMapper.insert(sqlSession, entity);
     }
 
     @Override
     public int[] batchInsert(Collection<Entity> entities) {
-        return new int[0];
+        return entityEntityMapper.batchInsert(sqlSession, entities);
     }
 
     @Override
@@ -81,22 +82,22 @@ public abstract class SessionMapperAdapter<Entity> implements SessionMapper<Enti
 
     @Override
     public int[] batchInsertOnDuplicateKeyUpdate(Collection<Entity> entities) {
-        return new int[0];
+        return entityEntityMapper.batchInsertOnDuplicateKeyUpdate(sqlSession, entities);
     }
 
     @Override
     public int update(Entity entity) {
-        return 0;
+        return entityEntityMapper.updateByPrimaryKey(sqlSession, entity);
     }
 
     @Override
     public int delete(Entity entity) {
-        return 0;
+        return entityEntityMapper.deleteByPrimaryKey(sqlSession, entity);
     }
 
     @Override
     public Entity parse(ResultSet resultSet) throws SQLException {
-        return null;
+        return entityEntityMapper.parse(resultSet);
     }
 
     protected Entity executeQueryObject(String sql) {

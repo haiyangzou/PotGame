@@ -428,6 +428,13 @@ public class Tunnel extends Thread {
         tunnelPlayer.getVisaData().setTargetServerId(server.getServerIdObject());
         runningTunnelPlayerMap.putIfAbsent(tunnelPlayer.getPlayerUid(), tunnelPlayer);
         //save db
+        SqlSession sqlSession = GameDb.local().getSqlSession(PlayerTunnelEntityMapper.class);
+        sqlSession.submitWithoutResult(
+                PlayerTunnelEntityMapper.class,
+                m -> m.insertOnDuplicateKeyUpdate(tunnelPlayer.toEntity()),
+                () -> log.info("join tunnel player success"),
+                () -> log.error("join tunnel player failed")
+        );
         tunnelPlayer.join();
         return false;
     }

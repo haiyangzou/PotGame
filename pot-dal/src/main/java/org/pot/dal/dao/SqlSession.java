@@ -1,11 +1,13 @@
 package org.pot.dal.dao;
 
 import lombok.Getter;
+import lombok.NonNull;
 import org.pot.common.concurrent.exception.ExceptionUtil;
 import org.pot.common.function.Operation;
 import org.pot.dal.async.AsyncDbTaskExecutor;
 import org.pot.dal.async.AsyncWithoutResultDbTask;
 import org.pot.dal.async.AsyncWithoutResultDbTaskCallback;
+import org.pot.dal.dao.param.BatchParamSetter;
 import org.pot.dal.dao.param.ParamSetter;
 import org.pot.dal.db.DbExecutor;
 import org.pot.dal.db.EntityParser;
@@ -87,6 +89,11 @@ public class SqlSession implements DbExecutor {
     }
 
     @Override
+    public int[] executeBatch(String... sql) {
+        return dbExecutor.executeBatch(sql);
+    }
+
+    @Override
     public <T> T executeQueryObject(EntityParser<T> parser, String sql, Object... params) {
         return dbExecutor.executeQueryObject(parser, sql, params);
     }
@@ -100,4 +107,10 @@ public class SqlSession implements DbExecutor {
         AsyncWithoutResultDbTask<M> asyncDbTask = new AsyncWithoutResultDbTask<>(caller, this, mapperClass, mapperMethod, callback);
         asyncDbTaskExecutor.submit(asyncDbTask);
     }
+
+    @Override
+    public final int[] executeBatch(String sql, @NonNull BatchParamSetter batchParamSetter) {
+        return dbExecutor.executeBatch(sql, batchParamSetter);
+    }
+
 }

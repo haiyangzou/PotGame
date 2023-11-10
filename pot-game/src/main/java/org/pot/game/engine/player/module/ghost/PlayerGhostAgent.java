@@ -3,6 +3,7 @@ package org.pot.game.engine.player.module.ghost;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.pot.common.util.JsonUtil;
 import org.pot.game.engine.GameServerInfo;
 import org.pot.game.engine.player.Player;
 import org.pot.game.engine.player.PlayerAgentAdapter;
@@ -41,6 +42,11 @@ public class PlayerGhostAgent extends PlayerAgentAdapter {
         }, () -> {
             log.info("Ghost Player Delete Fail! uid = {}", player.getUid());
         });
+    }
+
+    public void loadEntity(PlayerGhostEntity entity) {
+        this.destroyed = entity.getDestroyed();
+        this.visaData = JsonUtil.parseJson(entity.getVisaData(), TunnelVisaData.class);
     }
 
     public void update(PlayerData playerData) {

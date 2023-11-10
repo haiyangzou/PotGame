@@ -8,10 +8,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
@@ -122,6 +119,10 @@ public class JsonUtil {
             log.error("toJson error:{}", value, var3);
             return null;
         }
+    }
+
+    public static <T> T parseJackJson(String string, JavaType valueType) throws IOException {
+        return StringUtils.isBlank(string) ? null : MAPPER.readValue(string, valueType);
     }
 
     public static <T> T parseJackJson(File file, Class<T> valueType) throws IOException {
