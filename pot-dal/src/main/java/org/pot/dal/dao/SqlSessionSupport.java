@@ -1,7 +1,7 @@
 package org.pot.dal.dao;
 
 import com.google.common.collect.ImmutableMap;
-import org.pot.common.PotPackage;
+import org.pot.PotPackage;
 import org.pot.common.util.ClassUtil;
 import org.springframework.cglib.reflect.FastClass;
 

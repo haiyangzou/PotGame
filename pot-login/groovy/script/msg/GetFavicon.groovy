@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j
 import org.pot.core.io.handler.HttpHandler
 import org.pot.core.script.Script
 import org.pot.core.service.KafkaProducerService
-import org.pot.login.service.AccountService
+
 import org.springframework.beans.factory.annotation.Autowired
 
 import javax.annotation.Resource

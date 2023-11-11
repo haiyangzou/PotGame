@@ -3,7 +3,7 @@ package org.pot.dal.dao.handler;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import org.apache.dubbo.common.utils.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.pot.common.util.JsonUtil;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package org.pot.common;
+package org.pot;
 
 public class PotPackage {
 }

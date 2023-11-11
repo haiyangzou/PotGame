@@ -3,7 +3,6 @@ package script.msg
 
 import org.pot.core.io.handler.HttpHandler
 import org.pot.core.script.Script
-import org.pot.core.service.RoomService
 
 import javax.annotation.Resource
 

@@ -1,16 +1,15 @@
 package org.pot.common.structure;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
-
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.pot.common.util.CollectionUtil;
 import org.pot.common.util.MathUtil;
 import org.pot.common.util.StringUtil;
 
-import lombok.Getter;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 public class ElapsedTimeRecorder implements Comparable<ElapsedTimeRecorder> {
@@ -110,6 +109,32 @@ public class ElapsedTimeRecorder implements Comparable<ElapsedTimeRecorder> {
                     return t;
                 } else {
                     return prevMinValue;
+                }
+            });
+            maxTime.updateAndGet(prevMinValue -> {
+                if (t > prevMinValue) {
+                    maxHappen.updateAndGet(operand -> System.currentTimeMillis());
+                    maxObjectRef.updateAndGet(operand -> object);
+                    return t;
+                } else {
+                    return prevMinValue;
+                }
+            });
+        }
+    }
+
+    public void recordElapsedTime(final long t, final Object object) {
+        if (t >= 0) {
+            long time = totalTime.addAndGet(t);
+            long count = totalCount.incrementAndGet();
+            avgTime.updateAndGet(operand -> time / count);
+            minTime.updateAndGet(v -> {
+                if (t < v) {
+                    minHappen.updateAndGet(prevMinHappen -> System.currentTimeMillis());
+                    minObjectRef.updateAndGet(prevMinObj -> object);
+                    return t;
+                } else {
+                    return v;
                 }
             });
             maxTime.updateAndGet(prevMinValue -> {

@@ -11,7 +11,6 @@ import org.pot.common.compressor.GzipCompressor;
 import org.pot.common.concurrent.exception.ExceptionUtil;
 import org.pot.common.concurrent.exception.ServiceException;
 import org.pot.common.function.Operation;
-import org.pot.common.serialization.SerializeUtil;
 import org.pot.common.util.LogUtil;
 import org.pot.core.util.SignalLight;
 import org.pot.dal.async.IAsyncDbTask;

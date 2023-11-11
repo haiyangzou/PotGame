@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSortedMap;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.pot.common.PotPackage;
+import org.pot.PotPackage;
 import org.pot.common.concurrent.exception.ServiceException;
 import org.pot.common.relect.ConstructorUtil;
 import org.pot.common.text.Jackson;

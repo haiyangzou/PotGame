@@ -19,7 +19,6 @@ public class RoomManager {
 
     public void remove(Integer playerId){
         this.playerRooms.remove(playerId);
-
     }
 
 

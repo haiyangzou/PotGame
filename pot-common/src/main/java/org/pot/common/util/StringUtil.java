@@ -74,4 +74,10 @@ public class StringUtil {
         }
         return list;
     }
+
+    public static String abbreviate(String text, int length) {
+        if (StringUtils.isEmpty(text)) return "";
+        if (text.length() <= length) return text;
+        return text.substring(0, length) + "...";
+    }
 }

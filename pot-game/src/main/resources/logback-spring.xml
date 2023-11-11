@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <property name="queueSize" value="10240"/>
+    <property name="discardingThreshold" value="0"/>
+    <property name="LOG_HOME" value="./logs"/>
+    <include resource="org/spring/framework/boot/logging/logback/defaults.xml"/>
+    <springProperty scop="context" name="spring.application.name" source="spring.application.name" defaultValue=""/>
+</configuration>
