@@ -1,8 +1,9 @@
 package org.pot.common.config;
 
-import java.util.concurrent.TimeUnit;
-
 import lombok.Getter;
+import org.apache.commons.configuration2.Configuration;
+
+import java.util.concurrent.TimeUnit;
 
 @Getter
 public class ExecutorConfig {
@@ -11,6 +12,14 @@ public class ExecutorConfig {
     private int maxThreadSize = 199;
     private int keepAliveTime = 300;
     private String threadName = "Undefined";
-    private final TimeUnit keepAlivTimeUnit = TimeUnit.SECONDS;
+    private final TimeUnit keepAliveTimeUnit = TimeUnit.SECONDS;
 
+    public static ExecutorConfig loadExecutorConfig(String prefix, Configuration config) {
+        ExecutorConfig asyncExecutorConfig = new ExecutorConfig();
+        asyncExecutorConfig.setProperties(prefix, config);
+        return asyncExecutorConfig;
+    }
+
+    private void setProperties(String prefix, Configuration config) {
+    }
 }

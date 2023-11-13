@@ -1,13 +1,13 @@
 package org.pot.common.concurrent.executor;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
+import lombok.extern.slf4j.Slf4j;
 import org.pot.common.concurrent.exception.ExceptionUtil;
 import org.pot.common.config.ExecutorConfig;
 import org.pot.common.util.Indicator;
-import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class AsyncExecutor {
@@ -19,7 +19,7 @@ public class AsyncExecutor {
     public AsyncExecutor(ExecutorConfig config) {
         this.name = config.getThreadName();
         threadPoolExcutor = new StandardExecutor(config.getQueueMaxSize(), config.getCoreThreadSize(),
-                config.getMaxThreadSize(), config.getKeepAliveTime(), config.getKeepAlivTimeUnit(), this.name + "Sch");
+                config.getMaxThreadSize(), config.getKeepAliveTime(), config.getKeepAliveTimeUnit(), this.name + "Sch");
         scheduledExcutor = ScheduledExcutor.newScheduledExecutor(config.getCoreThreadSize(), this.name + "Sch");
     }
 

@@ -1,10 +1,12 @@
 package org.pot.common.file;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -260,5 +262,24 @@ public class FileUtil {
 
     public static boolean exists(File file) {
         return file != null && file.exists();
+    }
+
+    public static void write(String filePath, byte[] bytes, boolean append) throws IOException {
+        Objects.requireNonNull(filePath);
+        write(new File(filePath), bytes, append);
+    }
+
+    public static void write(File file, byte[] bytes, boolean append) throws IOException {
+        Objects.requireNonNull(file);
+        FileUtils.writeByteArrayToFile(file, bytes, append);
+    }
+
+    public static void createFileOnNoExists(File file) throws IOException {
+        if (!file.exists()) {
+            FileUtils.forceMkdirParent(file);
+            if (!file.createNewFile()) {
+                throw new IOException("create file error" + file.getAbsolutePath());
+            }
+        }
     }
 }

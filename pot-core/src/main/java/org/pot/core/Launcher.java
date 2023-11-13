@@ -6,7 +6,10 @@ import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.daemon.Daemon;
 import org.apache.commons.daemon.DaemonContext;
+import org.apache.commons.lang3.StringUtils;
+import org.pot.common.Constants;
 import org.pot.common.relect.ConstructorUtil;
+import org.pot.common.util.FilenameUtil;
 import org.pot.core.engine.EngineInstance;
 
 import java.io.File;
@@ -23,6 +26,19 @@ public class Launcher implements Daemon {
 
         static {
             try {
+                configLabel = System.getProperty("app.config.label", null);
+                configFile = System.getProperty("app.config.file", null);
+                if (configFile == null) {
+                    throw new IllegalArgumentException("Launcher Config is Null");
+                }
+                if (StringUtils.isNotBlank(configLabel)) {
+                    String part1 = StringUtils.substringBefore(configFile, ".");
+                    String part2 = StringUtils.substringAfter(configFile, ".");
+                    configFile = Constants.Env.getContextPath() + part1 + configFile + "." + part2;
+                } else {
+                    configFile = Constants.Env.getContextPath() + configFile;
+                }
+                configFile = FilenameUtil.formatPath(configFile);
                 Configurations configurations = new Configurations();
                 File propertiesFile = new File(Launcher.Env.getConfigFile());
                 PropertiesConfiguration configuration = configurations.properties(propertiesFile);

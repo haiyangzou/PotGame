@@ -5,6 +5,8 @@ import org.apache.commons.configuration2.CompositeConfiguration;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
+import org.apache.commons.lang3.StringUtils;
+import org.pot.common.Constants;
 import org.pot.common.config.*;
 import org.pot.common.net.ipv4.FireWall;
 import org.pot.common.relect.ConstructorUtil;
@@ -41,5 +43,20 @@ public class EngineConfig extends NettyConfig {
     protected void setProperties(Configuration config) {
         super.setProperties(config);
         this.localDbConfig = DbConfig.loadDbConfig("local", config);
+        this.asyExecutorConfig = ExecutorConfig.loadExecutorConfig("engine", config);
+        this.jettyConfig = JettyConfig.loadJettyConfig(config);
+        this.remoteServerConfig = RemoteServerConfig.loadRemoteConfig(config);
+        this.globalServerConfig = GlobalServerConfig.loadGlobalServerConfig(config);
+        this.localRedisConfig = RedisConfig.loadRedisConfig("local", config);
+        this.globalRedisConfig = RedisConfig.loadRedisConfig("global", config);
+        this.rankRedisConfig = RedisConfig.loadRedisConfig("rank", config);
+        String tcpFirewallFile = config.getString("tcp.firewall.file", "");
+        if (StringUtils.isNotBlank(tcpFirewallFile)) {
+            tcpFirewall = FireWall.file(Constants.Env.getContextPath() + tcpFirewallFile);
+        }
+        String webFirewallFile = config.getString("web.firewall.file", "");
+        if (StringUtils.isNotBlank(webFirewallFile)) {
+            webFirewall = FireWall.file(Constants.Env.getContextPath() + webFirewallFile, FireWall.lan());
+        }
     }
 }

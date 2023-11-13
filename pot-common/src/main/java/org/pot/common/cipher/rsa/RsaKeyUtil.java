@@ -19,6 +19,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 public class RsaKeyUtil {
+
     public static RSAPublicKey getPublicKeyFromStream(final InputStream publicKeyFileInputStream) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
         return getPublicKey(new String(IOUtils.toByteArray(publicKeyFileInputStream)));
     }

@@ -51,8 +51,6 @@ public class DefinedServerSupplier {
         params.put("port", String.valueOf(port));
         params.put("httpPort", String.valueOf(httpPort));
         params.put("rpcPort", String.valueOf(rpcPort));
-
-
         HttpResult httpResult = HttpSecurity.postWithJsonBody(url, params);
         if (!httpResult.isSuccess()) {
             throw new ServiceException(LogUtil.format("Get Server List Error. errorCode={},errorMessage={}", httpResult.getErrorCode(), httpResult.getErrorMessage()));

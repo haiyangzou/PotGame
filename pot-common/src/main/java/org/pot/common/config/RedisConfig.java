@@ -2,6 +2,7 @@ package org.pot.common.config;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
@@ -51,5 +52,19 @@ public class RedisConfig {
         poolConfig.setMaxWait(Duration.ofMillis(maxWaitMillis));
         poolConfig.setTimeBetweenEvictionRuns(Duration.ofMillis(timeBetweenEvictionRunsMills));
         return poolConfig;
+    }
+
+    public static RedisConfig loadRedisConfig(String prefix, Configuration config) {
+        String host = config.getString(prefix + ".redis.host", null);
+        String nodes = config.getString(prefix + ".redis.nodes", null);
+        if (StringUtils.isBlank(host) && StringUtils.isBlank(nodes)) {
+            return null;
+        }
+        RedisConfig redisConfig = new RedisConfig(host, nodes);
+        redisConfig.setProperties(prefix, config);
+        return redisConfig;
+    }
+
+    private void setProperties(String prefix, Configuration config) {
     }
 }

@@ -9,10 +9,12 @@ import org.pot.common.communication.server.ServerType;
 import org.pot.common.concurrent.executor.ThreadUtil;
 import org.pot.core.AppEngine;
 import org.pot.core.engine.EngineInstance;
+import org.pot.core.engine.IHttpServer;
 import org.pot.core.net.netty.*;
 import org.pot.gateway.guest.GuestWaitingRoom;
 import org.pot.gateway.remote.RemoteServerManager;
 import org.pot.gateway.remote.RemoteUserManager;
+import org.pot.web.JettyHttpServer;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +23,12 @@ public class GatewayEngine extends AppEngine<GatewayEngineConfig> {
         return (GatewayEngine) EngineInstance.getInstance();
     }
 
+    public GatewayEngine() throws Exception {
+        super(GatewayEngineConfig.class);
+    }
+
+    @Getter
+    private IHttpServer httpServer;
     @Getter
     private ServerId serverId;
     @Getter
@@ -43,7 +51,12 @@ public class GatewayEngine extends AppEngine<GatewayEngineConfig> {
         remoteUserManager = new RemoteUserManager();
         remoteServerManager = new RemoteServerManager();
         initNettyServerEngine();
+        initHttpServer();
+    }
 
+    private void initHttpServer() {
+        httpServer = new JettyHttpServer(getConfig().getJettyConfig());
+        httpServer.startup();
     }
 
     private void initNettyClientEngine() {
