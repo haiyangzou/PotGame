@@ -67,6 +67,10 @@ public class FireWall {
         return file(path, true, null);
     }
 
+    public static FireWall file(String path, FireWall defaultOnEmpty) {
+        return file(path, true, defaultOnEmpty);
+    }
+
     public static FireWall file(String path, boolean force, FireWall defaultOnEmpty) {
         return new FireWall(path, force, defaultOnEmpty);
     }

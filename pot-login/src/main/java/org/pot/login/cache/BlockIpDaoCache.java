@@ -2,11 +2,13 @@ package org.pot.login.cache;
 
 import org.pot.login.dao.BlockIpDao;
 import org.pot.login.entity.BlockIp;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Component
 public class BlockIpDaoCache {
     @Resource
     private BlockIpDao blockIpDao;

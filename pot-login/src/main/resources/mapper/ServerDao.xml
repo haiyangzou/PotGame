@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.pot.login.dao.ServerDao">
+    <resultMap id="BaseResultMap" type="org.pot.common.communication.server.Server">
+        <result property="typeId" column="type_id"/>
+        <result property="serverId" column="server_id"/>
+        <result property="typeName" column="type_name"/>
+        <result property="serverName" column="server_name"/>
+        <result property="host" column="host"/>
+        <result property="port" column="port"/>
+        <result property="httpPort" column="http_port"/>
+        <result property="rpcPort" column="rpc_port"/>
+        <result property="openTime" column="open_time"/>
+        <result property="targetServerId" column="target_server_id"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <insert id="insert" parameterType="org.pot.common.communication.server.Server">
+        INSERT INTO `server` (`type_id`,
+        `server_id`,
+        `type_name`,
+        `server_name`,
+        `host`,
+        `port`,
+        `http_port`,
+        `rpc_port`,
+        `open_time`,
+        `target_server_id`)
+        VALUES( #{server.typeId},
+        #{server.serverId},
+        #{server.typeName},
+        #{server.serverName},
+        #{server.host},
+        #{server.port},
+        #{server.httpPort},
+        #{server.rpcPort},
+        #{server.openTime},
+        #{server.targetServerId})
+        ON DUPLICATE KEY UPDATE `type_name` = VALUES(`type_name`),
+        `server_name` = VALUES(`server_name`),
+        `host` = VALUES(`host`),
+        `port` = VALUES(`port`),
+        `http_port` = VALUES(`http_port`),
+        `rpc_port` = VALUES(`rpc_port`),
+        `open_time` = VALUES(`open_time`),
+        `target_server_id` = VALUES(`target_server_id`)
+    </insert>
+    <select id="selectAll" resultType="org.pot.common.communication.server.Server">
+        SELECT *
+        FROM `server`
+        ORDER BY `open_time` DESC
+    </select>
+</mapper>

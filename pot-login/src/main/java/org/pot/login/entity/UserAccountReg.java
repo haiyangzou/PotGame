@@ -1,4 +1,4 @@
-package org.pot.login.domain.object;
+package org.pot.login.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -5,11 +5,13 @@ import org.pot.login.dao.RegisterLocaleDao;
 import org.pot.login.entity.RegisterLocale;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Component
 public class RegisterLocaleDaoCache {
     private final AtomicReference<List<RegisterLocale>> listReference = new AtomicReference<>(null);
     @Resource

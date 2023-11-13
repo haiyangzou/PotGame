@@ -15,5 +15,5 @@ public interface GameServerDao {
 
     void insertOne(@Param("gameServer") GameServer gameServer);
 
-    void batchUpdateMaintainInfo(@Param("serverIds") List<Integer> serverIds, Date endTime, Long languageId);
+    void batchUpdateMaintainInfo(@Param("serverIds") List<Integer> serverIds, @Param("endTime") Date endTime, @Param("languageId") Long languageId);
 }

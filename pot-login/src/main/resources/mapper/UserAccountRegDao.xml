@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.pot.login.dao.UserAccountRegDao">
+    <resultMap id="BaseResultMap" type="org.pot.login.entity.UserAccountReg">
+        <result property="accountUid" column="account_uid"/>
+        <result property="account" column="account"/>
+        <result property="device" column="device"/>
+        <result property="appId" column="app_id"/>
+        <result property="appName" column="app_name"/>
+        <result property="appVersion" column="app_version"/>
+        <result property="appPackageName" column="app_package_name"/>
+        <result property="channel" column="channel"/>
+        <result property="platform" column="platform"/>
+        <result property="country" column="country"/>
+        <result property="language" column="language"/>
+        <result property="ip" column="ip"/>
+        <result property="network" column="network"/>
+        <result property="phoneModel" column="phone_model"/>
+        <result property="deviceInfo" column="device_info"/>
+        <result property="deviceOs" column="device_os"/>
+        <result property="osVersion" column="os_version"/>
+        <result property="appsFlyerId" column="apps_flyer_id"/>
+        <result property="advertisingId" column="advertising_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <insert id="insertOne" parameterType="org.pot.login.entity.UserAccountReg">
+        INERT INTO
+        `user_account_reg`(`account_uid`,`account`,`device`,`app_id`,`app_name`,`app_version`,`app_package_name`,`channel`,
+        `platform`,`country`,`language`,`ip`，`network`,`phone_model`,`device_info`，`device_os`,`os_version`,`apps_flyer_id`，`advertising_id`)
+        VALUES (#{userAccountReg.accountUid},
+        #{userAccountReg.account},
+        #{userAccountReg.device},
+        #{userAccountReg.appId},
+        #{userAccountReg.appName},
+        #{userAccountReg.appVersion},
+        #{userAccountReg.appPackageName},
+        #{userAccountReg.channel},
+        #{userAccountReg.platform},
+        #{userAccountReg.country},
+        #{userAccountReg.language},
+        #{userAccountReg.ip},
+        #{userAccountReg.network},
+        #{userAccountReg.phoneModel},
+        #{userAccountReg.deviceInfo},
+        #{userAccountReg.deviceOs},
+        #{userAccountReg.osVersion},
+        #{userAccountReg.appsFlyerId},
+        #{userAccountReg.advertisingId})
+        ON DUPLICATE KEY UPDATE `account` = VALUES (`account`),
+        `device` = VALUES (`device`),
+        `app_id` = VALUES (`app_id`),
+        `app_name` = VALUES (`app_name`),
+        `app_version` = VALUES (`app_version`),
+        `app_package_name` = VALUES (`app_package_name`),
+        `channel` = VALUES (`channel`),
+        `platform` = VALUES (`platform`),
+        `country` = VALUES (`country`),
+        `language` = VALUES (`language`),
+        `ip` = VALUES (`ip`),
+        `network` = VALUES (`network`),
+        `phone_model` = VALUES (`phone_model`),
+        `device_info` = VALUES (`device_info`),
+        `device_os` = VALUES (`device_os`),
+        `os_version` = VALUES (`os_version`),
+        `apps_flyer_id` = VALUES (`apps_flyer_id`),
+        `advertising_id` = VALUES (`advertising_id`),
+    </insert>
+</mapper>

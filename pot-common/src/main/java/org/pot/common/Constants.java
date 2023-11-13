@@ -3,7 +3,6 @@ package org.pot.common;
 import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.pot.common.net.ipv4.Ipv4Util;
@@ -12,6 +11,7 @@ import org.pot.common.util.FilenameUtil;
 
 import java.io.File;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +32,9 @@ public interface Constants {
         static {
             try {
                 log.info("TimeZone is{}", ZoneId.systemDefault());
-                localhostIp = ImmutableList.copyOf(Ipv4Util.getLocalhostIpv4Address(false));
+//                localhostIp = ImmutableList.copyOf(Ipv4Util.getLocalhostIpv4Address(false));
+                localhostIp = new ArrayList<>();
+                localhostIp.add("172.16.30.61");
                 if (CollectionUtil.isEmpty(localhostIp)) {
                     throw new IllegalStateException("Failed to Get Ipv4 Address");
                 }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.pot.login.dao.UserAccountLoginLogDao">
+    <resultMap id="BaseResultMap" type="org.pot.login.entity.UserAccountLoginLog">
+        <result property="id" column="id"/>
+        <result property="accountUid" column="account_uid"/>
+        <result property="account" column="account"/>
+        <result property="device" column="device"/>
+        <result property="appId" column="app_id"/>
+        <result property="appName" column="app_name"/>
+        <result property="appVersion" column="app_version"/>
+        <result property="appPackageName" column="app_package_name"/>
+        <result property="channel" column="channel"/>
+        <result property="platform" column="platform"/>
+        <result property="country" column="country"/>
+        <result property="language" column="language"/>
+        <result property="ip" column="ip"/>
+        <result property="network" column="network"/>
+        <result property="phoneModel" column="phone_model"/>
+        <result property="deviceInfo" column="device_info"/>
+        <result property="deviceOs" column="device_os"/>
+        <result property="osVersion" column="os_version"/>
+        <result property="appsFlyerId" column="apps_flyer_id"/>
+        <result property="advertisingId" column="advertising_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <insert id="insertOne" parameterType="org.pot.login.entity.UserAccountLoginLog">
+        INERT INTO
+        `user_account_login_log`(`account_uid`,`account`,`device`,`app_id`,`app_name`,`app_version`,`app_package_name`,`channel`,
+        `platform`,`country`,`language`,`ip`，`network`,`phone_model`,`device_info`，`device_os`,`os_version`,`apps_flyer_id`，`advertising_id`)
+        VALUES (#{userAccountLoginLog.accountUid},
+        #{userAccountLoginLog.account},
+        #{userAccountLoginLog.device},
+        #{userAccountLoginLog.appId},
+        #{userAccountLoginLog.appName},
+        #{userAccountLoginLog.appVersion},
+        #{userAccountLoginLog.appPackageName},
+        #{userAccountLoginLog.channel},
+        #{userAccountLoginLog.platform},
+        #{userAccountLoginLog.country},
+        #{userAccountLoginLog.language},
+        #{userAccountLoginLog.ip},
+        #{userAccountLoginLog.network},
+        #{userAccountLoginLog.phoneModel},
+        #{userAccountLoginLog.deviceInfo},
+        #{userAccountLoginLog.deviceOs},
+        #{userAccountLoginLog.osVersion},
+        #{userAccountLoginLog.appsFlyerId},
+        #{userAccountLoginLog.advertisingId})
+    </insert>
+    <insert id="insertList">
+        INERT INTO
+        `user_account_login_log`(`account_uid`,`account`,`device`,`app_id`,`app_name`,`app_version`,`app_package_name`,`channel`,
+        `platform`,`country`,`language`,`ip`，`network`,`phone_model`,`device_info`，`device_os`,`os_version`,`apps_flyer_id`，`advertising_id`)
+        VALUES
+        <foreach collection="userAccountLoginLogs" item="userAccountLoginLog" index="index" separator=",">
+            (#{userAccountLoginLog.accountUid},
+            #{userAccountLoginLog.account},
+            #{userAccountLoginLog.device},
+            #{userAccountLoginLog.appId},
+            #{userAccountLoginLog.appName},
+            #{userAccountLoginLog.appVersion},
+            #{userAccountLoginLog.appPackageName},
+            #{userAccountLoginLog.channel},
+            #{userAccountLoginLog.platform},
+            #{userAccountLoginLog.country},
+            #{userAccountLoginLog.language},
+            #{userAccountLoginLog.ip},
+            #{userAccountLoginLog.network},
+            #{userAccountLoginLog.phoneModel},
+            #{userAccountLoginLog.deviceInfo},
+            #{userAccountLoginLog.deviceOs},
+            #{userAccountLoginLog.osVersion},
+            #{userAccountLoginLog.appsFlyerId},
+            #{userAccountLoginLog.advertisingId})
+        </foreach>
+
+    </insert>
+</mapper>

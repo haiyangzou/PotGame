@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.pot.login.dao.UserRoleDao">
+    <resultMap id="BaseResultMap" type="org.pot.login.entity.UserRole">
+        <result property="uid" column="uid"/>
+        <result property="accountUid" column="account_uid"/>
+        <result property="serverId" column="server_id"/>
+        <result property="banFlag" column="ban_flag"/>
+        <result property="banEndTime" column="ban_end_time"/>
+        <result property="lastLoginTime" column="last_login_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <insert id="insertRoleOnExistUpdateLastLogin" parameterType="org.pot.login.entity.UserRole">
+        INERT INTO
+        `user_role`(`uid`,`account_uid`,`server_id`,`last_login_time`)
+        VALUES (#{userRole.uid}, #{userRole.accountUid}, #{userRole.serverId}, #{userRole.lastLoginTime})
+        ON DUPLICATE KEY UPDATE `last_login_time` = #{userRole.lastLoginTime}
+    </insert>
+
+    <update id="updateRoleServerId">
+        UPDATE `user_role`
+        SET `server_id` = #{serverId}
+        WHERE `uid` = #{uid}
+    </update>
+
+    <select id="selectByUid" resultMap="BaseResultMap">
+        SELECT *
+        FROM `user_role`
+        WHERE `uid` = #{uid}
+    </select>
+    <select id="selectByAccountUid" resultMap="BaseResultMap">
+        SELECT *
+        FROM `user_role`
+        WHERE `uid` = #{accountUid}
+        ORDER BY `last_login_time` DESC
+    </select>
+    <select id="selectByUids" resultMap="BaseResultMap">
+        SELECT *
+        FROM `user_role`
+        WHERE `uid` = IN
+        <foreach collection="uids" item="uid" open="(" separator="," close=")">
+            #{uid}
+        </foreach>
+        ORDER BY `last_login_time` DESC
+    </select>
+</mapper>

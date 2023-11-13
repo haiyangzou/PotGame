@@ -4,7 +4,7 @@ package script.msg
 import org.pot.core.io.handler.HttpHandler
 import org.pot.core.script.Script
 import org.pot.core.util.TimeUtil
-import org.pot.login.domain.object.UserAccount
+import org.pot.login.entity.UserAccount
 
 import javax.annotation.Resource
 

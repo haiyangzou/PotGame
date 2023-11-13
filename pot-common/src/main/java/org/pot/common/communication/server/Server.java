@@ -1,5 +1,7 @@
 package org.pot.common.communication.server;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -7,20 +9,28 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import java.util.Date;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class Server implements Comparable<Server> {
+    @JsonProperty("type")
     private Integer typeId;
+    @JsonProperty("serverId")
     private Integer serverId;
     private String serverName;
     private String typeName;
+    @JsonProperty("host")
     private String host;
-    private int port;
+    @JsonProperty("port")
+    private Integer port;
+    private Integer httpPort;
+    private Integer rpcPort;
     @JsonProperty("openTime")
     private Date openTime;
-    private int httpPort;
-    private int rpcPort;
     @JsonProperty("target")
     private Integer targetServerId;
     private String remark;
+    private Date createTime;
+    private Date updateTime;
 
     public ServerId getServerIdObject() {
         return ServerId.of(typeId, serverId);

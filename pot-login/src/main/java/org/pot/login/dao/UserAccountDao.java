@@ -2,7 +2,7 @@ package org.pot.login.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.pot.login.domain.object.UserAccount;
+import org.pot.login.entity.UserAccount;
 
 @Mapper
 public interface UserAccountDao {

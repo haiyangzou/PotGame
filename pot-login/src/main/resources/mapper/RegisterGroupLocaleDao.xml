@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.pot.login.dao.RegisterGroupLocaleDao">
+    <resultMap id="BaseResultMap" type="org.pot.login.entity.RegisterGroupLocale">
+        <result property="id" column="id"/>
+        <result property="groupId" column="group_id"/>
+        <result property="localeId" column="locale_id"/>
+        <result property="ratio" column="ratio"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT *
+        FROM `register_group_locale`
+    </select>
+</mapper>

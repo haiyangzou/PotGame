@@ -114,7 +114,7 @@ public class Ipv4Util {
      */
 
     private static final Pattern IPV4_REGEX = Pattern
-            .compile("^((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$");
+            .compile("((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))");
 
     public static boolean isIpv4Address(String ipString) {
         return StringUtils.isNotBlank(ipString) && IPV4_REGEX.matcher(ipString).matches();

@@ -2,7 +2,7 @@ package org.pot.login.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.pot.login.domain.object.UserRole;
+import org.pot.login.entity.UserRole;
 
 import java.util.List;
 

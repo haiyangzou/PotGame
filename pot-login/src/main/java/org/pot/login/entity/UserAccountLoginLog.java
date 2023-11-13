@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.pot.login.domain.object.UserAccount;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,6 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserAccountLoginLog implements Serializable {
+    private Long id;
     private Long accountUid;
     private String account;
     private String device;

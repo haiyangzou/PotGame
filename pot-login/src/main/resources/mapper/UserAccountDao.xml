@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.pot.login.dao.UserAccountDao">
+    <resultMap id="BaseResultMap" type="org.pot.login.entity.UserAccount">
+        <result property="uid" column="uid"/>
+        <result property="account" column="account"/>
+        <result property="device" column="device"/>
+        <result property="gmFlag" column="gm_flag"/>
+        <result property="banFlag" column="ban_flag"/>
+        <result property="banEndTime" column="ban_end_time"/>
+        <result property="guidePolicy" column="guide_policy"/>
+        <result property="accountBind" column="account_bind"/>
+        <result property="facebookId" column="facebook_id"/>
+        <result property="googlePlayerId" column="game_player_id"/>
+        <result property="gameCenterId" column="game_center_id"/>
+        <result property="email" column="email"/>
+        <result property="appId" column="app_id"/>
+        <result property="appName" column="app_name"/>
+        <result property="appVersion" column="app_version"/>
+        <result property="appPackageName" column="app_package_name"/>
+        <result property="channel" column="channel"/>
+        <result property="platform" column="platform"/>
+        <result property="country" column="country"/>
+        <result property="language" column="language"/>
+        <result property="ip" column="ip"/>
+        <result property="network" column="network"/>
+        <result property="phoneModel" column="phone_model"/>
+        <result property="deviceInfo" column="device_info"/>
+        <result property="deviceOs" column="device_os"/>
+        <result property="osVersion" column="os_version"/>
+        <result property="appsFlyerId" column="apps_flyer_id"/>
+        <result property="advertisingId" column="advertising_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <insert id="insertAccount" parameterType="org.pot.login.entity.UserAccount">
+        INERT INTO
+        `user_account`(`uid`,`account`,`device`,`app_id`,`app_name`,`app_version`,`app_package_name`,`channel`,
+        `platform`,`country`,`language`,`ip`，`network`,`phone_model`,`device_info`，`device_os`,`os_version`,`apps_flyer_id`，`advertising_id`)
+        VALUES (#{userAccount.uid},
+        #{userAccount.account},
+        #{userAccount.device},
+        #{userAccount.appId},
+        #{userAccount.appName},
+        #{userAccount.appVersion},
+        #{userAccount.appPackageName},
+        #{userAccount.channel},
+        #{userAccount.platform},
+        #{userAccount.country},
+        #{userAccount.language},
+        #{userAccount.ip},
+        #{userAccount.network},
+        #{userAccount.phoneModel},
+        #{userAccount.deviceInfo},
+        #{userAccount.deviceOs},
+        #{userAccount.osVersion},
+        #{userAccount.appsFlyerId},
+        #{userAccount.advertisingId})
+    </insert>
+
+    <update id="updateAccount">
+        UPDATE `user_account`
+        SET `device` = #{userAccount.device},
+        `app_id` = #{userAccount.appId},
+        `app_name` = #{userAccount.appName},
+        `app_version` = #{userAccount.appVersion},
+        `app_package_name` = #{userAccount.appPackageName},
+        `channel` = #{userAccount.channel},
+        `platform` = #{userAccount.platform},
+        `country` = #{userAccount.country},
+        `language` = #{userAccount.language},
+        `ip` = #{userAccount.ip},
+        `network` = #{userAccount.network},
+        `phone_model` = #{userAccount.phoneModel},
+        `device_info` = #{userAccount.deviceInfo},
+        `device_os` = #{userAccount.deviceOs},
+        `os_version` = #{userAccount.osVersion},
+        `apps_flyer_id` = #{userAccount.appsFlyerId},
+        `advertising_id` = #{userAccount.advertisingId}
+        WHERE `uid` = #{userAccount.uid}
+    </update>
+
+    <select id="getUserAccountByUid" resultMap="BaseResultMap">
+        SELECT *
+        FROM `user_account`
+        WHERE `uid` = #{uid}
+    </select>
+
+    <select id="getUserAccountByAccount" resultMap="BaseResultMap">
+        SELECT *
+        FROM `user_account`
+        WHERE `account` = #{account}
+    </select>
+</mapper>

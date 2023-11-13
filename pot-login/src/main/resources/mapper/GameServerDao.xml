@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.pot.login.dao.GameServerDao">
+    <resultMap id="BaseResultMap" type="org.pot.common.communication.server.GameServer">
+        <result property="serverId" column="server_id"/>
+        <result property="serverName" column="server_name"/>
+        <result property="host" column="host"/>
+        <result property="port" column="port"/>
+        <result property="httpPort" column="http_port"/>
+        <result property="rpcPort" column="rpc_port"/>
+        <result property="openTime" column="open_time"/>
+        <result property="targetServerId" column="target_server_id"/>
+        <result property="unionServerId" column="union_server_id"/>
+        <result property="gameVersion" column="game_version"/>
+        <result property="maintainEndTime" column="maintain_end_time"/>
+        <result property="maintainNotice" column="maintain_notice"/>
+        <result property="totalMaxCount" column="total_max_count"/>
+        <result property="dayMaxCount" column="day_max_count"/>
+        <result property="hourMaxCount" column="hour_max_count"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <insert id="insertOne" parameterType="org.pot.common.communication.server.GameServer">
+        INSERT INTO `game_server` (`server_id`,
+        `server_name`,
+        `host`,
+        `port`,
+        `http_port`,
+        `rpc_port`,
+        `open_time`,
+        `target_server_id`,
+        `union_server_id`)
+        VALUES( #{gameServer.serverId},
+        #{gameServer.serverId},
+        #{gameServer.serverName},
+        #{gameServer.host},
+        #{gameServer.port},
+        #{gameServer.httpPort},
+        #{gameServer.rpcPort},
+        #{gameServer.openTime},
+        #{gameServer.targetServerId},
+        #{gameServer.unionServerId})
+        ON DUPLICATE KEY UPDATE `server_name` = VALUES(`server_name`),
+        `host` = VALUES(`host`),
+        `port` = VALUES(`port`),
+        `http_port` = VALUES(`http_port`),
+        `rpc_port` = VALUES(`rpc_port`),
+        `open_time` = VALUES(`open_time`),
+        `target_server_id` = VALUES(`target_server_id`)
+    </insert>
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT *
+        FROM `game_server`
+        ORDER BY `open_time` DESC
+    </select>
+    <select id="selectOne" resultMap="BaseResultMap">
+        SELECT *
+        FROM `game_server`
+        WHERE `server_id` = #{serverId}
+    </select>
+    <update id="batchUpdateMaintainInfo">
+        UPDATE `game_server`
+        SET `maintain_end_time` = #{endTime},`maintain_notice`=#{languageId}
+        WHERE `server_id` IN
+        <foreach collection="serverIds" item="serverId" open="(" close=")" separator=",">
+            #{serverId}
+        </foreach>
+    </update>
+</mapper>

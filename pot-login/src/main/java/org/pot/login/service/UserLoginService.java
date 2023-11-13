@@ -17,11 +17,7 @@ import org.pot.login.beans.VersionInfo;
 import org.pot.login.cache.BlockIpDaoCache;
 import org.pot.login.cache.GameServerDaoCache;
 import org.pot.login.dao.*;
-import org.pot.login.domain.object.UserAccount;
-import org.pot.login.domain.object.UserAccountReg;
-import org.pot.login.domain.object.UserRole;
-import org.pot.login.entity.UserAccountLoginLog;
-import org.pot.login.entity.UserRoleReg;
+import org.pot.login.entity.*;
 import org.pot.login.util.ThreeSevenUtil;
 import org.pot.message.protocol.login.LoginReqC2S;
 import org.springframework.stereotype.Service;
@@ -37,7 +33,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserLoginService {
     @Resource
-    private FireWall fireWall;
+    private FireWall loginFirewall;
     @Resource
     private UserRoleDao userRoleDao;
     @Resource

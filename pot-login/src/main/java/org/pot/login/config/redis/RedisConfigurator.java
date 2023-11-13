@@ -35,7 +35,8 @@ public class RedisConfigurator {
                                                        @Value("${global.redis.host:}") String host,
                                                        @Value("${global.redis.port:6379}") int port,
                                                        @Value("${global.redis.nodes:}") String nodes,
-                                                       @Value("${global.redis.nodes.maxRedirects:6:}") int maxRedirects) {
+                                                       @Value("${global.redis.nodes.maxRedirects:6}") int maxRedirects,
+                                                       @Value("${global.redis.nodes.topologyRefreshSeconds:6}") int topologyRefreshSeconds) {
         if (StringUtils.isBlank(nodes)) {
             RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(
                     host, port

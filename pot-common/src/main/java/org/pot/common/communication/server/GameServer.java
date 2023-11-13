@@ -22,6 +22,9 @@ public class GameServer implements Comparable<GameServer>, Serializable {
     private Integer totalMaxCount;
     private Integer dayMaxCount;
     private Integer hourMaxCount;
+    private Long maintainNotice;
+    private Date createTime;
+    private Date updateTime;
 
     @Override
     public int compareTo(GameServer o) {
