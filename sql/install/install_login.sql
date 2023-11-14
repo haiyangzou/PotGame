@@ -390,4 +390,54 @@ CREATE TABLE `register_policy`  (
   INDEX `idx_create_time`(`create_time`) USING BTREE,
   INDEX `idx_update_time`(`update_time`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '导量策略表' ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `strategy_device_name`;
+CREATE TABLE `strategy_device_name`  (
+  `device_name` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '设备名称',
+  `valid` int(0) NOT NULL DEFAULT 0 COMMENT '是否有效, 0无效, 1有效',
+  `resource_url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '资源下载地址',
+  `gateway_host` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '网关地址',
+  `gateway_port` int(0) NULL DEFAULT 0 COMMENT '网关端口',
+  `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '备注',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`device_name`) USING BTREE,
+  INDEX `idx_valid`(`valid`) USING BTREE,
+  INDEX `idx_create_time`(`create_time`) USING BTREE,
+  INDEX `idx_update_time`(`update_time`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '设备名称策略表' ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `strategy_version`;
+CREATE TABLE `strategy_version`  (
+  `version` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '版本',
+  `examine` int(0) NOT NULL DEFAULT 0 COMMENT '审核状态,0=全部未通过,1=安卓通过,2=苹果通过,3=全部通过',
+  `preview` int(0) NOT NULL DEFAULT 1 COMMENT '预览状态,0=false,1=true',
+  `upgrade` int(0) NOT NULL DEFAULT -1 COMMENT '更新到本版本的方式,-1:默认规则,0=无更新,1=补丁更新,2=推荐更新,3=强制更新',
+  `examine_resource_url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '审核资源下载地址',
+  `examine_gateway_host` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '审核网关地址',
+  `examine_gateway_port` int(0) NULL DEFAULT 0 COMMENT '审核网关端口',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`version`) USING BTREE,
+  INDEX `idx_examine`(`examine`) USING BTREE,
+  INDEX `idx_preview`(`preview`) USING BTREE,
+  INDEX `idx_create_time`(`create_time`) USING BTREE,
+  INDEX `idx_update_time`(`update_time`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '版本策略表' ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `strategy_ip`;
+CREATE TABLE `strategy_ip`  (
+  `ip` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'IP地址',
+  `valid` int(0) NOT NULL DEFAULT 0 COMMENT '是否有效, 0无效, 1有效',
+  `resource_url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '资源下载地址',
+  `gateway_host` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '网关地址',
+  `gateway_port` int(0) NULL DEFAULT 0 COMMENT '网关端口',
+  `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '备注',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`ip`) USING BTREE,
+  INDEX `idx_valid`(`valid`) USING BTREE,
+  INDEX `idx_create_time`(`create_time`) USING BTREE,
+  INDEX `idx_update_time`(`update_time`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = 'IP策略表' ROW_FORMAT = Dynamic;
 SET FOREIGN_KEY_CHECKS = 1;

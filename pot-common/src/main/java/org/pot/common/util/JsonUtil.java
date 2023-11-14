@@ -137,6 +137,15 @@ public class JsonUtil {
         return StringUtils.isBlank(string) ? null : MAPPER.readValue(string, valueType);
     }
 
+    public static <T> T parseJson(String string, JavaType valueType) {
+        try {
+            return StringUtils.isBlank(string) ? null : MAPPER.readValue(string, valueType);
+        } catch (IOException e) {
+            log.error("JackSon to Object error,String={},valueType={}", string, valueType, e);
+            return null;
+        }
+    }
+
     public static <T> T parseJson(String string, Class<T> valueType) {
         try {
             return parseJackJson(string, valueType);

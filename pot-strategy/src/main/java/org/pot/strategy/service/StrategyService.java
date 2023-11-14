@@ -11,8 +11,11 @@ import org.pot.common.communication.strategy.StrategyVersion;
 import org.pot.common.util.AppVersionUtil;
 import org.pot.strategy.beans.GatewayAddress;
 import org.pot.strategy.config.StrategyConfiguration;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +24,17 @@ import java.util.function.Predicate;
 @Slf4j
 @Service
 public class StrategyService {
+    @Async
+    @Scheduled(cron = "0 0/1 * * * ?")
+    public void executeJob() {
+        gatewayAddress = new GatewayAddress(strategyConfiguration.getClientGatewayHost());
+    }
+
+    @PostConstruct
+    private void init() throws Exception {
+        executeJob();
+    }
+
     @Resource
     StrategyConfiguration strategyConfiguration;
 

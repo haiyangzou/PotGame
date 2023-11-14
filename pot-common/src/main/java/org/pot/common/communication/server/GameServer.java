@@ -1,11 +1,15 @@
 package org.pot.common.communication.server;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class GameServer implements Comparable<GameServer>, Serializable {
     private static final long serialVersionUID = 1L;
     private Integer serverId;
@@ -25,6 +29,9 @@ public class GameServer implements Comparable<GameServer>, Serializable {
     private Long maintainNotice;
     private Date createTime;
     private Date updateTime;
+
+    public GameServer() {
+    }
 
     @Override
     public int compareTo(GameServer o) {

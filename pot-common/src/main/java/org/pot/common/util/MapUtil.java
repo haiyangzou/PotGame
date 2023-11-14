@@ -29,6 +29,12 @@ public class MapUtil {
         return map;
     }
 
+    public static <K, V> HashMap<K, V> toHashMap(Collection<V> values, Function<V, K> keyFunction) {
+        HashMap<K, V> map = Maps.newLinkedHashMapWithExpectedSize(values.size());
+        values.forEach(v -> map.put(keyFunction.apply(v), v));
+        return map;
+    }
+
     public static <E, K, V> HashMap<K, V> toHashMap(Collection<E> values, Function<E, K> keyFunction, Function<E, V> valueFunction) {
         HashMap<K, V> map = Maps.newLinkedHashMapWithExpectedSize(values.size());
         values.forEach(v -> map.put(keyFunction.apply(v), valueFunction.apply(v)));

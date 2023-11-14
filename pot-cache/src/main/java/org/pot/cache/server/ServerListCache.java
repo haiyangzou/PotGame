@@ -53,7 +53,7 @@ public class ServerListCache {
     }
 
     private void requestServerList() {
-        String url = globalServerConfig.getGameServerListUrl();
+        String url = globalServerConfig.getServerListUrl();
         try {
             List<Server> servers = DefinedServerSupplier.getServerList(url);
             serverList = Collections.unmodifiableList(servers.stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList()));
@@ -73,6 +73,13 @@ public class ServerListCache {
             gameServerMap = Collections.unmodifiableMap(MapUtil.toTreeMap(Integer::compareTo, servers, GameServer::getServerId, server -> server));
         } catch (Throwable throwable) {
             log.error("Get Game Server List Error.url={}", url, throwable);
+        }
+    }
+
+    public synchronized static void shutdown() {
+        if (instance != null) {
+            instance.close();
+            instance = null;
         }
     }
 

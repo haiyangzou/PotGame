@@ -12,11 +12,6 @@
     <artifactId>pot-strategy</artifactId>
     <dependencies>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>6.0.6</version>
-        </dependency>
-        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.1</version>
@@ -27,27 +22,42 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.maxmind.geoip2</groupId>
-            <artifactId>geoip2</artifactId>
-            <version>4.0.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.maxmind.db</groupId>
-            <artifactId>maxmind-db</artifactId>
-            <version>3.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.pot</groupId>
             <artifactId>pot-core</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>5.3.13</version>
+        </dependency>
+        <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
             <version>9.4.50.v20221201</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.pot</groupId>
+            <artifactId>pot-remote</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.pot</groupId>
+            <artifactId>pot-cache</artifactId>
+            <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

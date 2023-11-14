@@ -23,7 +23,7 @@ public class GeoIpUtil {
     public static void loadDatabase() {
         DatabaseReader newDatabase = null;
         DatabaseReader oldDatabase = database;
-        String filePath = "GeoIP2-Country_20230808/GeoIP2-Country.mmdb";
+        String filePath = "GeoIP2-Country_20231107/GeoIP2-Country.mmdb";
         try {
             InputStream inputStream = ClassResourceUtil.getInputStream(filePath);
             newDatabase = new DatabaseReader.Builder(inputStream).withCache(new CHMCache()).build();

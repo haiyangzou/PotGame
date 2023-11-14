@@ -17,6 +17,10 @@ public class Jackson {
         this.map = temp == null ? new TreeMap<>() : temp;
     }
 
+    public final Boolean getBoolean(String key) {
+        return get(key, Boolean.class);
+    }
+
     public <T> T get(final String key, final Class<T> clazz) {
         Object value = this.map.get(key);
         if (value == null) return null;

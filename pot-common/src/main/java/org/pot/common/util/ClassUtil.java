@@ -85,6 +85,10 @@ public class ClassUtil {
         return !Modifier.isInterface(mod) && !Modifier.isAbstract(mod);
     }
 
+    public static <T, A extends Annotation> Set<Class<? extends T>> getSubTypeOf(final Class scope, final Class<T> type) {
+        return getSubTypeOf(scope.getPackage(), type, null, null);
+    }
+
     public static <T, A extends Annotation> Set<Class<? extends T>> getSubTypeOf(final Class scope, final Class<T> type, Class<A> annotation) {
         return getSubTypeOf(scope.getPackage(), type, annotation, null);
     }

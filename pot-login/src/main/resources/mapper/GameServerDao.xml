@@ -31,7 +31,6 @@
         `target_server_id`,
         `union_server_id`)
         VALUES( #{gameServer.serverId},
-        #{gameServer.serverId},
         #{gameServer.serverName},
         #{gameServer.host},
         #{gameServer.port},
