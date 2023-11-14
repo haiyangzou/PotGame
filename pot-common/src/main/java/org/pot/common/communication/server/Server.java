@@ -32,6 +32,9 @@ public class Server implements Comparable<Server> {
     private Date createTime;
     private Date updateTime;
 
+    public Server() {
+    }
+
     public ServerId getServerIdObject() {
         return ServerId.of(typeId, serverId);
     }
@@ -78,5 +81,6 @@ public class Server implements Comparable<Server> {
         this.targetServerId = targetServerId;
         this.httpPort = httpPort;
         this.rpcPort = rpcPort;
+        this.remark = StringUtils.EMPTY;
     }
 }

@@ -61,7 +61,7 @@ public class GatewayEngine extends AppEngine<GatewayEngineConfig> {
 
     private void initNettyClientEngine() {
         this.nettyClientEngine = new NettyClientEngine<>(getConfig(), FramePlayerCodec::new);
-        this.nettyServerEngine.start();
+        this.nettyClientEngine.start();
     }
 
     private void initNettyServerEngine() {

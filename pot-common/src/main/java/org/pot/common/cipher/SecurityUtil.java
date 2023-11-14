@@ -4,11 +4,13 @@ package org.pot.common.cipher;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.pot.common.cipher.rsa.Rsa;
 import org.pot.common.cipher.rsa.RsaCipher;
 import org.pot.common.cipher.rsa.RsaKeyUtil;
 import org.pot.common.cipher.rsa.RsaSignatureUtil;
 import org.pot.common.file.FileUtil;
+import org.pot.common.util.file.TextFileUtil;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -35,12 +37,20 @@ public class SecurityUtil {
     public static void loadSecretKey() {
         try {
             final ClassLoader classLoader = SecurityUtil.class.getClassLoader();
-            final String dir = KEY_DIR_PREFIX + "20210902/";
+            final String dir = KEY_DIR_PREFIX + "/";
             ideaSecretKey = IOUtils.toByteArray(Objects.requireNonNull(classLoader.getResourceAsStream(dir + "idea.key")));
             rsaPublicKey = RsaKeyUtil.getPublicKeyFromStream(classLoader.getResourceAsStream(dir + "rsa/public-rsa.pem"));
             rsaPrivateKey = RsaKeyUtil.getPrivateKeyFromStream(classLoader.getResourceAsStream(dir + "rsa/private-rsa.pem"));
         } catch (Exception exception) {
             log.error("SecurityTool Failed to load key", exception);
+        }
+    }
+
+    public static void main(String args[]) {
+        try {
+            generateSecretKey();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -50,10 +60,9 @@ public class SecurityUtil {
         FileUtil.write(dir + "des.key", desSecretKey, false);
         byte[] ideaSecretKey = RandomUtils.nextBytes(16);
         FileUtil.write(dir + "idea.key", ideaSecretKey, false);
-//        final Pair<RSAPublicKey, RSAPrivateKey> keyPair = RsaKeyUtil.generateKey(RSA_KEY_MODE);
-//        TextFileUtil.write(RsaKeyUtil.saveKey(keyPair.getLeft()), dir + "rsa/public-rsa.pem", false, false);
-//        TextFileUtil.write(RsaKeyUtil.saveKey(keyPair.getRight()), dir + "rsa/private-rsa.pem", false, false);
-
+        final Pair<RSAPublicKey, RSAPrivateKey> keyPair = RsaKeyUtil.generateKey(RSA_KEY_MODE);
+        TextFileUtil.write(RsaKeyUtil.saveKey(keyPair.getLeft()), dir + "rsa/public-rsa.pem", false, false);
+        TextFileUtil.write(RsaKeyUtil.saveKey(keyPair.getRight()), dir + "rsa/private-rsa.pem", false, false);
     }
 
     public static String decryptIdea(final String data) {
@@ -74,6 +83,5 @@ public class SecurityUtil {
 
     public static String signRsa(final String data) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
         return RsaSignatureUtil.sign(RSA_SIGNATURE_ALGORITHM, rsaPrivateKey, data);
-
     }
 }

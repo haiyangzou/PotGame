@@ -9,6 +9,7 @@ import org.pot.common.concurrent.executor.ExecutorUtil;
 import org.pot.common.concurrent.executor.ScheduledExcutor;
 import org.pot.common.concurrent.executor.StandardExecutor;
 import org.pot.common.concurrent.executor.ThreadUtil;
+import org.pot.common.util.JsonUtil;
 import org.pot.common.util.LogUtil;
 import org.pot.common.util.MathUtil;
 import org.pot.gateway.engine.GatewayEngine;
@@ -72,6 +73,7 @@ public class RemoteServerManager {
     }
 
     private void requestDefinedGameServers() {
+        long time = System.currentTimeMillis();
         String url = GatewayEngine.getInstance().getConfig().getGlobalServerConfig().getGameServerListUrl();
         try {
             List<GameServer> servers = DefinedServerSupplier.getGameServerList(url);
@@ -82,7 +84,7 @@ public class RemoteServerManager {
                 serverIds.add(serverId);
             }
             definedGameServers.keySet().retainAll(serverIds);
-            log.info("request game server list");
+            log.info("request game server list success. used = {}ms,servers={}", System.currentTimeMillis() - time, JsonUtil.toJson(servers));
         } catch (Exception e) {
             throw new ServiceException(LogUtil.format("request game server list error. url={}", url));
         }

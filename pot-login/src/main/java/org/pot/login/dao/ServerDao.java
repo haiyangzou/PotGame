@@ -10,5 +10,9 @@ import java.util.List;
 public interface ServerDao {
     List<Server> selectAll();
 
+    List<Server> selectType(@Param("typeId") int typeId);
+
+    Server selectOne(@Param("typeId") int typeId, @Param("serverId") int serverId);
+
     void insert(@Param("server") Server server);
 }

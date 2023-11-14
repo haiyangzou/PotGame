@@ -10,12 +10,17 @@ import java.util.TreeMap;
 
 public class HttpResult implements Serializable {
     @Getter
+    private long timestamp = System.currentTimeMillis();
+    @Getter
+    @Setter
     private boolean success;
     @Getter
     private Map<String, String> parameters;
     @Getter
+    @Setter
     private Integer errorCode;
     @Getter
+    @Setter
     private String errorMessage;
     @Setter
     private Object data;

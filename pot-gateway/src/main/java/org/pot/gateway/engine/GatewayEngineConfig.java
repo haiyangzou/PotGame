@@ -1,6 +1,7 @@
 package org.pot.gateway.engine;
 
 import lombok.Getter;
+import org.apache.commons.configuration2.Configuration;
 import org.pot.common.Constants;
 import org.pot.core.engine.EngineConfig;
 
@@ -12,4 +13,9 @@ public class GatewayEngineConfig extends EngineConfig {
     private long guestReqWaitSlowMillis = 20L;
     private long gatewayTickIntervalMillis = Constants.RUN_INTERVAL_MS;
 
+    @Override
+    protected void setProperties(Configuration config) {
+        super.setProperties(config);
+
+    }
 }

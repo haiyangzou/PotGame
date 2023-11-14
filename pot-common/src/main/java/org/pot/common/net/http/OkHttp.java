@@ -104,7 +104,8 @@ public class OkHttp {
     }
 
     public String postWithJsonBody(String url, Object jsonObject) throws IOException {
-        return postWithJsonBody(url, Collections.emptyMap(), JsonUtil.toJackSon(jsonObject));
+        String body = postWithJsonBody(url, Collections.emptyMap(), JsonUtil.toJackSon(jsonObject));
+        return body;
     }
 
     public String postWithJsonBody(String url, Map<String, String> headMap, Object jsonObject) throws IOException {
@@ -127,7 +128,7 @@ public class OkHttp {
                 return postWithJsonBody(redirectUrl, headMap, jsonBody);
             }
             ensureSuccessful(url, response);
-            return Objects.requireNonNull(response.body()).toString();
+            return Objects.requireNonNull(response.body()).string();
         } catch (IOException e) {
             log.error(url, e);
             throw e;

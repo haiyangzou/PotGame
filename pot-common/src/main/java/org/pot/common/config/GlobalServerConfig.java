@@ -11,7 +11,9 @@ public class GlobalServerConfig extends EndPointConfig {
     protected String userReconnectUrl = StringUtils.EMPTY;
     protected String httpUrlPrefix = StringUtils.EMPTY;
     protected String gameServerListUrl = StringUtils.EMPTY;
+    protected String gameServerInfoUrl = StringUtils.EMPTY;
     protected String serverInfoUrl = StringUtils.EMPTY;
+    protected String serverListUrl = StringUtils.EMPTY;
 
     public static GlobalServerConfig loadGlobalServerConfig(Configuration config) {
         String host = config.getString("global.server.host", null);
@@ -31,6 +33,8 @@ public class GlobalServerConfig extends EndPointConfig {
         this.userLoginUrl = httpUrlPrefix + "/user/login";
         this.userReconnectUrl = httpUrlPrefix + "/user/reconnect";
         this.gameServerListUrl = httpUrlPrefix + "/gameServer/getList";
-
+        this.gameServerInfoUrl = httpUrlPrefix + "/gameServer/getInfo";
+        this.serverListUrl = httpUrlPrefix + "/server/getList";
+        this.serverInfoUrl = httpUrlPrefix + "/server/getInfo";
     }
 }

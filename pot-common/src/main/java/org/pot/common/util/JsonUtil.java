@@ -9,7 +9,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
@@ -142,6 +141,7 @@ public class JsonUtil {
         try {
             return parseJackJson(string, valueType);
         } catch (IOException e) {
+            log.error("JackSon to Object error,String={},valueType={}", string, valueType, e);
             return null;
         }
     }
@@ -150,6 +150,7 @@ public class JsonUtil {
         try {
             return parseJackJson(string, valueType);
         } catch (IOException e) {
+            log.error("JackSon to Object error,string={},valueTypeRef={}", string, valueType, e);
             return null;
         }
     }

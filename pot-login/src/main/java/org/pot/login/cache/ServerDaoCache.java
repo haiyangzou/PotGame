@@ -10,10 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
@@ -31,6 +28,15 @@ public class ServerDaoCache {
         Map<Integer, Map<Integer, Server>> nextMap = new HashMap<>();
         nextList.forEach(server -> nextMap.computeIfAbsent(server.getTypeId(), k -> new TreeMap<>()).put(server.getServerId(), server));
         mpaReference.getAndUpdate(value -> MapUtil.immutableMapMap(nextMap));
+    }
+
+    public Collection<Server> selectType(int typeId) {
+        Map<Integer, Map<Integer, Server>> map = mpaReference.get();
+        if (map != null) {
+            return map.getOrDefault(typeId, Collections.emptyMap()).values();
+        }
+        executeJob();
+        return serverDao.selectType(typeId);
     }
 
     public List<Server> selectAll() {

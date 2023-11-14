@@ -46,9 +46,21 @@
         `open_time` = VALUES(`open_time`),
         `target_server_id` = VALUES(`target_server_id`)
     </insert>
-    <select id="selectAll" resultType="org.pot.common.communication.server.Server">
+    <select id="selectAll" resultMap="BaseResultMap">
         SELECT *
         FROM `server`
         ORDER BY `open_time` DESC
+    </select>
+    <select id="selectType" resultMap="BaseResultMap">
+        SELECT *
+        FROM `server`
+        WHERE `type_id` = #{typeId}
+        ORDER BY `open_time` DESC
+    </select>
+    <select id="selectOne" resultMap="BaseResultMap">
+        SELECT *
+        FROM `server`
+        WHERE `type_id` = #{typeId}
+        AND `server_id` =#{serverId}
     </select>
 </mapper>

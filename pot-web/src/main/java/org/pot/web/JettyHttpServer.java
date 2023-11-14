@@ -84,6 +84,9 @@ public class JettyHttpServer extends Thread implements IHttpServer {
         Map<String, DetectedHttpService> serviceMap = MapUtil.newHashMap();
         for (Class<? extends HttpServlet> servletClazz : servletClazzSet) {
             EnableHttpService annotation = servletClazz.getAnnotation(EnableHttpService.class);
+            if (annotation == null) {
+                continue;
+            }
             String path = StringUtils.strip(annotation.path());
             if (StringUtils.isBlank(path)) {
                 continue;

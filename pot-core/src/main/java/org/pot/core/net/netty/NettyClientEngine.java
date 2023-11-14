@@ -8,6 +8,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollSocketChannel;
+import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +59,7 @@ public class NettyClientEngine<M extends FrameMessage> extends NettyBaseEngine<M
         }
         log.info("{} setup with Nio", getClass().getSimpleName());
         DefaultThreadFactory threadFactory = new DefaultThreadFactory(getClass().getSimpleName() + "Worker");
-        eventLoopGroup = new EpollEventLoopGroup(config.getWorkerThreads(), threadFactory);
+        eventLoopGroup = new NioEventLoopGroup(config.getWorkerThreads(), threadFactory);
         clientBootstrap.group(eventLoopGroup).channel(NioSocketChannel.class);
     }
 

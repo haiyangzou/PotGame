@@ -5,6 +5,10 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollChannelOption;
+import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.NetUtil;
@@ -12,6 +16,7 @@ import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.pot.common.concurrent.executor.ExecutorUtil;
 import org.pot.core.config.NettyConfig;
 
@@ -62,7 +67,7 @@ public class NettyServerEngine<M extends FrameMessage> extends NettyBaseEngine<M
         if (config.getPort() <= 0) {
             throw new RuntimeException("netty server port must be positive");
         }
-        int[] ports = new int[] { config.getPort() };
+        int[] ports = new int[]{config.getPort()};
         if (ArrayUtils.isEmpty(ports)) {
             throw new RuntimeException("netty server ports is empty");
         }
@@ -86,14 +91,33 @@ public class NettyServerEngine<M extends FrameMessage> extends NettyBaseEngine<M
 
     private void configureWorkerAndChannel(ServerBootstrap bootstrap) {
         if (config.isEnableNative()) {
-            return;
+            if (SystemUtils.IS_OS_LINUX) {
+                if (Epoll.isAvailable()) {
+                    setupEpoll(bootstrap);
+                    return;
+                } else {
+                    log.info("native enabled,but Epoll not available,cause", Epoll.unavailabilityCause());
+                }
+            }
         }
         log.info("{} setup with Nio", getClass().getSimpleName());
-        DefaultThreadFactory bossThreadFactory = new DefaultThreadFactory(getClass().getSimpleName() + "Worker");
+        DefaultThreadFactory bossThreadFactory = new DefaultThreadFactory(getClass().getSimpleName() + "Boss");
 
         bossGroup = new NioEventLoopGroup(config.getBossThreads(), bossThreadFactory);
         DefaultThreadFactory workerThreadFactory = new DefaultThreadFactory(getClass().getSimpleName() + "Worker");
         workerGroup = new NioEventLoopGroup(config.getWorkerThreads(), workerThreadFactory);
         bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class);
+    }
+
+    private void setupEpoll(ServerBootstrap bootstrap) {
+        log.info("{} setup with Epoll", getClass().getSimpleName());
+        DefaultThreadFactory bossThreadFactory = new DefaultThreadFactory(getClass().getSimpleName() + "EpollBoss");
+        bossGroup = new EpollEventLoopGroup(config.getBossThreads(), bossThreadFactory);
+        DefaultThreadFactory workerThreadFactory = new DefaultThreadFactory(getClass().getSimpleName() + "EpollWorker");
+        workerGroup = new EpollEventLoopGroup(config.getWorkerThreads(), workerThreadFactory);
+        bootstrap.group(bossGroup, workerGroup).channel(EpollServerSocketChannel.class);
+        if (config.isReusePort()) {
+            bootstrap.option(EpollChannelOption.SO_REUSEADDR, true);
+        }
     }
 }

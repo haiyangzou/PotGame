@@ -23,10 +23,24 @@ public class RsaCipher {
         return outBytes;
     }
 
-    public static byte[] decrypt(Rsa.KeyMode keyMode, Rsa.PaddingAlgorithm paddingAlgorithm, final Key publicKey, final byte[] data) throws Exception {
+    public static byte[] decrypt(Rsa.KeyMode keyMode, Rsa.PaddingAlgorithm paddingAlgorithm, final Key privateKey, final byte[] data) throws Exception {
         paddingAlgorithm.checkForEncrypt(keyMode, data);
         int encryptBlockLength = paddingAlgorithm.getEncryptBlockLength(keyMode);
         int decryptBlockLength = paddingAlgorithm.getDecryptBlockLength(keyMode);
-        return null;
+        if (data.length % decryptBlockLength != 0) {
+            throw new IllegalArgumentException("Wrong data size");
+        }
+        final Cipher cipher = Cipher.getInstance(paddingAlgorithm.name);
+        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+        final int blockCount = data.length / decryptBlockLength;
+        final byte[] outBytes = new byte[blockCount * encryptBlockLength];
+        int bytesLength = 0;
+        for (int blockIndex = 0; blockIndex < blockCount; blockIndex++) {
+            byte[] inBlockBytes = Arrays.copyOfRange(data, blockIndex * decryptBlockLength, Math.min(data.length, (blockIndex + 1) * decryptBlockLength));
+            byte[] outBlockBytes = cipher.doFinal(inBlockBytes);
+            bytesLength = bytesLength + outBlockBytes.length;
+            System.arraycopy(outBlockBytes, 0, outBytes, blockIndex * encryptBlockLength, outBlockBytes.length);
+        }
+        return Arrays.copyOfRange(outBytes, 0, Math.min(outBytes.length, bytesLength));
     }
 }

@@ -72,11 +72,13 @@ public class HttpSecurity {
     }
 
     public static HttpResult postWithJsonBody(String url, TreeMap<String, String> parameters) throws IOException {
-        return JsonUtil.parseJson(doPostWithJsonBody(url, parameters), HttpResult.class);
+        HttpResult result = JsonUtil.parseJson(doPostWithJsonBody(url, parameters), HttpResult.class);
+        return result;
     }
 
     public static String doPostWithJsonBody(String url, TreeMap<String, String> parameters) throws IOException {
-        return OkHttp.COMMON.postWithJsonBody(url, inject(parameters));
+        String body = OkHttp.COMMON.postWithJsonBody(url, inject(parameters));
+        return body;
     }
 
     private static String getSignatureSource(TreeMap<String, String> paramters) {

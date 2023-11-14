@@ -22,4 +22,12 @@ public class EngineInstance {
             }
         }
     }
+
+    public static IHttpServer getHttpServer() {
+        return getInstance().getHttpServer();
+    }
+
+    public static EngineConfig getConfig() {
+        return getInstance().getConfig();
+    }
 }

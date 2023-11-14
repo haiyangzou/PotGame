@@ -32,12 +32,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.datadoghq.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>3.12.15</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.pot</groupId>
             <artifactId>pot-core</artifactId>
             <version>1.0-SNAPSHOT</version>

@@ -3,13 +3,13 @@ package org.pot.common.cipher.rsa;
 import com.google.common.io.BaseEncoding;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.EncodedKeySpec;
@@ -19,6 +19,20 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 public class RsaKeyUtil {
+    public static Pair<RSAPublicKey, RSAPrivateKey> generateKey(Rsa.KeyMode keyMode) throws NoSuchAlgorithmException {
+        return generateKey(keyMode.keyBitsLength);
+    }
+
+    public static String saveKey(Key key) {
+        return BaseEncoding.base64().encode(key.getEncoded());
+    }
+
+    public static Pair<RSAPublicKey, RSAPrivateKey> generateKey(final int secretKeySize) throws NoSuchAlgorithmException {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(Rsa.KEY_ALGORITHM_NAME);
+        keyPairGenerator.initialize(secretKeySize);
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+        return Pair.of((RSAPublicKey) keyPair.getPublic(), (RSAPrivateKey) keyPair.getPrivate());
+    }
 
     public static RSAPublicKey getPublicKeyFromStream(final InputStream publicKeyFileInputStream) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
         return getPublicKey(new String(IOUtils.toByteArray(publicKeyFileInputStream)));

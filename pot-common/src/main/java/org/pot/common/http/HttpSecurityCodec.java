@@ -16,8 +16,13 @@ public class HttpSecurityCodec {
         return BaseEncoding.base64Url().encode(bytes);
     }
 
+    public static String encodeString(String data) throws Exception {
+        byte[] bytes = data.getBytes(StandardCharsets.UTF_8);
+        return encode(bytes);
+    }
+
     public static byte[] decode(String data) throws Exception {
-        byte[] bytes = BaseEncoding.base64().decode(data);
+        byte[] bytes = BaseEncoding.base64Url().decode(data);
         bytes = SecurityUtil.decryptRsa(bytes);
         bytes = compressor.decompress(bytes);
         return bytes;

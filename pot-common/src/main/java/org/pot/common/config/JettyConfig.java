@@ -18,5 +18,11 @@ public class JettyConfig {
     }
 
     private void setProperties(Configuration config) {
+        this.host = config.getString("jetty.bind", host);
+        this.port = config.getInteger("jetty.port", port);
+        this.threadPoolMinSize = config.getInteger("jetty.thread.min.size", threadPoolMinSize);
+        this.threadPoolMaxSize = config.getInteger("jetty.thread.max.size", threadPoolMaxSize);
+        this.timeoutSeconds = config.getInteger("jetty.timeout.seconds", timeoutSeconds);
+
     }
 }

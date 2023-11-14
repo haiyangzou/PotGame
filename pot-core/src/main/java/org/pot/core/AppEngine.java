@@ -121,7 +121,7 @@ public abstract class AppEngine<T extends EngineConfig> extends Thread implement
     }
 
     void startup() throws InterruptedException {
-        Stopwatch stopwatch = Stopwatch.createUnstarted();
+        Stopwatch stopwatch = Stopwatch.createStarted();
         this.start();
         this.starLatch.await();
         if (started) {
