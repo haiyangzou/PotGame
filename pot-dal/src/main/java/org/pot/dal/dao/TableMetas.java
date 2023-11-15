@@ -71,9 +71,13 @@ public class TableMetas {
         }
 
         @Override
-
         public Iterator<ColumnMeta> iterator() {
             return new ArrayIterator(column);
+        }
+
+        @Override
+        public String toString() {
+            return "TableMeta{tableName=`}" + tableName + "`}";
         }
     }
 

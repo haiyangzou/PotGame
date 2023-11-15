@@ -12,6 +12,7 @@ import org.pot.game.engine.GameEngine;
 import org.pot.game.engine.enums.PointType;
 import org.pot.game.engine.point.PointExtraData;
 import org.pot.game.engine.point.PointThroneData;
+import org.pot.game.engine.point.PointTowerData;
 import org.pot.game.engine.scene.AbstractScene;
 import org.pot.game.engine.scene.PointManager;
 import org.pot.game.engine.scene.PointRegulation;
@@ -132,15 +133,15 @@ public class WorldMapPointRegulation extends PointRegulation {
         Throne = ImmutableList.copyOf(PointRegulation.getOccupiedPoints(MAP_CENTER_X, MAP_CENTER_Y, THRONE_RANGE, THRONE_RANGE));
         ThroneMainId = PointUtil.getPointId(MAP_CENTER_X, MAP_CENTER_Y);
 
-        List<Integer> tempThroneCity = PointRegulation.getOccupiedPoints(MAP_CENTER_X, MAP_CENTER_Y, THRONE_RANGE, THRONE_RANGE);
+        List<Integer> tempThroneCity = PointRegulation.getOccupiedPoints(MAP_CENTER_X, MAP_CENTER_Y, THRONE_CITY_RANGE, THRONE_CITY_RANGE);
         tempThroneCity.removeAll(Throne);
         tempThroneCity.removeAll(AllTower);
         ThroneCity = ImmutableList.copyOf(tempThroneCity);
 
         List<Integer> temBlackEarth = PointRegulation.getOccupiedPoints(MAP_CENTER_X, MAP_CENTER_Y, BLACK_RANGE, BLACK_RANGE);
-        temBlackEarth.remove(Throne);
-        temBlackEarth.remove(AllTower);
-        temBlackEarth.remove(ThroneCity);
+        temBlackEarth.removeAll(Throne);
+        temBlackEarth.removeAll(AllTower);
+        temBlackEarth.removeAll(ThroneCity);
         BlackEarth = ImmutableList.copyOf(temBlackEarth);
         NorthBlackEarthVertex = getBlackEarthVertex(Direction.NORTH);
         SouthBlackEarthVertex = getBlackEarthVertex(Direction.SOUTH);
@@ -387,15 +388,18 @@ public class WorldMapPointRegulation extends PointRegulation {
             if (isThrone(pointId)) {
                 worldPoint = getThroneCityPoint(pointId, getThroneMainId(), PointType.THRONE, () -> new PointThroneData(WorldBuilding.Throne));
             } else if (isNorthTower(pointId)) {
-                worldPoint = getThroneCityPoint(pointId, getThroneMainId(), PointType.THRONE, () -> new PointThroneData(WorldBuilding.Throne));
+                worldPoint = getThroneCityPoint(pointId, getNorthTowerMainId(), PointType.TOWER, () -> new PointTowerData(WorldBuilding.NorthTower));
             } else if (isSouthTower(pointId)) {
-                worldPoint = getThroneCityPoint(pointId, getThroneMainId(), PointType.THRONE, () -> new PointThroneData(WorldBuilding.Throne));
+                worldPoint = getThroneCityPoint(pointId, getSouthTowerMainId(), PointType.TOWER, () -> new PointTowerData(WorldBuilding.SouthTower));
             } else if (isWestTower(pointId)) {
-                worldPoint = getThroneCityPoint(pointId, getThroneMainId(), PointType.THRONE, () -> new PointThroneData(WorldBuilding.Throne));
+                worldPoint = getThroneCityPoint(pointId, getWestTowerMainId(), PointType.TOWER, () -> new PointTowerData(WorldBuilding.WestTower));
             } else if (isEastTower(pointId)) {
-                worldPoint = getThroneCityPoint(pointId, getThroneMainId(), PointType.THRONE, () -> new PointThroneData(WorldBuilding.Throne));
+                worldPoint = getThroneCityPoint(pointId, getEastTowerMainId(), PointType.TOWER, () -> new PointTowerData(WorldBuilding.EastTower));
             } else if (isThroneCity(pointId)) {
-                worldPoint = getThroneCityPoint(pointId, getThroneMainId(), PointType.THRONE, () -> new PointThroneData(WorldBuilding.Throne));
+                worldPoint = getThroneCityPoint(pointId, pointId, PointType.THRONE_CITY, () -> null);
+            } else {
+                throw new IllegalArgumentException(StringUtil.format("throne city point type error{},{}",
+                        PointUtil.getPointX(pointId), PointUtil.getPointY(pointId)));
             }
             initialWorldPoint.put(pointId, worldPoint);
         }
@@ -439,14 +443,10 @@ public class WorldMapPointRegulation extends PointRegulation {
 
     private void expandDecoration(Map<Integer, WorldPoint> initialWorldPoint, int mainX, int mainY, int iRange, int jRange) {
         List<Integer> occupiedPoints = getOccupiedPoints(mainX, mainY, iRange, jRange);
-        for (Integer pointId : occupiedPoints) {
-            int xCoordinate = PointUtil.getPointX(pointId);
-            int yCoordinate = PointUtil.getPointY(pointId);
-            WorldPoint worldPoint = new WorldPoint(scene, WorldPointEntity.builder().id(pointId).type(PointType.WONDER.getId()).x(xCoordinate).y(yCoordinate).mainX(mainX).mainY(mainY).build());
-            WorldPoint oldWorldPoint = initialWorldPoint.put(pointId, worldPoint);
-            if (oldWorldPoint != null) {
-                log.error("{} point conflict ({},{}). range=({},{}),newMain=({},{}),oldMain=({},{})", scene.getName(), xCoordinate, yCoordinate, iRange, jRange, mainX, mainY, oldWorldPoint.getMainX(), oldWorldPoint.getMainY());
-            }
+        if (occupiedPoints.stream().anyMatch(initialWorldPoint::containsKey)) {
+            log.error("{} point conflict.main=({},{}) range = ({},{})", scene.getName(), mainX, mainY, iRange, jRange);
+        } else {
+            occupiedPoints.forEach(pid -> initialWorldPoint.put(pid, new WorldPoint(scene, PointType.WONDER, pid, mainX, mainY, null)));
         }
     }
 
@@ -472,7 +472,7 @@ public class WorldMapPointRegulation extends PointRegulation {
     }
 
     public static boolean isSouthTower(int pointId) {
-        return NorthTower.contains(pointId);
+        return SouthTower.contains(pointId);
     }
 
     public static boolean isEastTower(int pointId) {

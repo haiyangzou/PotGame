@@ -74,6 +74,11 @@ public class SqlSession implements DbExecutor {
     }
 
     @Override
+    public <T> List<T> executeQueryList(EntityParser<T> parser, String sql, ParamSetter paramSetter) {
+        return dbExecutor.executeQueryList(parser, sql, paramSetter);
+    }
+
+    @Override
     public final int executeUpdate(String sql) {
         return dbExecutor.executeUpdate(sql);
     }

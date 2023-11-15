@@ -10,6 +10,8 @@ import org.pot.dal.dao.handler.TypeHandler;
 import org.pot.dal.dao.handler.*;
 import org.pot.dal.dao.param.EntityBatchParamSetter;
 import org.pot.dal.db.EntityParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -22,9 +24,11 @@ import java.util.Map;
 
 @Slf4j
 public abstract class EntityMapper<E> implements EntityParser<E> {
+    protected static final Logger logger = LoggerFactory.getLogger(EntityMapper.class);
     protected final String sqlSelectAll;
     protected final TableMetas.TableMeta tableMeta;
-    protected TypeHandler[] typeHandlers;
+    @SuppressWarnings("rawtypes")
+    protected TypeHandler[] typeHandler;
     protected final String sqlInsertInDuplicateKeyUpdate;
     protected final String sqlDeleteByPrimaryKey;
     protected final String sqlUpdateByPrimaryKey;
@@ -39,23 +43,24 @@ public abstract class EntityMapper<E> implements EntityParser<E> {
             log.error("{} no field found annotated with ", entityClass);
         }
         int columns = columnMetas.length;
+        typeHandler = new TypeHandler[columns];
         for (int i = 0; i < columns; i++) {
             String propertyName = columnMetas[i].getPropertyName();
             Field field = getField(entityClass, propertyName);
             if (field == null) {
                 continue;
             }
-            typeHandlers[i] = getTypeHandlerByAnnotation(field);
-            if (typeHandlers[i] != null) {
+            typeHandler[i] = getTypeHandlerByAnnotation(field);
+            if (typeHandler[i] != null) {
                 continue;
             }
-            typeHandlers[i] = getTypeHandlerByMysqlType(field, columnMetas[i].getMysqlType());
-            if (typeHandlers[i] != null) {
+            typeHandler[i] = getTypeHandlerByMysqlType(field, columnMetas[i].getMysqlType());
+            if (typeHandler[i] != null) {
                 continue;
             }
-            typeHandlers[i] = TypeHandlers.of(field.getType());
-            if (typeHandlers[i] != null) {
-                typeHandlers[i] = TypeHandlers.OBJECT_TYPE_HANDLER;
+            typeHandler[i] = TypeHandlers.of(field.getType());
+            if (typeHandler[i] != null) {
+                typeHandler[i] = TypeHandlers.OBJECT_TYPE_HANDLER;
             }
         }
         this.sqlInsert = SqlBuilder.insert(tableMeta);

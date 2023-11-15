@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
+@SuppressWarnings("rawtypes")
 public class EntityMapperBuilder<E> {
     private static final Map<Class, Class<EntityMapper>> mapperClassMap = new ConcurrentHashMap<>();
     private final Class<E> entityClass;
@@ -18,9 +19,12 @@ public class EntityMapperBuilder<E> {
     public EntityMapperBuilder(Class<E> entityClass) {
         this.entityClass = entityClass;
         this.entityMapperClass = mapperClassMap.computeIfAbsent(entityClass, EntityMapperBuilder::makeEntityMapperClass);
+        if (entityMapperClass == null) {
+            throw new IllegalArgumentException("No Table annotation found of {}" + entityClass.getName());
+        }
     }
 
-
+    @SuppressWarnings("unchecked")
     private static Class<EntityMapper> makeEntityMapperClass(Class entityClass) {
         try {
             TableMetas.TableMeta tableMeta = TableMetas.of(entityClass);
@@ -33,7 +37,7 @@ public class EntityMapperBuilder<E> {
             Class<?> superClass = EntityMapper.class;
             CtClass superCtClass = classPool.get(superClass.getName());
             CtClass ctClass = classPool.makeClass(className, superCtClass);
-            CtConstructor ctConstructor = CtNewConstructor.make("public " + className + "(CLass entityClass){\nsuper(entityClass;\n)}", ctClass);
+            CtConstructor ctConstructor = CtNewConstructor.make("public " + className + "(Class entityClass) {\nsuper(entityClass);\n}", ctClass);
             ctClass.addConstructor(ctConstructor);
             CtMethod setParamMethod = makeSetParamMethod(classPool, ctClass, entityClass, column);
             ctClass.addMethod(setParamMethod);
@@ -80,7 +84,7 @@ public class EntityMapperBuilder<E> {
 
     private static CtMethod makeSetParamMethod(ClassPool classPool, CtClass ctClass, Class entityClass, TableMetas.ColumnMeta[] column) throws CannotCompileException, NotFoundException {
         StringBuilder bodyBuilder = new StringBuilder();
-        bodyBuilder.append("public void setParam(java.sql.PreparedStatement statement, )").append(entityClass.getName()).append(" entity, int index) throws java.sql.SQLException {\n");
+        bodyBuilder.append("public void setParam(java.sql.PreparedStatement statement, ").append(entityClass.getName()).append(" entity, int index) throws java.sql.SQLException {\n");
         for (int i = 0; i < column.length; i++) {
             appendSetParamStatement(classPool, bodyBuilder, i, entityClass, column[i].getPropertyName(), false);
         }
@@ -97,7 +101,7 @@ public class EntityMapperBuilder<E> {
                 CtPrimitiveType primitiveType = (CtPrimitiveType) classPool.get(returnType.getName());
                 String wrapperClassName = primitiveType.getWrapperName();
                 wrapperClassName = wrapperClassName.substring(wrapperClassName.lastIndexOf('.') + 1);
-                bodyBuilder.append("typeHandler[").append(i).append("].set(statement, index++,)").append(wrapperClassName).append(".valueOf(entity.)").append(getter.getName()).append("())));\n");
+                bodyBuilder.append("typeHandler[").append(i).append("].set(statement, index++, ").append(wrapperClassName).append(".valueOf(entity.").append(getter.getName()).append("()));\n");
             } else {
                 if (nonNull) {
                     bodyBuilder.append("java.util.Objects.requireNonNull(").append("entity.").append(getter.getName()).append("(), \"").append(propertyName).append(" should not be null\");\n");

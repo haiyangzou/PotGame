@@ -35,6 +35,10 @@ public class WorldPoint implements Serializable {
     @Getter
     private WorldPointEntity worldPointEntity;
 
+    public WorldPoint(AbstractScene scene, PointType type, int pid, int mainX, int mainY, PointExtraData extraData) {
+        this(scene, type.getId(), PointUtil.getPointX(pid), PointUtil.getPointY(pid), mainX, mainY, extraData);
+    }
+
     public WorldPoint(AbstractScene scene, int type, int x, int y, int mainX, int mainY, PointExtraData extraData) {
         this.scene = Objects.requireNonNull(scene);
         this.type = Objects.requireNonNull(PointType.find(type));

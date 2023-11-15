@@ -13,7 +13,10 @@ public enum PointType implements IntEnum {
     CITY(1, 2, 2, false, PointCityData.class),
     WONDER(-1, 1, 1, true, null),
     LAND(0, 1, 1, false, null),
+    TOWER(9, 2, 2, true, PointTowerData.class),
     THRONE(10, 3, 3, true, PointThroneData.class),
+    THRONE_CITY(11, 13, 13, true, null),
+
     RESOURCE(3, 1, 1, false, PointResourceData.class),
     MONSTER(5, 1, 1, false, PointMonsterData.class),
     RALLY(6, 2, 2, false, PointRallyData.class),

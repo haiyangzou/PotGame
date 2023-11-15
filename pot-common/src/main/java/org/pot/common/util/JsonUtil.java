@@ -168,6 +168,7 @@ public class JsonUtil {
         try {
             return parseJackJson(file, valueType);
         } catch (IOException e) {
+            log.error("JackSon to Object error,file={},valueType={}", file, valueType, e);
             return null;
         }
     }

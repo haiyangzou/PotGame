@@ -11,6 +11,7 @@ import org.pot.common.util.JsonUtil;
 import org.pot.common.util.StringUtil;
 import org.pot.common.util.UrlObject;
 import org.pot.dal.DbConstants;
+import org.pot.dal.dao.function.EntityListParserFunction;
 import org.pot.dal.dao.function.EntityParserFunction;
 import org.pot.dal.dao.function.QueryFunction;
 import org.pot.dal.dao.param.ArrayParamSetter;
@@ -107,6 +108,11 @@ public abstract class DbExecutorAdapter implements DbExecutor {
     @Override
     public <T> List<T> executeQueryList(EntityParser<T> parser, String sql, List params) {
         return executeQueryList(parser, sql, new ListParamSetter(params));
+    }
+
+    @Override
+    public <T> List<T> executeQueryList(EntityParser<T> parser, String sql, ParamSetter paramSetter) {
+        return queryWithParamSetter(sql, paramSetter, new EntityListParserFunction<>(parser));
     }
 
     @Override

@@ -27,6 +27,8 @@ public interface DbExecutor {
 
     <T> List<T> executeQueryList(EntityParser<T> parser, String sql, List params);
 
+    <T> List<T> executeQueryList(EntityParser<T> parser, String sql, ParamSetter paramSetter);
+
     int executeUpdate(String sql);
 
     int executeUpdate(String sql, ParamSetter paramSetter);

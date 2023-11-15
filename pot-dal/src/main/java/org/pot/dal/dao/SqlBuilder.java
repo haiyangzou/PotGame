@@ -160,8 +160,10 @@ public interface SqlBuilder {
 
         @Override
         public String build() {
-
-            return null;
+            if (conditions <= 0) {
+                return sqlBuilder.build(null);
+            }
+            return sqlBuilder.build(whereBuilder.toString());
         }
     }
 
