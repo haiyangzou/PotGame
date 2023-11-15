@@ -9,9 +9,13 @@ public abstract class MarchRegulation {
 
     public abstract AbstractScene getScene();
 
-    public abstract void tick();
-
     public double getMarchSpeedScale() {
         return 1;
     }
+
+    public abstract void save(boolean async);
+
+    public abstract void init();
+
+    public abstract void tick();
 }

@@ -6,6 +6,7 @@ import com.maxmind.geoip2.model.CountryResponse;
 import com.maxmind.geoip2.record.Country;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.pot.common.clazz.ClassResourceUtil;
 import org.pot.common.net.ipv4.Ipv4Util;
 
 import java.io.InputStream;
@@ -15,6 +16,10 @@ import java.net.InetAddress;
 public class GeoIpUtil {
     private static volatile DatabaseReader database = null;
     private static final String Unknown = "Unknown";
+
+    public static void init() {
+
+    }
 
     static {
         loadDatabase();

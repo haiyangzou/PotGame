@@ -1,7 +1,7 @@
 package org.pot.cache.player;
 
 import lombok.Data;
-import org.springframework.context.annotation.Configuration;
+import org.apache.commons.configuration2.Configuration;
 
 @Data
 public class PlayerCacheConfig {

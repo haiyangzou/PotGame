@@ -1,8 +1,10 @@
 package org.pot.game.resource.map;
 
+import org.pot.config.Configure;
 import org.pot.game.resource.GameConfigSupport;
 import org.pot.game.resource.InitJsonConfig;
 
+@Configure(file = "RallyRefresh.json")
 public class RallyRefreshConfig extends InitJsonConfig<RallyRefresh> {
     public static RallyRefreshConfig getInstance() {
         return GameConfigSupport.getConfig(RallyRefreshConfig.class);

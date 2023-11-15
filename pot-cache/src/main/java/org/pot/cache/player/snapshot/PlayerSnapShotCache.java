@@ -5,7 +5,7 @@ import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.cache.player.PlayerCacheConfig;
 import org.pot.common.concurrent.executor.AsyncExecutor;
-import org.pot.core.util.RedisUtils;
+import org.pot.dal.RedisUtils;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 
 import java.time.Duration;

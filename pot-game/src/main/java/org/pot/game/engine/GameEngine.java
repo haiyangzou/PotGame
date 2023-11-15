@@ -46,6 +46,10 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
         return (GameEngine) EngineInstance.getInstance();
     }
 
+    public GameEngine() throws Exception {
+        super(GameEngineConfig.class);
+    }
+
     protected GameEngine(Class<GameEngineConfig> configClass) throws Exception {
         super(configClass);
     }

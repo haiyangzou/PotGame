@@ -1,6 +1,5 @@
 package org.pot.game.engine.world;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.common.relect.ConstructorUtil;
 import org.pot.game.engine.world.module.instance.InstanceModule;
@@ -21,24 +20,17 @@ public enum WorldModuleType {
     WORLD_RESOURCE(WorldResourceModule.class),
     INSTANCE(InstanceModule.class),
     ;
-    private final WorldModule instance;
-    @Getter
-    private final Class<? extends WorldModule> moduleClass;
+    private final WorldModule module;
 
     <T extends WorldModule> WorldModuleType(Class<T> moduleClass) {
-        this.moduleClass = moduleClass;
-        this.instance = ModuleFactory.instanceOf(moduleClass);
-    }
-
-    public <T extends WorldModule> T getInstance() {
-        return (T) instance;
+        this.module = ModuleFactory.instanceOf(moduleClass);
     }
 
     public static WorldModule[] modules() {
         WorldModuleType[] worldModuleTypes = WorldModuleType.values();
         WorldModule[] modules = new WorldModule[worldModuleTypes.length];
         for (int i = 0; i < modules.length; i++) {
-            modules[i] = worldModuleTypes[i].instance;
+            modules[i] = worldModuleTypes[i].module;
         }
         return modules;
     }
@@ -55,15 +47,6 @@ public enum WorldModuleType {
     }
 
     public <T extends WorldModule> T getModule() {
-        return (T) instance;
-    }
-
-    public static WorldModule[] getModules() {
-        WorldModuleType[] moduleTypes = WorldModuleType.values();
-        WorldModule[] modules = new WorldModule[moduleTypes.length];
-        for (int i = 0; i < modules.length; i++) {
-            modules[i] = moduleTypes[i].instance;
-        }
-        return modules;
+        return (T) module;
     }
 }

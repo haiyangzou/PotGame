@@ -13,7 +13,7 @@ public interface WorldVarDef<VarType> {
     void update(VarType var);
 
     default void delete() {
-        WorldVarModule.getInstance().remove(key());
+        WorldVarModule.singleton().remove(key());
     }
 
     enum BooleanVar implements WorldVarDef<Boolean> {
@@ -30,17 +30,17 @@ public interface WorldVarDef<VarType> {
 
         @Override
         public Boolean value() {
-            return WorldVarModule.getInstance().getBoolean(key());
+            return WorldVarModule.singleton().getBoolean(key());
         }
 
         @Override
         public Boolean value(Boolean defaultValue) {
-            return WorldVarModule.getInstance().getBoolean(key(), defaultValue);
+            return WorldVarModule.singleton().getBoolean(key(), defaultValue);
         }
 
         @Override
         public void update(Boolean var) {
-            WorldVarModule.getInstance().putBoolean(key(), var);
+            WorldVarModule.singleton().putBoolean(key(), var);
         }
 
         public boolean get(boolean v) {
@@ -70,17 +70,17 @@ public interface WorldVarDef<VarType> {
 
         @Override
         public String value() {
-            return WorldVarModule.getInstance().getString(key());
+            return WorldVarModule.singleton().getString(key());
         }
 
         @Override
         public String value(String defaultValue) {
-            return WorldVarModule.getInstance().getString(key(), defaultValue);
+            return WorldVarModule.singleton().getString(key(), defaultValue);
         }
 
         @Override
         public void update(String var) {
-            WorldVarModule.getInstance().putString(key(), var);
+            WorldVarModule.singleton().putString(key(), var);
         }
 
         public String get(String v) {
@@ -115,17 +115,17 @@ public interface WorldVarDef<VarType> {
 
         @Override
         public Integer value() {
-            return WorldVarModule.getInstance().getInt(key());
+            return WorldVarModule.singleton().getInt(key());
         }
 
         @Override
         public Integer value(Integer defaultValue) {
-            return WorldVarModule.getInstance().getInt(key(), defaultValue);
+            return WorldVarModule.singleton().getInt(key(), defaultValue);
         }
 
         @Override
         public void update(Integer var) {
-            WorldVarModule.getInstance().putInt(key(), var);
+            WorldVarModule.singleton().putInt(key(), var);
         }
 
         public int get(int v) {
@@ -150,17 +150,17 @@ public interface WorldVarDef<VarType> {
 
         @Override
         public Long value() {
-            return WorldVarModule.getInstance().getLong(key());
+            return WorldVarModule.singleton().getLong(key());
         }
 
         @Override
         public Long value(Long defaultValue) {
-            return WorldVarModule.getInstance().getLong(key(), defaultValue);
+            return WorldVarModule.singleton().getLong(key(), defaultValue);
         }
 
         @Override
         public void update(Long var) {
-            WorldVarModule.getInstance().putLong(key(), var);
+            WorldVarModule.singleton().putLong(key(), var);
         }
 
         public long get(long v) {

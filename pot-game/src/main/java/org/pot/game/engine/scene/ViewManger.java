@@ -21,6 +21,12 @@ public class ViewManger {
         this.scene = scene;
     }
 
+    protected void init() {
+    }
+
+    public void tick() {
+    }
+
     public IErrorCode remoteBrowseView(long playerId, int fromServerId, WorldMapViewC2S request) {
         ViewLevel viewLevel = ViewLevel.findById(request.getViewLevel());
         if (viewLevel == null) {

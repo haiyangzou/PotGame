@@ -2,7 +2,7 @@ package org.pot.game.engine.enums;
 
 import lombok.Getter;
 import org.pot.cache.rank.codec.RankItemCodec;
-import org.pot.core.util.RedisUtils;
+import org.pot.dal.RedisUtils;
 import org.pot.game.engine.GameServerInfo;
 
 @Getter

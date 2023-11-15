@@ -1,26 +1,27 @@
 package org.pot.message.protocol;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.protobuf.InvalidProtocolBufferException;
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
-
 import lombok.extern.slf4j.Slf4j;
-
+import org.apache.commons.lang3.tuple.Pair;
 import org.pot.common.concurrent.exception.IErrorCode;
 import org.pot.common.relect.ConstructorUtil;
 import org.pot.common.util.ClassUtil;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 public class ProtocolSupport {
     private static final Map<Class, String> nameMap;
     private static final Map<String, Pair<Class, Parser>> parseMap;
+
+    public static void init() {
+
+    }
 
     static {
         try {

@@ -26,7 +26,7 @@ public class PlayerBornInfo {
         //出生资源带有序，随机打乱每个资源带的出生block顺序
         for (int bandId = bornMinBandId; bandId <= bornMaxBandId; bandId++) {
             WorldBand resourceBand = WorldMapPointRegulation.getResourceBand(bandId);
-
+            blocks.addAll(resourceBand.getDisorderlyBlockIds());
         }
     }
 

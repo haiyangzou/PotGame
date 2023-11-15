@@ -1,10 +1,12 @@
 package org.pot.game.resource.map;
 
+import org.pot.config.Configure;
 import org.pot.game.resource.GameConfigSupport;
 import org.pot.game.resource.InitJsonConfig;
 
 import java.util.List;
 
+@Configure(file = "MapRefreshDay.json")
 public class MapRefreshDayConfig extends InitJsonConfig<MapRefreshDay> {
     public static MapRefreshDayConfig getInstance() {
         return GameConfigSupport.getConfig(MapRefreshDayConfig.class);

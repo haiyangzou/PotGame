@@ -30,7 +30,7 @@ public class RedisConfig {
     private int maxRedirects = 6;
     private int topologyRefreshSeconds = 6;
 
-    public RedisConfig(String nodes, String host) {
+    public RedisConfig(String host, String nodes) {
         this.nodes = nodes;
         this.host = host;
     }

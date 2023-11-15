@@ -5,9 +5,9 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.pot.common.anno.Ordinal;
 import org.pot.common.concurrent.exception.ServiceException;
-import org.pot.common.relect.FieldUtil;
 import org.pot.common.util.StringUtil;
 import org.pot.game.engine.player.Player;
 import org.pot.game.engine.player.PlayerAgentAdapter;
@@ -54,7 +54,7 @@ public interface PlayerAgentsInitializer {
     @SuppressWarnings("unchecked")
     static String addAgents() {
         StringBuilder stringBuilder = new StringBuilder();
-        Field[] fields = FieldUtil.getAllFields(Player.class);
+        Field[] fields = FieldUtils.getAllFields(Player.class);
         Arrays.sort(fields, Comparator.comparingInt(f -> {
             Ordinal ordinal = f.getAnnotation(Ordinal.class);
             return ordinal == null ? Ordinal.DEFAULT_ORDINAL : ordinal.value();

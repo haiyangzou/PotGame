@@ -12,4 +12,10 @@ public abstract class CityRegulation {
     }
 
     protected abstract int randomPutCity(PointCityData city);
+
+    protected abstract void save(boolean async);
+
+    protected abstract void init();
+
+    protected abstract void tick();
 }

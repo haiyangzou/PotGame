@@ -24,6 +24,10 @@ public class GameEngineConfig extends EngineConfig {
 
     @Override
     protected void setProperties(Configuration config) {
+        super.setProperties(config);
+        this.serverType = ServerType.valueOf(config.getString("game.server.type", serverType.name()));
         kingdomCacheConfig = KingdomCacheConfig.loadCacheConfig(config);
+        playerCacheConfig = PlayerCacheConfig.loadCacheConfig(config);
+        rankCacheConfig = RankCacheConfig.loadConfig(config);
     }
 }

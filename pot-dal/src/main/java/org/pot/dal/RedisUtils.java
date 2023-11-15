@@ -1,4 +1,4 @@
-package org.pot.core.util;
+package org.pot.dal;
 
 import org.apache.commons.lang3.ArrayUtils;
 

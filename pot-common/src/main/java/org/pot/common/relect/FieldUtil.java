@@ -13,9 +13,9 @@ public final class FieldUtil {
     private static final Map<Class<?>, List<Field>> cach1 = new ConcurrentHashMap<>();
     private static final Map<Class<?>, List<Field>> cach2 = new ConcurrentHashMap<>();
 
-    public static Field[] getAllFields(final Class<?> cls) {
+    public static Field[] getAllFields(Class<?> cls) {
         List<Field> allFieldsList = getAllFieldsList(cls);
-        return (Field[]) allFieldsList.toArray(ArrayUtils.EMPTY_FIELD_ARRAY);
+        return allFieldsList.toArray(ArrayUtils.EMPTY_FIELD_ARRAY);
     }
 
     public static List<Field> getAllFieldsList(final Class<?> cls) {

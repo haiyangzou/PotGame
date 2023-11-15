@@ -40,7 +40,7 @@ public class GhostEnterTask implements Runnable {
                 player.ghostAgent.setVisaData(visaData);
                 playerData.setLoadOver(true);//关闭load over
                 playerSession.establish(ghostEnterCmd);
-                GhostUtil.save();
+                GhostUtil.save(player.ghostAgent.toEntity());
                 GhostEnterSuccessCmd.Builder builder = GhostEnterSuccessCmd.newBuilder();
                 builder.setPlayerId(ghostEnterCmd.getPlayerId());
                 playerSession.send(builder.build());

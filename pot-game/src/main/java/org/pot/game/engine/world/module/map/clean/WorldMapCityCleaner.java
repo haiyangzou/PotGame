@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class WorldMapCleaner {
+public class WorldMapCityCleaner {
     private volatile int cleanMin;
     @Getter
     private volatile int cleanMax;

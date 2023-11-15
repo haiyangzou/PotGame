@@ -18,6 +18,10 @@ import java.util.*;
 public class ApiSupport {
     private static final Map<String, ApiMethod> apiMap;
 
+    public static void init() {
+
+    }
+
     static {
         Map<String, ApiMethod> tempApiMap = new HashMap<>();
         try {

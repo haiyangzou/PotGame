@@ -17,5 +17,7 @@ public class RemoteServerConfig extends EndPointConfig {
     }
 
     private void setProperties(Configuration config) {
+        this.host = config.getString("rpc.bind", host);
+        this.port = config.getInt("rpc.port", port);
     }
 }

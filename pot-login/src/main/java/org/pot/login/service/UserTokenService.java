@@ -7,7 +7,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.pot.common.cipher.SecurityUtil;
 import org.pot.common.compressor.Compressor;
 import org.pot.common.compressor.SnappyCompressor;
-import org.pot.core.util.RedisUtils;
+import org.pot.dal.RedisUtils;
 import org.pot.message.protocol.login.LoginDataS2S;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 import org.springframework.stereotype.Service;

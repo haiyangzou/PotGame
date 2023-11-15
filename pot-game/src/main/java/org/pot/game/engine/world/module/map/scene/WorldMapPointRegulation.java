@@ -3,25 +3,30 @@ package org.pot.game.engine.world.module.map.scene;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.pot.common.util.CollectionUtil;
-import org.pot.common.util.JsonUtil;
-import org.pot.common.util.MathUtil;
-import org.pot.common.util.PointUtil;
+import org.pot.common.util.*;
+import org.pot.dal.dao.SqlSession;
+import org.pot.game.engine.GameEngine;
 import org.pot.game.engine.enums.PointType;
 import org.pot.game.engine.point.PointExtraData;
 import org.pot.game.engine.point.PointThroneData;
 import org.pot.game.engine.scene.AbstractScene;
+import org.pot.game.engine.scene.PointManager;
 import org.pot.game.engine.scene.PointRegulation;
 import org.pot.game.engine.scene.WorldPoint;
+import org.pot.game.engine.world.module.map.born.PlayerBornRule;
+import org.pot.game.persistence.GameDb;
 import org.pot.game.persistence.entity.WorldPointEntity;
+import org.pot.game.persistence.mapper.WorldPointEntityMapper;
 import org.pot.game.resource.GameConfigSupport;
 import org.pot.game.resource.map.WorldMapDecoration;
 import org.pot.game.resource.map.WorldMapDecorationConfig;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -92,6 +97,16 @@ public class WorldMapPointRegulation extends PointRegulation {
     @Getter
     private static volatile List<Integer> ThroneCity;
     @Getter
+    private static volatile List<Integer> BlackEarth;
+    @Getter
+    private static volatile int NorthBlackEarthVertex;
+    @Getter
+    private static volatile int SouthBlackEarthVertex;
+    @Getter
+    private static volatile int WestBlackEarthVertex;
+    @Getter
+    private static volatile int EastBlackEarthVertex;
+    @Getter
     private static volatile List<Integer> lowToHighBlockIdList;//block带定义
     @Getter
     private static volatile List<Integer> highToLowBlockBandIdList;
@@ -121,22 +136,16 @@ public class WorldMapPointRegulation extends PointRegulation {
         tempThroneCity.removeAll(Throne);
         tempThroneCity.removeAll(AllTower);
         ThroneCity = ImmutableList.copyOf(tempThroneCity);
-        Map<Integer, WorldBand> tempWorldResourceBandMap = new TreeMap<>(Integer::compareTo);
-        for (int i = 0; i < RESOURCE_BAND_COUNT; i++) {
-            int bandId = i + 1;
-            tempWorldResourceBandMap.put(bandId, new WorldBand(bandId));
-        }
-        ResourceBandMap = ImmutableMap.copyOf(tempWorldResourceBandMap);
 
-        Map<Integer, WorldBlock> tempWorldBlockMap = new HashMap<>();
-        int blockId = 0;
-        for (int i = 0; i < BLOCK_COUNT; i++) {
-            for (int j = 0; j < BLOCK_COUNT; j++) {
-                WorldBlock worldBlock = new WorldBlock(++blockId, i * BLOCK_LENGTH_X, j * BLOCK_LENGTH_Y);
-                tempWorldBlockMap.put(blockId, worldBlock);
-            }
-        }
-        BlockMap = ImmutableMap.copyOf(tempWorldBlockMap);
+        List<Integer> temBlackEarth = PointRegulation.getOccupiedPoints(MAP_CENTER_X, MAP_CENTER_Y, BLACK_RANGE, BLACK_RANGE);
+        temBlackEarth.remove(Throne);
+        temBlackEarth.remove(AllTower);
+        temBlackEarth.remove(ThroneCity);
+        BlackEarth = ImmutableList.copyOf(temBlackEarth);
+        NorthBlackEarthVertex = getBlackEarthVertex(Direction.NORTH);
+        SouthBlackEarthVertex = getBlackEarthVertex(Direction.SOUTH);
+        WestBlackEarthVertex = getBlackEarthVertex(Direction.WEST);
+        EastBlackEarthVertex = getBlackEarthVertex(Direction.EAST);
         List<Integer> tempLowToHighBlockBand = new ArrayList<>();
         List<Integer> tempHighToLowBlockBand = new ArrayList<>();
         Map<Integer, WorldBand> tempWorldBlockBandMap = new TreeMap<>(Integer::compareTo);
@@ -146,8 +155,66 @@ public class WorldMapPointRegulation extends PointRegulation {
             tempHighToLowBlockBand.add(0, bandId);
             tempWorldBlockBandMap.put(bandId, new WorldBand(bandId));
         }
+        lowToHighBlockIdList = ImmutableList.copyOf(tempLowToHighBlockBand);
+        highToLowBlockBandIdList = ImmutableList.copyOf(tempHighToLowBlockBand);
         BlockBandMap = ImmutableMap.copyOf(tempWorldBlockBandMap);
 
+        List<Integer> tempLowToHighResourceBand = new ArrayList<>();
+        List<Integer> tempHighToLowResourceBand = new ArrayList<>();
+        Map<Integer, WorldBand> tempWorldResourceBandMap = new TreeMap<>(Integer::compareTo);
+        for (int i = 0; i < RESOURCE_BAND_COUNT; i++) {
+            int bandId = i + 1;
+            tempLowToHighResourceBand.add(bandId);
+            tempHighToLowResourceBand.add(0, bandId);
+            tempWorldResourceBandMap.put(bandId, new WorldBand(bandId));
+        }
+        lowToHighResourceBandIdList = ImmutableList.copyOf(tempLowToHighResourceBand);
+        highToLowResourceBandIdList = ImmutableList.copyOf(tempHighToLowResourceBand);
+        ResourceBandMap = ImmutableMap.copyOf(tempWorldResourceBandMap);
+
+        Map<Integer, WorldBlock> tempWorldBlockMap = new HashMap<>();
+        int blockId = 0;
+        for (int i = 0; i < BLOCK_COUNT; i++) {
+            for (int j = 0; j < BLOCK_COUNT; j++) {
+                WorldBlock worldBlock = new WorldBlock(++blockId, i * BLOCK_LENGTH_X, j * BLOCK_LENGTH_Y);
+                tempWorldBlockMap.put(blockId, worldBlock);
+                addToBand(worldBlock, BlockBandMap, 1);
+                addToBand(worldBlock, ResourceBandMap, RESOURCE_BAND_WIDTH);
+            }
+        }
+        BlockMap = ImmutableMap.copyOf(tempWorldBlockMap);
+    }
+
+    private static void addToBand(WorldBlock worldBlock, Map<Integer, WorldBand> bandMap, int bandBlockWith) {
+        int i = worldBlock.getX() / BLOCK_LENGTH_X;
+        int j = worldBlock.getX() / BLOCK_LENGTH_X;
+        for (WorldBand band : bandMap.values()) {
+            int bandId = band.getId();
+            int bandIndex = bandId - 1;
+            int bandBlockHeadMin = bandIndex * bandBlockWith;
+            int bandBlockHeadMax = bandId * bandBlockWith;
+            int bandBlockTaiMin = BLOCK_COUNT - bandBlockHeadMax;
+            int bandBlockTaiMax = BLOCK_COUNT - bandBlockHeadMin;
+            if ((i >= bandBlockHeadMin && i < bandBlockHeadMax) || (i >= bandBlockTaiMin && i < bandBlockTaiMax)) {
+                band.addBlockId(worldBlock.getId());
+                break;
+            }
+            if ((j >= bandBlockHeadMin && j < bandBlockHeadMax) || (j >= bandBlockTaiMin && j < bandBlockTaiMax)) {
+                band.addBlockId(worldBlock.getId());
+                break;
+            }
+        }
+    }
+
+    private static Integer getBlackEarthVertex(Direction direction) {
+        int centerI = (MAP_CENTER_X - MAP_CENTER_Y) / 2;
+        int centerJ = (MAP_CENTER_X + MAP_CENTER_Y) / 2;
+        int blackEarthOffset = BLACK_RANGE / 2;
+        int iCoordinate = direction.iMove(centerI, blackEarthOffset);
+        int jCoordinate = direction.jMove(centerJ, blackEarthOffset);
+        int xCoordinate = jCoordinate + iCoordinate;
+        int yCoordinate = jCoordinate - iCoordinate;
+        return PointUtil.getPointId(xCoordinate, yCoordinate);
     }
 
     public static WorldBand getResourceBand(int resourceBandId) {
@@ -160,6 +227,11 @@ public class WorldMapPointRegulation extends PointRegulation {
 
     public WorldMapPointRegulation(AbstractScene scene) {
         super(scene);
+    }
+
+    @Override
+    public WorldMapScene getScene() {
+        return (WorldMapScene) scene;
     }
 
     private volatile Map<Integer, WorldPoint> initialWorldPoint = null;
@@ -179,10 +251,20 @@ public class WorldMapPointRegulation extends PointRegulation {
         return initialWorldPoint == null ? null : initialWorldPoint.get(pointId);
     }
 
+    private final ImmutableList<RunSignal> validateSignals = ImmutableList.of(
+            new RunSignal(TimeUnit.MINUTES.toMillis(1)), new RunSignal(TimeUnit.MINUTES.toMillis(1)),
+            new RunSignal(TimeUnit.MINUTES.toMillis(1)), new RunSignal(TimeUnit.MINUTES.toMillis(1)),
+            new RunSignal(TimeUnit.MINUTES.toMillis(1)), new RunSignal(TimeUnit.MINUTES.toMillis(1)),
+            new RunSignal(TimeUnit.MINUTES.toMillis(1)), new RunSignal(TimeUnit.MINUTES.toMillis(1)));
+
     @Override
     protected Map<Integer, WorldPoint> init() {
         initialWorldPoint = ImmutableMap.copyOf(initWorldMapPoints());
-        return null;
+        SqlSession sqlSession = GameDb.local().getSqlSession(WorldPointEntityMapper.class);
+        WorldPointEntityMapper worldPointEntityMapper = sqlSession.getMapper(WorldPointEntityMapper.class);
+        return worldPointEntityMapper.all().stream()
+                .map(e -> new WorldPoint(scene, e.getType(), e.getX(), e.getY(), e.getMainX(), e.getMainY(), e.getExtraData()))
+                .collect(Collectors.toMap(WorldPoint::getId, p -> p));
     }
 
     @Override
@@ -198,6 +280,82 @@ public class WorldMapPointRegulation extends PointRegulation {
     @Override
     public boolean isCanBuild(int pointId) {
         return false;
+    }
+
+    @Override
+    protected void onAddPoint(WorldPoint worldPoint) {
+        SqlSession sqlSession = GameDb.local().getSqlSession(WorldPointEntityMapper.class);
+        sqlSession.submitWithoutResult(WorldPointEntityMapper.class, m -> m.insertOnDuplicateKeyUpdate(toWorldPointEntity(worldPoint)));
+    }
+
+    private WorldPointEntity toWorldPointEntity(WorldPoint worldPoint) {
+        return WorldPointEntity.builder()
+                .id(worldPoint.getId())
+                .type(worldPoint.getType().getId())
+                .x(worldPoint.getX())
+                .y(worldPoint.getY())
+                .mainX(worldPoint.getMainX())
+                .mainY(worldPoint.getMainY())
+                .extraData(worldPoint.getExtraData())
+                .build();
+    }
+
+    @Override
+    protected void save(boolean async) {
+        PlayerBornRule.getInstance().save();
+        PointManager pointManager = WorldMapScene.singleton.getPointManager();
+        Collection<WorldPoint> worldPoints = pointManager.getPoints();
+        if (worldPoints.isEmpty()) return;
+        Runnable runnable = () -> {
+
+        };
+        if (async) {
+            GameEngine.getInstance().getAsyncExecutor().execute(runnable);
+        } else {
+            runnable.run();
+        }
+    }
+
+    @Override
+    protected void tick() {
+        for (int i = 0; i < validateSignals.size() - 1; i++) {
+            if (validateSignals.get(i).signal()) validatePoint(i);
+        }
+    }
+
+    private void validatePoint(int index) {
+        PointRegulation regulation = WorldMapScene.singleton.getPointRegulation();
+        int yStep = MathUtil.divideAndCeil(regulation.getMaxY(), validateSignals.size());
+        int yStart = index * yStep;
+        int yEnd = yStart + yStep;
+        for (int x = 0; x < regulation.getMaxX(); x++) {
+            for (int y = yStart; y < yEnd; y++) {
+                if (regulation.isValidCoordinate(x, y)) {
+                    WorldPoint p = WorldMapScene.singleton.getPoint(x, y);
+                    if (p != null) {
+                        p.validate();
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onRemovePoint(PointType pointType, int mainX, int mainY, List<Integer> pointIds) {
+        SqlSession sqlSession = GameDb.local().getSqlSession(WorldPointEntityMapper.class);
+        sqlSession.submitWithoutResult(WorldPointEntityMapper.class, m -> m.deleteInIdList(pointIds));
+    }
+
+    public static double getInBlackEarthDistance(int startPoint, int endPoint) {
+        return 0;
+    }
+
+    @Override
+    public double inBlackEarthDistance(int startPoint, int endPoint) {
+        if (WorldBuilding.TempleBattleBuildingPoints.contains(startPoint) || WorldBuilding.TempleBattleBuildingMainPoints.contains(endPoint)) {
+            return getInBlackEarthDistance(startPoint, endPoint);
+        }
+        return 0;
     }
 
     public static WorldBand getBlockBand(int blockBandId) {
@@ -292,6 +450,7 @@ public class WorldMapPointRegulation extends PointRegulation {
         }
     }
 
+    @Data
     private static final class TempForLoadPoint {
         private int id, x, y;
     }

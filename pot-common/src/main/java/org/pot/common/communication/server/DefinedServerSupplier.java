@@ -23,6 +23,11 @@ public class DefinedServerSupplier {
         });
     }
 
+    public static GameServer getGameServerInfo(String url, int port, int httpPort, int rpcPort) throws Exception {
+        return getGenericServerInfo(url, port, httpPort, rpcPort, new TreeMap<>(String::compareTo), new TypeReference<GameServer>() {
+        });
+    }
+
     public static Server getServerInfo(String url, ServerType serverType, int port, int httpPort, int rpcPort) throws Exception {
         TreeMap<String, String> params = MapUtil.newTreeMap(String::compareTo, "type", String.valueOf(serverType.getId()));
         return getGenericServerInfo(url, port, httpPort, rpcPort, params, new TypeReference<Server>() {

@@ -14,7 +14,7 @@ public enum ViewLevel implements IntEnum {
 
     @Override
     public int getId() {
-        return 0;
+        return id;
     }
 
     public static ViewLevel findById(int id) {

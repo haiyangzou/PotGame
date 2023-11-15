@@ -1,7 +1,6 @@
 package org.pot.game.engine.scene;
 
 import com.google.common.collect.Lists;
-import lombok.Getter;
 import org.pot.common.util.PointUtil;
 import org.pot.game.engine.enums.PointType;
 import org.pot.game.persistence.entity.WorldPointEntity;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class PointRegulation {
-    @Getter
     protected final AbstractScene scene;
 
     public PointRegulation(AbstractScene scene) {
@@ -97,5 +95,7 @@ public abstract class PointRegulation {
     protected abstract void onRemovePoint(PointType pointType, int mainX, int mainY, List<Integer> pointIds);
 
     public abstract double inBlackEarthDistance(int startPoint, int endPoint);
+
+    public abstract AbstractScene getScene();
 
 }

@@ -3,6 +3,7 @@ package org.pot.game.gate;
 import com.google.protobuf.ByteString;
 import org.pot.common.binary.Base64Util;
 import org.pot.common.compressor.Lz4Compressor;
+import org.pot.common.serialization.SerializeUtil;
 import org.pot.common.util.JsonUtil;
 import org.pot.game.engine.player.PlayerData;
 

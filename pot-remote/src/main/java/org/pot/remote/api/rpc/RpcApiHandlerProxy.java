@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.common.communication.server.ServerId;
 import org.pot.common.rpc.RpcMessage;
+import org.pot.common.serialization.KryoSerializer;
 import org.pot.common.text.Jackson;
 import org.pot.common.util.JsonUtil;
 import org.pot.remote.api.ApiSecurity;

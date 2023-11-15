@@ -27,8 +27,8 @@ import java.util.function.Supplier;
 
 @Slf4j
 public class WorldResourceModule extends AbstractWorldModule {
-    public static WorldResourceModule getInstance() {
-        return WorldModuleType.WORLD_RESOURCE.getInstance();
+    public static WorldResourceModule singleton() {
+        return WorldModuleType.WORLD_RESOURCE.getModule();
     }
 
     private volatile long blackEarthRefreshTime = 0;

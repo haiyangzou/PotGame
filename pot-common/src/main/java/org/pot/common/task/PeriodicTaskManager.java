@@ -9,7 +9,6 @@ import org.pot.common.util.DateTimeUnit;
 
 import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
@@ -32,7 +31,7 @@ public final class PeriodicTaskManager implements Ticker {
     private volatile long currentSecond, currentMinute, currentHour, currentDay, currentWeek, currentMonth, currentYear;
     private volatile long lastSecond, lastMinute, lastHour, lastDay, lastWeek, lastMonth, lastYear;
 
-    private final class TaskAndCounter implements Comparator<TaskAndCounter> {
+    private final class TaskAndCounter implements Comparable<TaskAndCounter> {
         private final long index = INDEX_GENERATOR.getAndIncrement();
         private final AtomicInteger count = new AtomicInteger();
         private final PeriodTask periodTask;
@@ -42,7 +41,7 @@ public final class PeriodicTaskManager implements Ticker {
         }
 
         @Override
-        public int compare(TaskAndCounter o1, TaskAndCounter o2) {
+        public int compareTo(TaskAndCounter o1) {
             return Long.compare(this.index, o1.index);
         }
 

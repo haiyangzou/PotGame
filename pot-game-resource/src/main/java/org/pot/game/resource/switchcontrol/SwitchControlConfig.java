@@ -1,22 +1,12 @@
 package org.pot.game.resource.switchcontrol;
 
-import java.util.List;
+import org.pot.config.Configure;
+import org.pot.game.resource.GameConfigSupport;
+import org.pot.game.resource.StringJsonConfig;
 
-public class SwitchControlConfig {
-    public SwitchControlConfig() {
-    }
-
+@Configure(file = "SwitchControl.json")
+public class SwitchControlConfig extends StringJsonConfig<SwitchControl> {
     public static SwitchControlConfig getInstance() {
-        return new SwitchControlConfig();
+        return GameConfigSupport.getConfig(SwitchControlConfig.class);
     }
-
-    public List<SwitchControl> getSpecList() {
-        return null;
-    }
-
-    public SwitchControl getSpec(String id) {
-        return null;
-    }
-
-
 }

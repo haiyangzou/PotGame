@@ -30,6 +30,10 @@ public class PointManager {
         this.scene = scene;
     }
 
+    public void tick() {
+        scene.getPointRegulation().tick();
+    }
+
     protected void init() {
         worldPoints.putAll(scene.getPointRegulation().init());
         for (WorldPoint worldPoint : worldPoints.values()) {
@@ -55,6 +59,10 @@ public class PointManager {
 
     public long countPointType(PointType pointType) {
         return worldPoints.values().stream().filter(worldPoint -> worldPoint.isMainPoint() && pointType.equals(worldPoint.getType())).count();
+    }
+
+    public List<WorldPoint> getMainPoints(PointType pointType) {
+        return worldPoints.values().stream().filter(point -> point.isMainPoint() && pointType.equals(point.getType())).collect(Collectors.toList());
     }
 
     public List<WorldPoint> getMainPoints(List<Integer> pointIds, PointType pointType) {
@@ -137,7 +145,7 @@ public class PointManager {
         return (int) pointIds.stream().filter(this::isCanBuild).count();
     }
 
-    public int allocateRandomLocation(List<Integer> pointIds, PointExtraData pointExtraData) {
+    public int allocateRandomLocation(Collection<Integer> pointIds, PointExtraData pointExtraData) {
         scene.requireThreadSafe();
         List<Integer> canBuildPointIds = CollectionUtil.shuffle(getCanBuildPoints(pointIds));
         PointType pointType = pointExtraData.getPointType();
@@ -196,7 +204,7 @@ public class PointManager {
         listeners.forEach(listeners -> listeners.onPointAdded(worldPoint));
     }
 
-    public List<Integer> getCanBuildPoints(List<Integer> pointIds) {
+    public List<Integer> getCanBuildPoints(Collection<Integer> pointIds) {
         return pointIds.stream().filter(this::isCanBuild).collect(Collectors.toList());
     }
 
@@ -208,5 +216,9 @@ public class PointManager {
     public PointExtraData getPointExtraData(int pointId) {
         WorldPoint worldPoint = getPoint(pointId);
         return worldPoint == null ? null : worldPoint.getRawExtraData();
+    }
+
+    public void save(boolean async) {
+        scene.getPointRegulation().save(async);
     }
 }

@@ -1,6 +1,7 @@
 package org.pot.dal.redis;
 
-import org.pot.core.util.RedisUtils;
+
+import org.pot.dal.RedisUtils;
 
 import java.util.Objects;
 

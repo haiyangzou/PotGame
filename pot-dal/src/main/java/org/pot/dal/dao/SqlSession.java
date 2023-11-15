@@ -98,6 +98,10 @@ public class SqlSession implements DbExecutor {
         return dbExecutor.executeQueryObject(parser, sql, params);
     }
 
+    public <M extends SessionMapper> void submitWithoutResult(Class<M> mapperClass, Consumer<M> mapperMethod) {
+        submitWithoutResult(mapperClass, mapperMethod, null, null);
+    }
+
     public <M extends SessionMapper> void submitWithoutResult(Class<M> mapperClass, Consumer<M> mapperMethod, Operation onSuccess, Operation onFail) {
         if (asyncDbTaskExecutor == null) {
             return;

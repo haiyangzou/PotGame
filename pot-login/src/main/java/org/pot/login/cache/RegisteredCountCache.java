@@ -6,7 +6,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.pot.common.communication.server.GameServer;
 import org.pot.common.date.DateTimeString;
 import org.pot.common.util.CollectionUtil;
-import org.pot.core.util.RedisUtils;
+import org.pot.dal.RedisUtils;
 import org.pot.login.entity.RegisterGroupLocale;
 import org.pot.login.entity.RegisterPolicy;
 import org.pot.login.entity.RegisterPolicyGroup;

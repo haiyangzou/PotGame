@@ -1,10 +1,12 @@
 package org.pot.game.resource.map;
 
+import org.pot.config.Configure;
 import org.pot.game.resource.GameConfigSupport;
 import org.pot.game.resource.InitJsonConfig;
 
 import java.util.function.Function;
 
+@Configure(file = "MapLimitLevel.json")
 public class MapLimitLevelConfig extends InitJsonConfig<MapLimitLevel> {
     public static MapLimitLevelConfig getInstance() {
         return GameConfigSupport.getConfig(MapLimitLevelConfig.class);

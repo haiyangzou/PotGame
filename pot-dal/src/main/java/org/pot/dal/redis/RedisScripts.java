@@ -3,7 +3,7 @@ package org.pot.dal.redis;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.pot.core.util.ClassResourceUtil;
+import org.pot.common.clazz.ClassResourceUtil;
 import org.springframework.data.redis.core.script.RedisScript;
 
 import java.io.File;

@@ -32,6 +32,10 @@ public class MarchManager {
         return marchId == null ? null : marchMap.get(marchId);
     }
 
+    public void init() {
+        scene.getMarchRegulation().init();
+    }
+
     public void addMarch(March march) {
         if (march == null) {
             return;
@@ -99,7 +103,7 @@ public class MarchManager {
         }
     }
 
-    private void tick() {
+    public void tick() {
         March march;
         while ((march = pending.poll()) != null) {
             innerAddMarch(march);
@@ -151,5 +155,9 @@ public class MarchManager {
 
     public Collection<March> getMarches() {
         return Collections.unmodifiableCollection(marchMap.values());
+    }
+
+    public void save(boolean async) {
+        scene.getMarchRegulation().save(async);
     }
 }

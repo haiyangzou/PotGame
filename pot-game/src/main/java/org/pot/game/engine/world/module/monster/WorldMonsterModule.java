@@ -28,8 +28,8 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class WorldMonsterModule extends AbstractWorldModule implements PointListener {
-    public static WorldMonsterModule getInstance() {
-        return WorldModuleType.WORLD_MONSTER.getInstance();
+    public static WorldMonsterModule singleton() {
+        return WorldModuleType.WORLD_MONSTER.getModule();
     }
 
     private final Set<Integer> timeoutMonsterPointIds = new CopyOnWriteArraySet<>();

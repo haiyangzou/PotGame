@@ -56,4 +56,8 @@ public class UniqueIdUtil {
     public static String newUuid() {
         return RandomUtil.uuid();
     }
+
+    public static void init() {
+
+    }
 }

@@ -16,6 +16,16 @@ public class WorldMapMarchRegulation extends MarchRegulation {
     }
 
     @Override
+    public void save(boolean async) {
+
+    }
+
+    @Override
+    public void init() {
+
+    }
+
+    @Override
     public void tick() {
 
     }

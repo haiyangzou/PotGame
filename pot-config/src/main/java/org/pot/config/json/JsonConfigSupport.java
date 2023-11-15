@@ -3,8 +3,8 @@ package org.pot.config.json;
 
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.pot.PotPackage;
 import org.pot.common.Constants;
-import org.pot.common.PotPackage;
 import org.pot.common.file.loader.LoadManager;
 import org.pot.common.util.ClassUtil;
 import org.pot.common.util.FilenameUtil;

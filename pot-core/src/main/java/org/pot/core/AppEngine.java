@@ -3,16 +3,22 @@ package org.pot.core;
 import com.google.common.base.Stopwatch;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.pot.cache.server.ServerListCache;
 import org.pot.common.Constants;
 import org.pot.common.concurrent.executor.AsyncExecutor;
 import org.pot.common.concurrent.executor.ThreadUtil;
 import org.pot.common.function.Ticker;
+import org.pot.common.id.UniqueIdUtil;
 import org.pot.common.task.PeriodTask;
 import org.pot.common.task.PeriodicTaskManager;
 import org.pot.common.task.ScheduledTaskManager;
+import org.pot.common.util.DateTimeUnit;
 import org.pot.core.engine.EngineConfig;
 import org.pot.core.engine.IEngine;
+import org.pot.core.util.GeoIpUtil;
 import org.pot.core.util.SignalLight;
+import org.pot.message.protocol.ProtocolSupport;
+import org.pot.remote.api.ApiSupport;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -101,7 +107,28 @@ public abstract class AppEngine<T extends EngineConfig> extends Thread implement
     }
 
     private void startup0() throws Throwable {
+        UniqueIdUtil.init();
+        GeoIpUtil.init();
+        ApiSupport.init();
+        ProtocolSupport.init();
+        ServerListCache.init(getConfig().getGlobalServerConfig());
         doStart();
+        periodicTaskManager.addTask(new PeriodTask() {
+            @Override
+            public void doPeriodicTask() {
+                log.info("Diagnostic Information:\n");
+            }
+
+            @Override
+            public long getInterval() {
+                return 10;
+            }
+
+            @Override
+            public DateTimeUnit getDateTimeUnit() {
+                return DateTimeUnit.MINUTE;
+            }
+        });
     }
 
     private void tick() {

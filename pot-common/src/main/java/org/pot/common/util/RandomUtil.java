@@ -1,5 +1,6 @@
 package org.pot.common.util;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,6 +12,16 @@ import java.util.stream.Collectors;
 public class RandomUtil {
     public static <E> E naturalRandomOne(List<E> objects) {
         return CollectionUtil.isEmpty(objects) ? null : objects.get(randomInt(objects.size()));
+    }
+
+    public static List<Integer> randomSequence(int left, int right) {
+        int min = Math.min(left, right);
+        int max = Math.max(left, right);
+        if (min == max) return Collections.singletonList(min);
+        List<Integer> list = Lists.newArrayListWithExpectedSize(Math.abs(max - min));
+        for (int i = min; i <= max; i++) list.add(i);
+        CollectionUtil.shuffle(list);
+        return list;
     }
 
     public static int randomBetweenInt(int min, int max) {

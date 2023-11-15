@@ -51,8 +51,8 @@ public class DbConfig {
 
     public static DbConfig loadDbConfig(String prefix, Configuration config) {
         String url = config.getString(prefix + ".jdbc.url", null);
-        String useName = config.getString(prefix + "jdbc.username", null);
-        String password = config.getString(prefix + "jdbc.password", null);
+        String useName = config.getString(prefix + ".jdbc.username", null);
+        String password = config.getString(prefix + ".jdbc.password", null);
         if (StringUtils.isAnyBlank(url, useName, password)) {
             return null;
         }

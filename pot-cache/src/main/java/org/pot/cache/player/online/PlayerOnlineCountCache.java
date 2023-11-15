@@ -2,7 +2,7 @@ package org.pot.cache.player.online;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.pot.common.date.DateTimeString;
-import org.pot.core.util.RedisUtils;
+import org.pot.dal.RedisUtils;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 
 import java.time.LocalDateTime;

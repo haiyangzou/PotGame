@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.pot.common.structure.ElapsedTimeMonitor;
-import org.pot.core.util.RedisUtils;
+import org.pot.dal.RedisUtils;
 import org.pot.dal.redis.RedisScripts;
 
 import java.util.concurrent.TimeUnit;

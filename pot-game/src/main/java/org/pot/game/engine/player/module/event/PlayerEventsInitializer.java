@@ -5,7 +5,7 @@ import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
-import org.pot.common.PotPackage;
+import org.pot.PotPackage;
 import org.pot.common.anno.Ordinal;
 import org.pot.common.concurrent.exception.ServiceException;
 import org.pot.common.relect.ConstructorUtil;

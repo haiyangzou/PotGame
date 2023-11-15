@@ -1,14 +1,16 @@
 package org.pot.game.engine.scene;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.pot.game.engine.march.MarchManager;
 import org.pot.game.engine.point.PointExtraData;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@Slf4j
 public abstract class AbstractScene {
     @Getter
     protected final String name;
@@ -19,21 +21,32 @@ public abstract class AbstractScene {
     @Getter
     protected final PointManager pointManager;
     @Getter
-    protected final PointRegulation pointRegulation;
-    @Getter
-    protected final CityRegulation cityRegulation;
+    protected final CityManager cityManager;
 
-    public AbstractScene(String name, Function<AbstractScene, CityRegulation> cityRegulation, Function<AbstractScene, PointRegulation> pointRegulation) {
+    protected final PointRegulation pointRegulation;
+    protected final CityRegulation cityRegulation;
+    protected final MarchRegulation marchRegulation;
+
+    public AbstractScene(String name,
+                         Function<AbstractScene, CityRegulation> cityRegulation,
+                         Function<AbstractScene, MarchRegulation> marchRegulation,
+                         Function<AbstractScene, PointRegulation> pointRegulation) {
         this.name = name;
         this.viewManger = new ViewManger(this);
-        this.marchManager = new MarchManager(this);
+        this.cityManager = new CityManager(this);
         this.pointManager = new PointManager(this);
-        this.pointRegulation = pointRegulation.apply(this);
+        this.marchManager = new MarchManager(this);
         this.cityRegulation = cityRegulation.apply(this);
+        this.marchRegulation = marchRegulation.apply(this);
+        this.pointRegulation = pointRegulation.apply(this);
+        log.info("init scene");
     }
 
     public void init() {
-
+        this.pointManager.init();
+        this.marchManager.init();
+        this.cityManager.init();
+        this.viewManger.init();
     }
 
     public WorldPoint getPoint(int x, int y) {
@@ -60,7 +73,7 @@ public abstract class AbstractScene {
 
     public abstract <T> T execute(Supplier<T> supplier);
 
-    public int putPoint(List<Integer> pointIds, PointExtraData pointExtraData) {
+    public int putPoint(Collection<Integer> pointIds, PointExtraData pointExtraData) {
         return pointManager.allocateRandomLocation(pointIds, pointExtraData);
     }
 
@@ -71,4 +84,9 @@ public abstract class AbstractScene {
     public abstract CityRegulation getCityRegulation();
 
     public abstract MarchRegulation getMarchRegulation();
+
+    public abstract boolean isThreadSafe();
+
+    public abstract PointRegulation getPointRegulation();
+
 }

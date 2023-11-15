@@ -1,4 +1,4 @@
-package org.pot.remote.api.rpc;
+package org.pot.common.serialization;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

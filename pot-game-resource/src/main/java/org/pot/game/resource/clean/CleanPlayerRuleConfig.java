@@ -2,10 +2,12 @@ package org.pot.game.resource.clean;
 
 
 import lombok.Getter;
+import org.pot.config.Configure;
 
 import java.util.Collections;
 import java.util.List;
 
+@Configure(file = "CleanPlayerRule.json")
 public class CleanPlayerRuleConfig {
     public CleanPlayerRuleConfig() {
     }

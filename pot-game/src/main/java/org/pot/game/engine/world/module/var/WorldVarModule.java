@@ -12,8 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class WorldVarModule extends AbstractWorldModule {
-    public static WorldVarModule getInstance() {
-        return WorldModuleType.WORLD_VAR.getInstance();
+    public static WorldVarModule singleton() {
+        return WorldModuleType.WORLD_VAR.getModule();
     }
 
     private final RunSignal saveSignal = new RunSignal(TimeUnit.MINUTES.toMillis(1));

@@ -1,9 +1,10 @@
 package org.pot.game.resource.switchcontrol;
 
 import lombok.Getter;
+import org.pot.game.resource.StringJsonConfigSpec;
 
 @Getter
-public class SwitchControl {
+public class SwitchControl extends StringJsonConfigSpec {
     private String id;
     private String openType;
     private int serverOpenDays;
