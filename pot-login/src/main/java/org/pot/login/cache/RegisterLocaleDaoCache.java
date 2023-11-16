@@ -21,6 +21,7 @@ public class RegisterLocaleDaoCache {
     @Scheduled(cron = "0/5 * * * * ?")
     public void executeJob() {
         List<RegisterLocale> nextList = ImmutableList.copyOf(registerLocaleDao.selectAll());
+        List<RegisterLocale> prevList = listReference.getAndUpdate(value -> nextList);
     }
 
     public List<RegisterLocale> selectAll() {

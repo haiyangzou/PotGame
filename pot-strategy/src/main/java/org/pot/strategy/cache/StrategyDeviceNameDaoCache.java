@@ -29,6 +29,7 @@ public class StrategyDeviceNameDaoCache {
     @Scheduled(cron = "0/5 * * * * ?")
     public void executeJob() {
         List<StrategyDeviceName> nextList = ImmutableList.copyOf(strategyDeviceNameDao.selectValidAll());
+        List<StrategyDeviceName> prevList = listReference.getAndUpdate(value -> nextList);
         mapReference.getAndUpdate(value -> ImmutableMap.copyOf(MapUtil.toHashMap(nextList, StrategyDeviceName::getDeviceName)));
         StrategyUtil.setDeviceNameList(listReference.get());
         StrategyUtil.setDeviceNameMap(mapReference.get());

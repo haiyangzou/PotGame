@@ -24,6 +24,7 @@ public class RegisterPolicyDaoCache {
     @Scheduled(cron = "0/5 * * * * ?")
     public void executeJob() {
         List<RegisterPolicy> nextList = ImmutableList.copyOf(registerPolicyDao.selectAll());
+        List<RegisterPolicy> prevList = listReference.getAndUpdate(value -> nextList);
     }
 
     @PostConstruct

@@ -25,6 +25,7 @@ public class ServerDaoCache {
     @Scheduled(cron = "0/5 * * * * ?")
     public void executeJob() {
         List<Server> nextList = ImmutableList.copyOf(serverDao.selectAll());
+        List<Server> prevList = listReference.getAndUpdate(value -> nextList);
         Map<Integer, Map<Integer, Server>> nextMap = new HashMap<>();
         nextList.forEach(server -> nextMap.computeIfAbsent(server.getTypeId(), k -> new TreeMap<>()).put(server.getServerId(), server));
         mpaReference.getAndUpdate(value -> MapUtil.immutableMapMap(nextMap));

@@ -23,6 +23,7 @@ public class RegisterGroupLocaleDaoCache {
     @Scheduled(cron = "0/5 * * * * ?")
     public void executeJob() {
         List<RegisterGroupLocale> nextList = ImmutableList.copyOf(registerGroupLocaleDao.selectAll());
+        List<RegisterGroupLocale> prevList = listReference.getAndUpdate(value -> nextList);
     }
 
     public List<RegisterGroupLocale> selectAll() {

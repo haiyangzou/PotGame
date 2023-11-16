@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class StrategyVersionDaoCache {
-    private final AtomicReference<List<StrategyVersion>> listReference = new AtomicReference<>();
+    private final AtomicReference<List<StrategyVersion>> listReference = new AtomicReference<>(null);
     private final AtomicReference<Map<String, Map<String, StrategyVersion>>> mapReference = new AtomicReference<>(null);
     @Resource
     private StrategyVersionDao strategyVersionDao;
@@ -30,6 +30,7 @@ public class StrategyVersionDaoCache {
     @Scheduled(cron = "0/5 * * * * ?")
     public void executeJob() {
         List<StrategyVersion> nextList = ImmutableList.copyOf(strategyVersionDao.selectAll());
+        List<StrategyVersion> prevList = listReference.getAndUpdate(value -> nextList);
         Map<String, Map<String, StrategyVersion>> map = nextList.stream().collect(Collectors.groupingBy(StrategyVersion::getVersion, Collectors.toMap((StrategyVersion v) -> StringUtils.stripToEmpty(v.getPackageName()), v -> v)));
         mapReference.getAndUpdate(value -> MapUtil.immutableMapMap(map));
         StrategyUtil.setVersionList(listReference.get());

@@ -29,6 +29,7 @@ public class StrategyIpDaoCache {
     @Scheduled(cron = "0/5 * * * * ?")
     public void executeJob() {
         List<StrategyIp> nextList = ImmutableList.copyOf(strategyIpDao.selectValidAll());
+        List<StrategyIp> prevList = listReference.getAndUpdate(value -> nextList);
         mapReference.getAndUpdate(value -> ImmutableMap.copyOf(MapUtil.toHashMap(nextList, StrategyIp::getIp)));
         StrategyUtil.setIpList(listReference.get());
         StrategyUtil.setIpMap(mapReference.get());

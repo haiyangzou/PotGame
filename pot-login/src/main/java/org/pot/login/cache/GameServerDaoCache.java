@@ -32,6 +32,7 @@ public class GameServerDaoCache {
     @Scheduled(cron = "0/5 * * * * ?")
     public void executeJob() {
         List<GameServer> nextList = ImmutableList.copyOf(gameServerDao.selectAll());
+        List<GameServer> prevList = listReference.getAndUpdate(value -> nextList);
         mapReference.getAndUpdate(value -> MapUtil.immutableMap(nextList, GameServer::getServerId));
     }
 

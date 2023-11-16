@@ -23,6 +23,7 @@ public class RegisterGroupDaoCache {
     @Scheduled(cron = "0/5 * * * * ?")
     public void executeJob() {
         List<RegisterGroup> nextList = ImmutableList.copyOf(registerGroupDao.selectAll());
+        List<RegisterGroup> prevList = listReference.getAndUpdate(value -> nextList);
     }
 
     public List<RegisterGroup> selectAll() {
