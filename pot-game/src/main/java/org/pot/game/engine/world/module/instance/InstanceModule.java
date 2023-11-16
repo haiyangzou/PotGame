@@ -14,11 +14,10 @@ public class InstanceModule extends AbstractWorldModule {
 
     @Override
     public void init() {
-        for (InstanceType instanceType : InstanceType.values()) {
-            instanceType.getInitOperation().operate();
-        }
+//        for (InstanceType instanceType : InstanceType.values()) {
+//            instanceType.getInitOperation().operate();
+//        }
         //加載數據庫中的副本數據
-
     }
 
     public static InstanceModule singleton() {

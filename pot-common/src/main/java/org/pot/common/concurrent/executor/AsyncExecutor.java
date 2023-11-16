@@ -61,8 +61,8 @@ public class AsyncExecutor {
                     log.error("Async Executor Error", e);
                 }
                 long elapsed = System.currentTimeMillis() - mills;
-                if (elapsed < slowMills) {
-                    log.warn("Aysnc Executor SLow: elapsed={}ms,caller={}", elapsed, caller);
+                if (elapsed > slowMills) {
+                    log.warn("Async Executor SLow: elapsed={}ms,caller={}", elapsed, caller);
                 }
             }
 

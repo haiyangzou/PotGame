@@ -151,7 +151,7 @@ public class EntityMapperBuilder<E> {
                         CtClass paramCtClass = classPool.getCtClass(paramType.getName());
                         paramTypeName = paramCtClass.getName();
                     }
-                    bodyBuilder.append("entity.").append(setter.getName()).append("((").append(paramTypeName).append(")(typeHandler[)").append(i).append("].get(resultSet, \")").append(columnName).append("\")));\n");
+                    bodyBuilder.append("entity.").append(setter.getName()).append("((").append(paramTypeName).append(")(typeHandler[").append(i).append("].get(resultSet, \"").append(columnName).append("\")));\n");
                 }
                 bodyBuilder.append("} catch(Throwable cause) {\n logger.error(\"failed to parse ").append(entityName).append(".").append(propertyName).append("\", cause);\n}\n");
             } else {

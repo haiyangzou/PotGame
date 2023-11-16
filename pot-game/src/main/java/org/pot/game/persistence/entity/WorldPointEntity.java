@@ -27,9 +27,9 @@ public class WorldPointEntity implements Serializable {
     private Integer x;
     @Column(name = "y")
     private Integer y;
-    @Column(name = "mainX")
+    @Column(name = "main_x")
     private Integer mainX;
-    @Column(name = "mainY")
+    @Column(name = "main_y")
     private Integer mainY;
     @Column(name = "extra_data")
     private PointExtraData extraData;

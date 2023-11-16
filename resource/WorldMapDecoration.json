@@ -1,0 +1,37 @@
+[
+  {
+    "id": 10101,
+    "titleCountX": 3,
+    "titleCountY": 3,
+    "canReplace": true,
+    "canBuild": false
+  },
+  {
+    "id": 10102,
+    "titleCountX": 3,
+    "titleCountY": 3,
+    "canReplace": true,
+    "canBuild": false
+  },
+  {
+    "id": 10103,
+    "titleCountX": 3,
+    "titleCountY": 3,
+    "canReplace": true,
+    "canBuild": false
+  },
+  {
+    "id": 10104,
+    "titleCountX": 3,
+    "titleCountY": 3,
+    "canReplace": true,
+    "canBuild": false
+  },
+  {
+    "id": 10201,
+    "titleCountX": 1,
+    "titleCountY": 1,
+    "canReplace": true,
+    "canBuild": true
+  }
+]

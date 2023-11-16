@@ -180,6 +180,12 @@ public interface SqlBuilder {
             this.builder = new StringBuilder("SELECT ");
         }
 
+        public SelectSqlBuilder limit(int limitMin, int limit) {
+            this.limitMin = limitMin;
+            this.limit = limit;
+            return this;
+        }
+
         public SelectSqlBuilder column(String columnName) {
             if (columns > 0) {
                 builder.append(",");
@@ -191,7 +197,7 @@ public interface SqlBuilder {
 
         @Override
         public String build(String conditions) {
-            builder.append(" FROM ").append(tableName).append('`');
+            builder.append(" FROM `").append(tableName).append('`');
             if (StringUtils.isNoneBlank(conditions)) {
                 builder.append(conditions);
             }

@@ -19,7 +19,6 @@ import org.pot.dal.dao.param.BatchParamSetter;
 import org.pot.dal.dao.param.ListParamSetter;
 import org.pot.dal.dao.param.ParamSetter;
 
-import java.lang.reflect.Parameter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -56,7 +55,7 @@ public abstract class DbExecutorAdapter implements DbExecutor {
 
     @Override
     public <T> T executeQueryObject(EntityParser<T> parser, String sql) {
-        return executeQueryObject(parser, sql, (Parameter) null);
+        return executeQueryObject(parser, sql, (ParamSetter) null);
     }
 
     @Override
@@ -97,7 +96,7 @@ public abstract class DbExecutorAdapter implements DbExecutor {
 
     @Override
     public <T> List<T> executeQueryList(EntityParser<T> parser, String sql) {
-        return executeQueryList(parser, sql, (Parameter) null);
+        return executeQueryList(parser, sql, (ParamSetter) null);
     }
 
     @Override
@@ -117,7 +116,7 @@ public abstract class DbExecutorAdapter implements DbExecutor {
 
     @Override
     public int executeUpdate(String sql) {
-        return executeUpdate(sql, (Parameter) null);
+        return executeUpdate(sql, (ParamSetter) null);
     }
 
     @Override
