@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="queueSize" value="10240"/>
+    <property name="discardingThreshold" value="0"/>
+    <property name="LOG_HOME" value="./logs"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <springProperty scop="context" name="spring.application.name" source="spring.application.name" defaultValue=""/>
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+    <appender name="runtime" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/runtime/runtime.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <MaxHistory>7</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+    <appender name="async-console" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="console"/>
+        <queueSize>${queueSize}</queueSize>
+        <discardingThreshold>${discardingThreshold}</discardingThreshold>
+    </appender>
+    <appender name="async-runtime" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="runtime"/>
+        <queueSize>${queueSize}</queueSize>
+        <discardingThreshold>${discardingThreshold}</discardingThreshold>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="async-console"/>
+        <appender-ref ref="async-runtime"/>
+    </root>
+    <logger name="org.reflections.Reflections" level="WARN" additivity="true"/>
+    <logger name="org.apache.thrift" level="ERROR" additivity="true"/>
+    <logger name="org.quartz" level="WARN" additivity="true"/>
+</configuration>
