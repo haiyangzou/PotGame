@@ -11,6 +11,8 @@ import org.pot.core.AppEngine;
 import org.pot.core.engine.EngineInstance;
 import org.pot.core.engine.IHttpServer;
 import org.pot.core.net.netty.*;
+import org.pot.core.net.netty.websocket.WebCmdCodec;
+import org.pot.core.net.netty.websocket.WebSocketServer;
 import org.pot.gateway.guest.GuestWaitingRoom;
 import org.pot.gateway.remote.RemoteServerManager;
 import org.pot.gateway.remote.RemoteUserManager;
@@ -35,6 +37,8 @@ public class GatewayEngine extends AppEngine<GatewayEngineConfig> {
     private NettyClientEngine<FramePlayerMessage> nettyClientEngine;
     @Getter
     private NettyServerEngine<FrameCmdMessage> nettyServerEngine;
+    @Getter
+    private WebSocketServer<FrameCmdMessage> webSocketServer;
     @Getter
     private RemoteUserManager remoteUserManager;
     @Getter
@@ -66,9 +70,15 @@ public class GatewayEngine extends AppEngine<GatewayEngineConfig> {
 
     private void initNettyServerEngine() {
         GuestWaitingRoom.getInstance().setAccept(true);
-        this.nettyServerEngine = new NettyServerEngine<>(getConfig(), FrameCmdCodec::new);
-        this.nettyServerEngine.getConnectionManager().setListener(GuestWaitingRoom.getInstance());
-        this.nettyServerEngine.start();
+        if (Constants.Env.isWeb()) {
+            this.webSocketServer = new WebSocketServer<>(getConfig(), WebCmdCodec::new);
+            this.webSocketServer.getConnectionManager().setListener(GuestWaitingRoom.getInstance());
+            this.webSocketServer.start();
+        } else {
+            this.nettyServerEngine = new NettyServerEngine<>(getConfig(), FrameCmdCodec::new);
+            this.nettyServerEngine.getConnectionManager().setListener(GuestWaitingRoom.getInstance());
+            this.nettyServerEngine.start();
+        }
     }
 
     private void initServerInfo() throws Exception {

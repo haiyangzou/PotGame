@@ -35,6 +35,6 @@ public abstract class NettyBaseEngine<M extends FrameMessage> extends ChannelIni
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
         pipeline.addLast(codecFactory.apply(this));
-        pipeline.addLast(new NettyChannleHandler<>(this));
+        pipeline.addLast(new NettyChannelHandler<>(this));
     }
 }

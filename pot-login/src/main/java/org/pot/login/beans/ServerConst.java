@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 public class ServerConst {
     private Server server;
     private boolean debugMode;
+    private boolean webMode = true;
     private int workerThreadMin = 10;
     private int workerThreadMax = 10;
     private int workerQueueMaxSize = 1000000;
@@ -20,5 +21,6 @@ public class ServerConst {
     @PostConstruct
     private void afterPropertiesSet() {
         Constants.Env.setDebugOption(String.valueOf(debugMode));
+        Constants.Env.setWebOption(String.valueOf(webMode));
     }
 }

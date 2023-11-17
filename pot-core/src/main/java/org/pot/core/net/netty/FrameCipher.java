@@ -17,7 +17,7 @@ public class FrameCipher {
         this.initialRcvKey = initialRcvKey;
     }
 
-    byte encrypt(byte[] bytes) {
+    public byte encrypt(byte[] bytes) {
         if (++sndKey == initialSndKey) {
             sndKey = 0;
         }
@@ -34,7 +34,7 @@ public class FrameCipher {
         return encryptByte(summary, encryptKey);
     }
 
-    boolean decrypt(byte check, byte[] bytes) {
+    public boolean decrypt(byte check, byte[] bytes) {
         if (++rcvKey == initialRcvKey) {
             rcvKey = 0;
         }

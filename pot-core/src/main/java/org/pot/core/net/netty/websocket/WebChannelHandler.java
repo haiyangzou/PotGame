@@ -1,18 +1,19 @@
-package org.pot.core.net.netty;
-
-import org.pot.core.net.connection.IConnection;
+package org.pot.core.net.netty.websocket;
 
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.haproxy.HAProxyMessage;
+import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
+import org.pot.core.net.connection.IConnection;
+import org.pot.core.net.netty.FrameMessage;
 
 @Slf4j
-public class NettyChannleHandler<M extends FrameMessage> extends ChannelDuplexHandler {
-    private final NettyBaseEngine<M> engine;
+public class WebChannelHandler<M extends FrameMessage> extends ChannelDuplexHandler {
+    private final WebBaseEngine<M> engine;
 
-    public NettyChannleHandler(NettyBaseEngine<M> engine) {
+    public WebChannelHandler(WebBaseEngine<M> engine) {
         this.engine = engine;
     }
 
@@ -51,7 +52,7 @@ public class NettyChannleHandler<M extends FrameMessage> extends ChannelDuplexHa
             HAProxyMessage haProxyMessage = (HAProxyMessage) msg;
             connection.setRemoteHost(haProxyMessage.sourceAddress());
         }
-        if (msg instanceof FrameMessage) {
+        if (msg instanceof WebSocketFrame) {
             int size = connection.getRecvMessageQueueSize();
             int maxSize = engine.getConfig().getConnectionRecvQueueMaxSize();
             if (size > maxSize) {

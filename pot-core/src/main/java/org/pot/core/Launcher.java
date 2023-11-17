@@ -42,6 +42,8 @@ public class Launcher implements Daemon {
                 Configurations configurations = new Configurations();
                 File propertiesFile = new File(Launcher.Env.getConfigFile());
                 PropertiesConfiguration configuration = configurations.properties(propertiesFile);
+                Constants.Env.setDebugOption(configuration.getString("app.debug"));
+                Constants.Env.setWebOption(configuration.getString("app.web"));
                 engineClass = Class.forName(configuration.getString("app.engine.class"));
                 if (!AppEngine.class.isAssignableFrom(engineClass)) {
                     String info = String.format("Object named after %s must implement %s", engineClass, AppEngine.class.getName());

@@ -28,6 +28,8 @@ public interface Constants {
         private static String contextPath;
         @Getter
         private static boolean debug;
+        @Getter
+        private static boolean web;
 
         static {
             try {
@@ -58,6 +60,13 @@ public interface Constants {
             debug = BooleanUtils.toBoolean(debugOption);
             if (debug) {
                 log.warn("DebugOption={},please ensure this is not production environment!", debugOption);
+            }
+        }
+
+        public static void setWebOption(String webOption) {
+            web = BooleanUtils.toBoolean(webOption);
+            if (web) {
+                log.warn("WebOption={},please ensure this is not production environment!", webOption);
             }
         }
     }

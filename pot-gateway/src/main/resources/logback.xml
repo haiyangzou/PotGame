@@ -64,12 +64,12 @@
         <discardingThreshold>${discardingThreshold}</discardingThreshold>
     </appender>
     <appender name="async-guest" class="ch.qos.logback.classic.AsyncAppender">
-        <appender-ref ref="player"/>
+        <appender-ref ref="guest"/>
         <queueSize>${queueSize}</queueSize>
         <discardingThreshold>${discardingThreshold}</discardingThreshold>
     </appender>
     <appender name="async-remote" class="ch.qos.logback.classic.AsyncAppender">
-        <appender-ref ref="flow"/>
+        <appender-ref ref="remote"/>
         <queueSize>${queueSize}</queueSize>
         <discardingThreshold>${discardingThreshold}</discardingThreshold>
     </appender>
