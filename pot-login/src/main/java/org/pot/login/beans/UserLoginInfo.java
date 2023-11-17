@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.pot.common.client.AppUpdatePolicy;
 import org.pot.common.concurrent.exception.IErrorCode;
-import org.pot.core.util.GeoIpUtil;
+import org.pot.common.util.GeoIpUtil;
 import org.pot.login.entity.UserAccount;
 import org.pot.message.protocol.login.LoginReqC2S;
 

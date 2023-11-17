@@ -1,4 +1,4 @@
-package org.pot.core.util;
+package org.pot.common.util;
 
 import com.maxmind.db.CHMCache;
 import com.maxmind.geoip2.DatabaseReader;
