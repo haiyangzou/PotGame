@@ -50,7 +50,7 @@ public class SpringRedisLock extends RedisLock {
             Stopwatch stopwatch = Stopwatch.createStarted();
             do {
                 if (acquire(redisTemplate.execute(redisScript, keys, argv).blockFirst())) {
-                    long elapsed = stopwatch.elapsed().toMillis();
+                    long elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
                     if (elapsed > SLOW_LOCK_MILLIS) {
                         log.warn("Redis Lock Slow. name = {}", name);
                         RedisLock.elapsedTimeMonitor.recordElapsedTime(name, elapsed);
@@ -58,7 +58,7 @@ public class SpringRedisLock extends RedisLock {
                     return;
                 }
                 TimeUnit.MILLISECONDS.sleep(SPIN_INTERVAL_MILLIS);
-            } while (stopwatch.elapsed().toMillis() < timeoutMillis);
+            } while (stopwatch.elapsed(TimeUnit.MILLISECONDS) < timeoutMillis);
             throw new TimeoutException("Redis Lock Timeout.name=" + name);
         }
     }

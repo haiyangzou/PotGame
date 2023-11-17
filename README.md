@@ -14,10 +14,7 @@ spring-mongo
 2. mongodb
 3. maven
 4. netty
-5. dubbo
 6. redis
-7. zookeeper
-8. kafka
 ## kcp lockstep
 1.kcp-base
 

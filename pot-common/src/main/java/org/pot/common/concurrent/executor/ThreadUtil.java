@@ -75,7 +75,7 @@ public class ThreadUtil {
             long seconds = 0;
             do {
                 unit.sleep(await);
-                long ms = stopwatch.elapsed().toMillis();
+                long ms = stopwatch.elapsed(TimeUnit.MILLISECONDS);
                 if (seconds != TimeUnit.MILLISECONDS.toSeconds(ms)) {
                     seconds = TimeUnit.MINUTES.toSeconds(ms);
                 }
