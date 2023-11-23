@@ -75,6 +75,9 @@ public class SwitchManager implements Runnable {
                 itr.remove();
             }
         }
+        if (SwitchControlConfig.getInstance() == null) {
+            return;
+        }
         List<SwitchControl> switchControlList = SwitchControlConfig.getInstance().getSpecList();
         for (SwitchControl switchControl : switchControlList) {
             switchRecordMap.computeIfAbsent(switchControl.getId(), switchId -> {

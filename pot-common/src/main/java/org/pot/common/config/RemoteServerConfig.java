@@ -9,6 +9,12 @@ public class RemoteServerConfig extends EndPointConfig {
     private int clientTimeout = 1000;
     private int selectorThreads = 10;
     private int acceptQueueSizePerThread = 10;
+    private int backlog = 1024;
+    private int maxReadBufferBytes = 2 * 1024 * 1024;
+    private int workerThreadsMin = 10;
+    private int workerThreadsMax = 200;
+    private int workerQueueMaxSize = 1000000;
+    private int workerKeepAliveSeconds = 300;
 
     public static RemoteServerConfig loadRemoteConfig(Configuration config) {
         RemoteServerConfig remoteServerConfig = new RemoteServerConfig();

@@ -2,6 +2,7 @@ package org.pot.common.util;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
 import javax.annotation.Nullable;
@@ -10,6 +11,14 @@ import java.util.function.Function;
 
 public class MapUtil {
     private static final int DEFAULT_MAP_INITIAL_CAPACITY = 1 << 8;
+
+    public static <K, V> Map<K, Set<V>> immutableMapSet(Map<K, Set<V>> map) {
+        Map<K, Set<V>> temp = new LinkedHashMap<>();
+        for (Map.Entry<K, Set<V>> kListEntry : map.entrySet()) {
+            temp.put(kListEntry.getKey(), ImmutableSet.copyOf(kListEntry.getValue()));
+        }
+        return ImmutableMap.copyOf(temp);
+    }
 
     public static <K, V> Map<K, List<V>> immutableMapList(Map<K, List<V>> map) {
         Map<K, List<V>> temp = new LinkedHashMap<>();
