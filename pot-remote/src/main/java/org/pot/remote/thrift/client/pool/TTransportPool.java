@@ -47,4 +47,8 @@ public class TTransportPool {
     public void prepare() throws Exception {
         internalPool.preparePool();
     }
+
+    public void destroy() {
+        internalPool.close();
+    }
 }

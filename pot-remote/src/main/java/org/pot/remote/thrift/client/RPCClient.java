@@ -84,4 +84,12 @@ public class RPCClient {
     public boolean isLocal() {
         return RpcClientManager.instance.getLocalServerId().equals(this.remoteClientConfig.getServerId());
     }
+
+    public void close() {
+        proxyObjectMap.clear();
+        if (pool != null) {
+            pool.destroy();
+            pool = null;
+        }
+    }
 }
