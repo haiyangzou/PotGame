@@ -7,6 +7,7 @@ import org.pot.common.communication.server.ServerType;
 import org.pot.common.concurrent.executor.ScheduledExcutor;
 import org.pot.common.config.RemoteServerFilterConfig;
 import org.pot.common.util.MapUtil;
+import org.pot.common.util.RandomUtil;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -58,5 +59,14 @@ public class RpcServerTypeCache {
         for (RpcServerCache value : serverIdMap.values()) {
             executor.submit(value::ensureAvailable);
         }
+    }
+
+    public RpcServerCache getRpcServerCache(int serverId) {
+        RpcServerCache rpcServerCache = serverIdMap.get(serverId);
+        return rpcServerCache == null || rpcServerCache.isAvailable() ? rpcServerCache : null;
+    }
+
+    public RpcServerCache randomRpcServerCache() {
+        return RandomUtil.naturalRandomOne(serverIdMap.values().stream().filter(RpcServerCache::isAvailable).collect(Collectors.toList()));
     }
 }

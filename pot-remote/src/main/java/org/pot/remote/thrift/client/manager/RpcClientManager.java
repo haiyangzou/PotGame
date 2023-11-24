@@ -6,8 +6,11 @@ import org.pot.cache.server.ServerListCache;
 import org.pot.common.communication.server.Server;
 import org.pot.common.communication.server.ServerId;
 import org.pot.common.communication.server.ServerType;
+import org.pot.common.concurrent.exception.ExceptionUtil;
 import org.pot.common.concurrent.executor.ScheduledExcutor;
+import org.pot.common.util.ClassUtil;
 import org.pot.remote.thrift.RemoteUtil;
+import org.pot.remote.thrift.define.IRemote;
 import org.pot.remote.thrift.server.RemoteServer;
 
 import java.util.List;
@@ -16,6 +19,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -56,5 +60,51 @@ public class RpcClientManager {
         } catch (Throwable e) {
             log.error("ensure rpc available error", e);
         }
+    }
+
+    public <T extends IRemote> T randomService(ServerType serverType, Class<T> serviceInterface) {
+        try {
+            RpcServerTypeCache rpcServerTypeCache = servertypeCacheMap.computeIfAbsent(serverType, RpcServerTypeCache::new);
+            RpcServerCache rpcServerCache = rpcServerTypeCache.randomRpcServerCache();
+            if (rpcServerCache != null) {
+                return rpcServerCache.getService(serviceInterface);
+            } else {
+                String caller = ExceptionUtil.abbreviate(ExceptionUtil.getCaller(RpcClientManager.class));
+                log.error("get remote service null:caller={},{} {}", caller, serverType, ClassUtil.getAbbreviatedName(serviceInterface));
+            }
+        } catch (Throwable throwable) {
+            log.error("get remote service error:{} {}", serverType, ClassUtil.getAbbreviatedName(serviceInterface), throwable);
+        }
+        return null;
+    }
+
+    public <T extends IRemote> T getService(ServerType serverType, int serverId, Class<T> serviceInterface) {
+        try {
+            RpcServerTypeCache rpcServerTypeCache = servertypeCacheMap.computeIfAbsent(serverType, RpcServerTypeCache::new);
+            RpcServerCache rpcServerCache = rpcServerTypeCache.getRpcServerCache(serverId);
+            if (rpcServerCache != null) {
+                return rpcServerCache.getService(serviceInterface);
+            } else {
+                String caller = ExceptionUtil.abbreviate(ExceptionUtil.getCaller(RpcClientManager.class));
+                log.error("get remote service null:caller={},{}[{}] {}", caller, serverType, serverId, ClassUtil.getAbbreviatedName(serviceInterface));
+            }
+        } catch (Throwable throwable) {
+            log.error("get remote service error:{}[{}] {}", serverType, serverId, ClassUtil.getAbbreviatedName(serviceInterface), throwable);
+        }
+        return null;
+    }
+
+    public <T extends IRemote> T getService(ServerId serverId, Class<T> serviceInterface) {
+        return serverId == null ? null : this.getService(serverId.serverType, serverId.id, serviceInterface);
+    }
+
+    public <T extends IRemote> void ifPresentService(ServerId serverId, Class<T> serviceInterface, Consumer<T> func) {
+        T remote = this.getService(serverId.serverType, serverId.id, serviceInterface);
+        if (remote != null) func.accept(remote);
+    }
+
+    public <T extends IRemote> void ifPresentService(ServerType serverType, Class<T> serviceInterface, Consumer<T> func) {
+        T remote = this.randomService(serverType, serviceInterface);
+        if (remote != null) func.accept(remote);
     }
 }

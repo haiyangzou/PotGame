@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.pot.PotPackage;
 import org.pot.cache.kingdom.KingdomCache;
 import org.pot.common.Constants;
+import org.pot.common.communication.server.ServerType;
 import org.pot.common.concurrent.executor.ThreadUtil;
 import org.pot.common.date.DateTimeUtil;
 import org.pot.common.id.UniqueIdUtil;
@@ -25,6 +26,8 @@ import org.pot.game.gate.GhostUtil;
 import org.pot.game.gate.TunnelManager;
 import org.pot.game.persistence.GameDb;
 import org.pot.game.resource.GameConfigSupport;
+import org.pot.remote.thrift.client.manager.RpcClientManager;
+import org.pot.remote.thrift.server.RemoteServer;
 import org.pot.web.JettyHttpServer;
 
 import java.time.LocalDate;
@@ -41,6 +44,8 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
 
     @Getter
     private IHttpServer httpServer;
+
+    private RemoteServer remoteServer;
 
     public static GameEngine getInstance() {
         return (GameEngine) EngineInstance.getInstance();
@@ -91,7 +96,11 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
         RankManager.getInstance().init();
         WorldManager.getInstance().init();
         GhostUtil.load();
+        remoteServer = new RemoteServer(getConfig().getRemoteServerConfig());
+        remoteServer.addServerTypeHandlerIfAbsent(ServerType.GAME_SERVER, GameServerInfo.getServerIdObject().serverType);
+        RpcClientManager.instance.open(GameServerInfo.getServerIdObject(), remoteServer);
         SwitchManager.getInstance().startup();
+        remoteServer.start();
         initHttpServer();
         initNettyClientEngine();
         initNettyServerEngine();

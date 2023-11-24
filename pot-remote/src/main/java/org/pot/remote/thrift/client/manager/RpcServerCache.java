@@ -54,6 +54,11 @@ public class RpcServerCache {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends IRemote> T getService(Class<T> serviceClass) {
+        return (T) this.serviceProxyMap.get(serviceClass);
+    }
+
     boolean isAvailable() {
         return rpcClient != null && rpcClient.isAvailable();
     }
