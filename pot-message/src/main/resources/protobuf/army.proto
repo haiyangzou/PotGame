@@ -1,0 +1,11 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package = "org.pot.message.protocol.army";
+option java_multiple_files = true;
+message PlayerArmyDto{
+ int32 armyId =1;
+ int64 count =2;
+}
+message PushTotalArmyS2C{
+    repeated PlayerArmyDto playerTotalArmys =1;
+}

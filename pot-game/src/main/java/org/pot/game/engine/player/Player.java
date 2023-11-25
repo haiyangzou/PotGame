@@ -19,6 +19,7 @@ import org.pot.game.engine.player.component.PlayerSceneComponent;
 import org.pot.game.engine.player.module.PlayerAgentsInitializer;
 import org.pot.game.engine.player.module.event.PlayerEventsInitializer;
 import org.pot.game.engine.player.module.ghost.PlayerGhostAgent;
+import org.pot.game.engine.player.module.tower.PlayerTowerAgent;
 import org.pot.game.engine.player.union.PlayerUnionAgent;
 import org.pot.game.gate.PlayerSession;
 import org.pot.game.persistence.entity.PlayerProfileEntity;
@@ -43,6 +44,11 @@ public class Player {
     public final PlayerSceneComponent sceneComponent = new PlayerSceneComponent(this);
     public final PlayerCommonAgent commonAgent = new PlayerCommonAgent(this);
     public final PlayerUnionAgent unionAgent = new PlayerUnionAgent(this);
+
+    public final PlayerTowerAgent towerAgent = new PlayerTowerAgent(this);
+
+    public final PlayerTowerAgent armyAgent = new PlayerTowerAgent(this);
+
     @Getter
     public final List<PlayerAgentAdapter> agentAdapterList;
     @Getter

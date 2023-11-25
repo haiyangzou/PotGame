@@ -27,6 +27,41 @@ public class ViewManger {
     public void tick() {
     }
 
+    public void notifyUpdateMarch(March march) {
+        pushMarch(march);
+    }
+
+    public void notifyAddMarch(March march) {
+        pushMarch(march);
+    }
+
+    public void notifyRemoveMarch(March march) {
+        RemoveWorldMarchInfoS2C.Builder builder = RemoveWorldMarchInfoS2C.newBuilder();
+        RemoveWorldMarchInfoS2C mesage = builder.addUid(march.getId()).setSid(GameServerInfo.getServerId()).build();
+        scene.submit(() -> {
+            views.values().forEach(view -> view.sendMessage(mesage));
+            remoteViews.values().forEach(view -> view.sendMessage(mesage));
+        });
+    }
+
+
+    private void pushMarch(March march) {
+        scene.submit(() -> {
+            for (View view : views.values()) {
+                AddWorldMarchInfoS2C.Builder builder = AddWorldMarchInfoS2C.newBuilder();
+                builder.addMarchs(march.buildWorldMarchInfo(view.getPlayerId()));
+                builder.setSid(GameServerInfo.getServerId());
+                view.sendMessage(builder.build());
+            }
+            for (View view : remoteViews.values()) {
+                AddWorldMarchInfoS2C.Builder builder = AddWorldMarchInfoS2C.newBuilder();
+                builder.addMarchs(march.buildWorldMarchInfo(view.getPlayerId()));
+                builder.setSid(GameServerInfo.getServerId());
+                view.sendMessage(builder.build());
+            }
+        });
+    }
+
     public IErrorCode remoteBrowseView(long playerId, int fromServerId, WorldMapViewC2S request) {
         ViewLevel viewLevel = ViewLevel.findById(request.getViewLevel());
         if (viewLevel == null) {

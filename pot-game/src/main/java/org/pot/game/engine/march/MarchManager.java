@@ -3,6 +3,8 @@ package org.pot.game.engine.march;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.game.engine.enums.MarchState;
+import org.pot.game.engine.march.alarm.MarchAlarmDispatcher;
+import org.pot.game.engine.march.alarm.MarchPlayerNotifier;
 import org.pot.game.engine.march.war.WarManager;
 import org.pot.game.engine.scene.AbstractScene;
 import org.pot.game.engine.world.WorldManager;
@@ -23,6 +25,10 @@ public class MarchManager {
     private final List<MarchListener> listeners = new CopyOnWriteArrayList<>();
     private final Queue<String> changed = new LinkedBlockingDeque<>();
     private final Map<Long, CopyOnWriteArrayList<String>> playerMarchMap = new ConcurrentHashMap<>();
+
+    private final MarchAlarmDispatcher marchAlarmDispatcher = new MarchAlarmDispatcher();
+
+    private final MarchPlayerNotifier marchPlayerNotifier = new MarchPlayerNotifier();
 
     public MarchManager(AbstractScene scene) {
         this.scene = scene;
@@ -76,6 +82,10 @@ public class MarchManager {
                 playerMarchMap.computeIfAbsent(march.getOwnerId(), k -> new CopyOnWriteArrayList<>()).addIfAbsent(march.getId());
             }
             march.onAdd(this);
+            scene.getMarchRegulation().onMarchAdd(march);
+            scene.getViewManger().notifyAddMarch(march);
+            marchAlarmDispatcher.onMarchAdd(march);
+            marchPlayerNotifier.notifyMarchPlayer(this, march);
             listeners.forEach(listeners -> listeners.onMarchAdded(march));
         } catch (Throwable ex) {
             log.error("March add Error", ex);
@@ -97,6 +107,10 @@ public class MarchManager {
                 }
             }
             listeners.forEach(listeners -> listeners.onMarchRemoved(march));
+            marchPlayerNotifier.notifyMarchPlayer(this,march);
+            marchAlarmDispatcher.onMarchRemove(march);
+            scene.getViewManger().notifyRemoveMarch(march);
+            scene.getMarchRegulation().onMarchRemove(march);
             march.onRemove(this);
         } catch (Throwable ex) {
             log.error("March add Error", ex);
@@ -143,6 +157,10 @@ public class MarchManager {
 
     private void innerUpdateMarch(March march) {
         try {
+            scene.getMarchRegulation().onMarchUpdate(march);
+            scene.getViewManger().notifyUpdateMarch(march);
+            marchAlarmDispatcher.onMarchUpdate(march);
+            marchPlayerNotifier.notifyMarchPlayer(this, march);
             listeners.forEach(listeners -> listeners.onMarchUpdated(march));
         } catch (Throwable ex) {
             log.error("March add Error", ex);
@@ -159,5 +177,23 @@ public class MarchManager {
 
     public void save(boolean async) {
         scene.getMarchRegulation().save(async);
+    }
+
+    public List<March> getPlayerMarches(long playerId) {
+        List<String> list = playerMarchMap.get(playerId);
+        if (list == null) {
+            return Collections.emptyList();
+        }
+        List<March> result = new ArrayList<>();
+        for (String marchId : list) {
+            March march = marchMap.get(marchId);
+            if (march == null) {
+                list.remove(marchId);
+                continue;
+            }
+            result.add(march);
+        }
+        result.sort(Comparator.comparingLong(March::getCreateTime));
+        return result;
     }
 }

@@ -51,6 +51,11 @@ public class WorldHuntMarch extends BaseMarch {
         }
     }
 
+    @Override
+    public long getCreateTime() {
+        return createTime;
+    }
+
     private void arrived() {
 
     }

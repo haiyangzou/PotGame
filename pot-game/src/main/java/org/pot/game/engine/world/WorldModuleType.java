@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.pot.common.relect.ConstructorUtil;
 import org.pot.game.engine.world.module.instance.InstanceModule;
 import org.pot.game.engine.world.module.map.WorldMapModule;
-import org.pot.game.engine.world.module.march.WorldMarchModule;
 import org.pot.game.engine.world.module.monster.WorldMonsterModule;
 import org.pot.game.engine.world.module.rally.WorldRallyModule;
 import org.pot.game.engine.world.module.resource.WorldResourceModule;
@@ -14,7 +13,6 @@ import org.pot.game.engine.world.module.var.WorldVarModule;
 public enum WorldModuleType {
     WORLD_VAR(WorldVarModule.class),
     WORLD_MAP(WorldMapModule.class),
-    WORLD_MARCH(WorldMarchModule.class),
     WORLD_RALLY(WorldRallyModule.class),
     WORLD_MONSTER(WorldMonsterModule.class),
     WORLD_RESOURCE(WorldResourceModule.class),

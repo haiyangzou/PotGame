@@ -87,3 +87,15 @@ message WorldMapAttackC2S{
   repeated MarchHero heroes = 2;
   repeated MarchSoldier soldiers = 3;
 }
+message PlayerOwnerMarchS2C{
+    repeated WorldMarchInfo marchs = 1;
+    int32 sid = 2;
+}
+message CityReinforcingMarchS2C{
+    repeated WorldMarchInfo marchs = 1;
+    int32 sid = 2;
+}
+message RemoveWorldMarchInfoS2C{
+ repeated string uid = 1;
+ int32 sid = 2;
+}

@@ -1,5 +1,7 @@
 package org.pot.game.engine.scene;
 
+import org.pot.game.engine.march.March;
+
 public abstract class MarchRegulation {
     protected final AbstractScene scene;
 
@@ -18,4 +20,10 @@ public abstract class MarchRegulation {
     public abstract void init();
 
     public abstract void tick();
+
+    public abstract void onMarchAdd(March march);
+
+    public abstract void onMarchRemove(March march);
+
+    public abstract void onMarchUpdate(March march);
 }
