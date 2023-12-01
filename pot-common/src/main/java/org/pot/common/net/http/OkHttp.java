@@ -96,7 +96,7 @@ public class OkHttp {
                 return get(redirectUrl);
             }
             ensureSuccessful(url, response);
-            return Objects.requireNonNull(response.body()).toString();
+            return Objects.requireNonNull(response.body()).string();
         } catch (IOException e) {
             log.error(url, e);
             throw e;

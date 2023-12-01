@@ -16,7 +16,9 @@ import org.pot.core.net.netty.websocket.WebSocketServer;
 import org.pot.gateway.guest.GuestWaitingRoom;
 import org.pot.gateway.remote.RemoteServerManager;
 import org.pot.gateway.remote.RemoteUserManager;
+import org.pot.message.protocol.ProtocolSupport;
 import org.pot.web.JettyHttpServer;
+import org.pot.gateway.guest.GuestRequestHandlerSupport;
 
 import java.util.concurrent.TimeUnit;
 
@@ -50,6 +52,8 @@ public class GatewayEngine extends AppEngine<GatewayEngineConfig> {
 
     @Override
     protected void doStart() throws Exception {
+        ProtocolSupport.init();
+        GuestRequestHandlerSupport.init();
         initServerInfo();
         initNettyClientEngine();
         remoteUserManager = new RemoteUserManager();
@@ -70,6 +74,7 @@ public class GatewayEngine extends AppEngine<GatewayEngineConfig> {
 
     private void initNettyServerEngine() {
         GuestWaitingRoom.getInstance().setAccept(true);
+        addTicker(GuestWaitingRoom.getInstance());
         if (Constants.Env.isWeb()) {
             this.webSocketServer = new WebSocketServer<>(getConfig(), WebCmdCodec::new);
             this.webSocketServer.getConnectionManager().setListener(GuestWaitingRoom.getInstance());

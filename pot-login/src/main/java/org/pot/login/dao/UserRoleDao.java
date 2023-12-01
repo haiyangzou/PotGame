@@ -10,7 +10,7 @@ import java.util.List;
 public interface UserRoleDao {
     UserRole selectByUid(@Param("uid") long uid);
 
-    public List<UserRole> selectByAccountUid(long gameUid);
+    public List<UserRole> selectByAccountUid(@Param("accountUid") long gameUid);
 
     void insertRoleOnExistUpdateLastLogin(@Param("userRole") UserRole userRole);
 

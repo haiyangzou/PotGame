@@ -76,7 +76,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>org.pot.login.PotLogin</mainClass>
+                            <mainClass>org.pot.strategy.StrategyServerApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -113,7 +113,7 @@
                             </includes>
                         </resource>
                     </webResources>
-                    <warName>pot-login</warName>
+                    <warName>pot-strategy</warName>
                 </configuration>
             </plugin>
             <plugin>

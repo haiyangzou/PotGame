@@ -21,31 +21,23 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
     <insert id="insertOne" parameterType="org.pot.common.communication.server.GameServer">
-        INSERT INTO `game_server` (`server_id`,
-        `server_name`,
-        `host`,
-        `port`,
-        `http_port`,
-        `rpc_port`,
-        `open_time`,
-        `target_server_id`,
-        `union_server_id`)
+        INSERT INTO `game_server` (`server_id`, `server_name`, `host`, `port`, `http_port`, `rpc_port`, `open_time`, `target_server_id`, `union_server_id`)
         VALUES( #{gameServer.serverId},
-        #{gameServer.serverName},
-        #{gameServer.host},
-        #{gameServer.port},
-        #{gameServer.httpPort},
-        #{gameServer.rpcPort},
-        #{gameServer.openTime},
-        #{gameServer.targetServerId},
-        #{gameServer.unionServerId})
+                #{gameServer.serverName},
+                #{gameServer.host},
+                #{gameServer.port},
+                #{gameServer.httpPort},
+                #{gameServer.rpcPort},
+                #{gameServer.openTime},
+                #{gameServer.targetServerId},
+                #{gameServer.unionServerId})
         ON DUPLICATE KEY UPDATE `server_name` = VALUES(`server_name`),
-        `host` = VALUES(`host`),
-        `port` = VALUES(`port`),
-        `http_port` = VALUES(`http_port`),
-        `rpc_port` = VALUES(`rpc_port`),
-        `open_time` = VALUES(`open_time`),
-        `target_server_id` = VALUES(`target_server_id`)
+                                `host` = VALUES(`host`),
+                                `port` = VALUES(`port`),
+                                `http_port` = VALUES(`http_port`),
+                                `rpc_port` = VALUES(`rpc_port`),
+                                `open_time` = VALUES(`open_time`),
+                                `target_server_id` = VALUES(`target_server_id`)
     </insert>
     <select id="selectAll" resultMap="BaseResultMap">
         SELECT *

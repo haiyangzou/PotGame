@@ -12,7 +12,7 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
     <insert id="insertRoleOnExistUpdateLastLogin" parameterType="org.pot.login.entity.UserRole">
-        INERT INTO
+        INSERT INTO
         `user_role`(`uid`,`account_uid`,`server_id`,`last_login_time`)
         VALUES (#{userRole.uid}, #{userRole.accountUid}, #{userRole.serverId}, #{userRole.lastLoginTime})
         ON DUPLICATE KEY UPDATE `last_login_time` = #{userRole.lastLoginTime}
@@ -32,7 +32,7 @@
     <select id="selectByAccountUid" resultMap="BaseResultMap">
         SELECT *
         FROM `user_role`
-        WHERE `uid` = #{accountUid}
+        WHERE `account_uid` = #{accountUid}
         ORDER BY `last_login_time` DESC
     </select>
     <select id="selectByUids" resultMap="BaseResultMap">

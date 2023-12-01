@@ -47,4 +47,9 @@ public class UserLoginInfo {
         this.gameUid = loginReqC2S.getGameUid();
         this.debugRole = debugRole;
     }
+
+    public void setUserAccount(UserAccount account) {
+        this.userAccount = account;
+        this.accountUid = account.getUid();
+    }
 }

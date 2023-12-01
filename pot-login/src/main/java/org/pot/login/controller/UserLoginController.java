@@ -11,6 +11,7 @@ import org.pot.common.http.HttpSecurityCodec;
 import org.pot.common.http.HttpServletUtils;
 import org.pot.dal.redis.lock.RedisLock;
 import org.pot.dal.redis.lock.RedisLockFactory;
+import org.pot.login.beans.ServerConst;
 import org.pot.login.beans.UserLoginInfo;
 import org.pot.login.beans.VersionInfo;
 import org.pot.login.cache.GameServerDaoCache;
@@ -46,6 +47,9 @@ public class UserLoginController {
     @Resource
     private ReactiveStringRedisTemplate globalReactiveRedisTemplate;
 
+    @Resource
+    private ServerConst serverConst;
+
     @ResponseBody
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public String login(HttpServletRequest request, HttpServletResponse response,
@@ -57,7 +61,8 @@ public class UserLoginController {
         String result = "";
         try {
             final LoginReqC2S loginReqC2S = LoginReqC2S.parseFrom(HttpSecurityCodec.decode(data));
-            final boolean isDebugRole = true;
+            String debugSerialCode = StringUtils.trimToEmpty(loginReqC2S.getDebugSerialCode());
+            final boolean isDebugRole = StringUtils.isNotBlank(this.serverConst.getDebugSerialCode()) && StringUtils.equals(debugSerialCode, this.serverConst.getDebugSerialCode());
             final int serverId = gameServerDaoCache.selectOne(loginReqC2S.getServerId()) == null ? 0 : loginReqC2S.getServerId();
             userLoginInfo = new UserLoginInfo(loginReqC2S, isDebugRole, serverId, userIp);
             Throwable loginThrowable = null;

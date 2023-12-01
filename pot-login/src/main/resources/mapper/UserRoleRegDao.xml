@@ -25,28 +25,28 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
     <insert id="insertOne" parameterType="org.pot.login.entity.UserRoleReg">
-        INERT INTO
-        `user_role_reg`(`account_uid`,`account`,`device`,`app_id`,`app_name`,`app_version`,`app_package_name`,`channel`,
-        `platform`,`country`,`language`,`ip`，`network`,`phone_model`,`device_info`，`device_os`,`os_version`,`apps_flyer_id`，`advertising_id`)
-        VALUES (#{userRoleReg.accountUid},
-        #{userRoleReg.account},
-        #{userRoleReg.device},
-        #{userRoleReg.appId},
-        #{userRoleReg.appName},
-        #{userRoleReg.appVersion},
-        #{userRoleReg.appPackageName},
-        #{userRoleReg.channel},
-        #{userRoleReg.platform},
-        #{userRoleReg.country},
-        #{userRoleReg.language},
-        #{userRoleReg.ip},
-        #{userRoleReg.network},
-        #{userRoleReg.phoneModel},
-        #{userRoleReg.deviceInfo},
-        #{userRoleReg.deviceOs},
-        #{userRoleReg.osVersion},
-        #{userRoleReg.appsFlyerId},
-        #{userRoleReg.advertisingId})
+        INSERT INTO
+        `user_role_reg`(`game_uid`,`account_uid`,`account`,`device`,`app_id`,`app_name`,`app_version`,`app_package_name`,`channel`,`platform`,`country`,`language`,`ip`,`network`,`phone_model`,`device_info`,`device_os`,`os_version`,`apps_flyer_id`,`advertising_id`)
+        VALUES (#{userRoleReg.gameUid},
+                #{userRoleReg.accountUid},
+                #{userRoleReg.account},
+                #{userRoleReg.device},
+                #{userRoleReg.appId},
+                #{userRoleReg.appName},
+                #{userRoleReg.appVersion},
+                #{userRoleReg.appPackageName},
+                #{userRoleReg.channel},
+                #{userRoleReg.platform},
+                #{userRoleReg.country},
+                #{userRoleReg.language},
+                #{userRoleReg.ip},
+                #{userRoleReg.network},
+                #{userRoleReg.phoneModel},
+                #{userRoleReg.deviceInfo},
+                #{userRoleReg.deviceOs},
+                #{userRoleReg.osVersion},
+                #{userRoleReg.appsFlyerId},
+                #{userRoleReg.advertisingId})
     </insert>
     <select id="selectMap" resultMap="BaseResultMap">
         SELECT *

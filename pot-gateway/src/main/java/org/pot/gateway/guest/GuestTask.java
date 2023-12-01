@@ -37,7 +37,10 @@ public class GuestTask implements Runnable {
         Throwable throwable = null;
         IErrorCode errorCode = null;
         try {
-
+            boolean waiting = guestRequestHandler.handleRequest(this.guest,frameCmdMessage.getProto());
+            if(waiting){
+                GuestWaitingRoom.getInstance().addWaitingGuest(this.guest);
+            }
         } catch (ServiceException e) {
             throwable = e;
             errorCode = CommonErrorCode.INVALID_REQUEST;

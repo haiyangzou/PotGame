@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 
+import org.pot.common.alloc.MapAlloc;
 import org.pot.core.net.netty.FrameMessage;
 
 import lombok.Setter;
@@ -16,10 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ConnectionManager<M extends FrameMessage> {
     private final long connectionIdleMills;
-    private final Map<Channel, IConnection<M>> channelMap = new ConcurrentHashMap<>();
+    private final Map<Channel, IConnection<M>> channelMap = MapAlloc.newMediumConcurrentHashMap();
 
     public ConnectionManager(int connectionIdleSeconds) {
-        this.connectionIdleMills = connectionIdleSeconds;
+        this.connectionIdleMills = TimeUnit.SECONDS.toMillis(connectionIdleSeconds);
     }
 
     @Setter
@@ -33,9 +35,22 @@ public class ConnectionManager<M extends FrameMessage> {
     public IConnection<M> addConnection(Channel channel, String remoteHost, int remotePort) {
         if (channel == null) {
             log.error("Connection channel is null,remoteHost={},remotePort={}", remoteHost, remotePort);
+            return null;
         }
         IConnection<M> connection = channelMap.computeIfAbsent(channel,
                 k -> new Connection<>(channel, remoteHost, remotePort));
+        try {
+            ConnectionManagerListener<M> tempListener = this.listener;
+            if (tempListener != null && !tempListener.onAdd(connection)) {
+                log.error("connection manager listener onAdd failed conn{}", connection);
+                connection.close();
+                return null;
+            }
+        } catch (Exception e) {
+            log.error("connection manager listener onAdd error conn{}", connection, e);
+            connection.close();
+            return null;
+        }
         return connection;
     }
 

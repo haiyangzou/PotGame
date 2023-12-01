@@ -14,8 +14,15 @@ public class MapAlloc {
     public static <T extends Map> T newSmallMap(Function<Integer, T> function) {
         return newMap(8, function);
     }
+    public static <T extends Map> T newMediumMap(Function<Integer, T> function) {
+        return newMap(12, function);
+    }
 
     public static <K, V> ConcurrentHashMap<K, V> newSmallConcurrentHashMap() {
         return newSmallMap(ConcurrentHashMap::new);
     }
+    public static <K, V> ConcurrentHashMap<K, V> newMediumConcurrentHashMap() {
+        return newMediumMap(ConcurrentHashMap::new);
+    }
+
 }

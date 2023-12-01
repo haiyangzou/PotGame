@@ -7,6 +7,7 @@ import io.netty.handler.codec.haproxy.HAProxyMessage;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.core.net.connection.IConnection;
+import org.pot.core.net.netty.FrameCmdMessage;
 import org.pot.core.net.netty.FrameMessage;
 
 @Slf4j
@@ -52,7 +53,7 @@ public class WebChannelHandler<M extends FrameMessage> extends ChannelDuplexHand
             HAProxyMessage haProxyMessage = (HAProxyMessage) msg;
             connection.setRemoteHost(haProxyMessage.sourceAddress());
         }
-        if (msg instanceof WebSocketFrame) {
+        if (msg instanceof FrameMessage) {
             int size = connection.getRecvMessageQueueSize();
             int maxSize = engine.getConfig().getConnectionRecvQueueMaxSize();
             if (size > maxSize) {

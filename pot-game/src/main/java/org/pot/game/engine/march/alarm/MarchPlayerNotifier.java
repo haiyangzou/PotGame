@@ -41,6 +41,6 @@ public class MarchPlayerNotifier {
         }
         owner.sendMessage(builder.build());
         //推送总兵量变化
-        owner.submit(owner.armyAgent::sendTotalArmys);
+//        owner.submit(owner.armyAgent::sendTotalArmys);
     }
 }

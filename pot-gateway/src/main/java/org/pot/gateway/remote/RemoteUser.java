@@ -66,10 +66,12 @@ public class RemoteUser {
     IConnection<FramePlayerMessage> getRemoteServerConnection() {
         RemoteServer remoteServer = GatewayEngine.getInstance().getRemoteServerManager().getRemoteServer(getServerId());
         if (remoteServer == null) {
-
+            log.error("RemoteServer not exists.uid={}.server={}", getGameUid(), getServerId());
+            return null;
         }
         IConnection<FramePlayerMessage> remoteServerConnection = remoteServer.getConnection(this);
         if (remoteServerConnection == null || remoteServerConnection.isClosed()) {
+            log.error("RemoteServer  connection not exists.uid={}.server={}", getGameUid(), getServerId());
             return null;
         }
         return remoteServerConnection;

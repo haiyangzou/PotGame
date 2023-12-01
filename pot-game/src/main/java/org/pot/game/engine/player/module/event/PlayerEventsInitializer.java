@@ -33,7 +33,7 @@ public interface PlayerEventsInitializer {
                 CtClass ctClass = classPool.makeClass(proxyClassName);
                 ctClass.addInterface(classPool.get(PlayerEventsInitializer.class.getName()));
                 classPool.importPackage(Player.class.getPackage().getName());
-                String method = "public void initEvent(Player player) {" + StringUtil.getLineSeparator() +
+                String method = "public void initEvents(Player player) {" + StringUtil.getLineSeparator() +
                         addEvent() +
                         "}";
                 ctClass.addMethod(CtMethod.make(method, ctClass));
@@ -62,7 +62,7 @@ public interface PlayerEventsInitializer {
             ConstructorUtil.requireNoneParamConstructor(eventHandlerType);
             Type superClass = eventHandlerType.getGenericSuperclass();
             Class<? extends PlayerEvent> eventType = ((Class<? extends PlayerEvent>) ((ParameterizedType) superClass).getActualTypeArguments()[0]);
-            stringBuilder.append(StringUtil.format("player.eventComponent.registerPlayerEventHandler({}.class,new{}());", eventType.getName(), eventType.getName()));
+            stringBuilder.append(StringUtil.format("player.eventComponent.registerPlayerEventHandler({}.class,new {}());", eventType.getName(), eventHandlerType.getName()));
             stringBuilder.append(StringUtil.getLineSeparator());
         }
         return stringBuilder.toString();

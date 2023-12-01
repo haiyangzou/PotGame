@@ -29,4 +29,9 @@ public class RemoteUserManager {
         int index = UniqueIdUtil.index(remoteUser.getGameUid(), remoteUserGroups.length);
         return remoteUserGroups[index].addRemoteUser(remoteUser);
     }
+
+    RemoteUser getRemoteUser(long gameUid) {
+        int index = UniqueIdUtil.hash(gameUid, this.remoteUserGroups.length);
+        return this.remoteUserGroups[index].getRemoteUser(gameUid);
+    }
 }

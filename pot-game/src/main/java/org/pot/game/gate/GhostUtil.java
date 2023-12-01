@@ -60,7 +60,7 @@ public class GhostUtil {
                 delete(entity.getPlayerId());
             }
         }
-        ThreadUtil.await(Constants.AWAIT_MS, TimeUnit.MINUTES, () -> {
+        ThreadUtil.await(Constants.AWAIT_MS, TimeUnit.MILLISECONDS, () -> {
             boolean success = true;
             for (PlayerGhostEntity playerGhostEntity : playerGhostEntities) {
                 Player player = PlayerManager.fetchPlayer(playerGhostEntity.getPlayerId());

@@ -15,10 +15,7 @@ import org.pot.common.util.MathUtil;
 import org.pot.gateway.engine.GatewayEngine;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Slf4j
 public class RemoteServerManager {
@@ -109,6 +106,12 @@ public class RemoteServerManager {
         remoteServers.values().removeIf(RemoteServer::isClosed);
         shutdownExecutor(remoteServerConnector.getName(), remoteServerConnector);
         shutdownExecutor(remoteServerRunner.getName(), remoteServerRunner);
+    }
+
+    Future<?> connectRemoteServer(RemoteServer remoteServer) {
+        if (this.definedGameServers.containsKey(remoteServer.getServerId()))
+            return this.remoteServerConnector.submit(remoteServer::setConnections);
+        return null;
     }
 
     private void shutdownExecutor(String name, ExecutorService executorService) {

@@ -17,6 +17,7 @@ public class ServerConst {
     private int workerThreadMax = 10;
     private int workerQueueMaxSize = 1000000;
     private int workerKeepAliveSeconds = 300;
+    private String debugSerialCode = "";
 
     @PostConstruct
     private void afterPropertiesSet() {

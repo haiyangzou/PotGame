@@ -4,10 +4,12 @@ import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public final class FieldUtil {
     private static final Map<Class<?>, List<Field>> cach1 = new ConcurrentHashMap<>();
@@ -24,8 +26,8 @@ public final class FieldUtil {
 
     private static List<Field> getAllFields0(final Class<?> cls) {
         List<Field> fieldsIncludeStatic = getAllFieldsIncludeStatic(cls);
-        // List<Field> fields = fieldsIncludeStatic.stream().filter(field -> !Modifier.isStatic());
-        return null;
+        List<Field> fields = fieldsIncludeStatic.stream().filter(field -> !Modifier.isStatic(field.getModifiers())).collect(Collectors.toList());
+        return ImmutableList.copyOf(fields);
     }
 
     private static List<Field> getAllFieldsIncludeStatic(final Class<?> cls) {

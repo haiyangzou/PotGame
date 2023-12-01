@@ -83,7 +83,7 @@ public class FireWall {
             this.defaultOnEmpty = defaultOnEmpty;
             this.path = path;
             File file = new File(this.path);
-            if (force || file.exists()) {
+            if (force && file.exists()) {
                 this.lastModified = file.lastModified();
                 FileUtils.readLines(file, "UTF-8").forEach(this::addRule);
             }

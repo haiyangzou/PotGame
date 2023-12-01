@@ -34,49 +34,48 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
     <insert id="insertAccount" parameterType="org.pot.login.entity.UserAccount">
-        INERT INTO
-        `user_account`(`uid`,`account`,`device`,`app_id`,`app_name`,`app_version`,`app_package_name`,`channel`,
-        `platform`,`country`,`language`,`ip`，`network`,`phone_model`,`device_info`，`device_os`,`os_version`,`apps_flyer_id`，`advertising_id`)
+        INSERT INTO
+        `user_account`(`uid`,`account`,`device`,`app_id`,`app_name`,`app_version`,`app_package_name`,`channel`,`platform`,`country`,`language`,`ip`,`network`,`phone_model`,`device_info`,`device_os`,`os_version`,`apps_flyer_id`,`advertising_id`)
         VALUES (#{userAccount.uid},
-        #{userAccount.account},
-        #{userAccount.device},
-        #{userAccount.appId},
-        #{userAccount.appName},
-        #{userAccount.appVersion},
-        #{userAccount.appPackageName},
-        #{userAccount.channel},
-        #{userAccount.platform},
-        #{userAccount.country},
-        #{userAccount.language},
-        #{userAccount.ip},
-        #{userAccount.network},
-        #{userAccount.phoneModel},
-        #{userAccount.deviceInfo},
-        #{userAccount.deviceOs},
-        #{userAccount.osVersion},
-        #{userAccount.appsFlyerId},
-        #{userAccount.advertisingId})
+                #{userAccount.account},
+                #{userAccount.device},
+                #{userAccount.appId},
+                #{userAccount.appName},
+                #{userAccount.appVersion},
+                #{userAccount.appPackageName},
+                #{userAccount.channel},
+                #{userAccount.platform},
+                #{userAccount.country},
+                #{userAccount.language},
+                #{userAccount.ip},
+                #{userAccount.network},
+                #{userAccount.phoneModel},
+                #{userAccount.deviceInfo},
+                #{userAccount.deviceOs},
+                #{userAccount.osVersion},
+                #{userAccount.appsFlyerId},
+                #{userAccount.advertisingId})
     </insert>
 
     <update id="updateAccount">
         UPDATE `user_account`
         SET `device` = #{userAccount.device},
-        `app_id` = #{userAccount.appId},
-        `app_name` = #{userAccount.appName},
-        `app_version` = #{userAccount.appVersion},
-        `app_package_name` = #{userAccount.appPackageName},
-        `channel` = #{userAccount.channel},
-        `platform` = #{userAccount.platform},
-        `country` = #{userAccount.country},
-        `language` = #{userAccount.language},
-        `ip` = #{userAccount.ip},
-        `network` = #{userAccount.network},
-        `phone_model` = #{userAccount.phoneModel},
-        `device_info` = #{userAccount.deviceInfo},
-        `device_os` = #{userAccount.deviceOs},
-        `os_version` = #{userAccount.osVersion},
-        `apps_flyer_id` = #{userAccount.appsFlyerId},
-        `advertising_id` = #{userAccount.advertisingId}
+            `app_id` = #{userAccount.appId},
+            `app_name` = #{userAccount.appName},
+            `app_version` = #{userAccount.appVersion},
+            `app_package_name` = #{userAccount.appPackageName},
+            `channel` = #{userAccount.channel},
+            `platform` = #{userAccount.platform},
+            `country` = #{userAccount.country},
+            `language` = #{userAccount.language},
+            `ip` = #{userAccount.ip},
+            `network` = #{userAccount.network},
+            `phone_model` = #{userAccount.phoneModel},
+            `device_info` = #{userAccount.deviceInfo},
+            `device_os` = #{userAccount.deviceOs},
+            `os_version` = #{userAccount.osVersion},
+            `apps_flyer_id` = #{userAccount.appsFlyerId},
+            `advertising_id` = #{userAccount.advertisingId}
         WHERE `uid` = #{userAccount.uid}
     </update>
 

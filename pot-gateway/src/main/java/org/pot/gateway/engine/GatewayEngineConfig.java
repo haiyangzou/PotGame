@@ -12,6 +12,8 @@ public class GatewayEngineConfig extends EngineConfig {
     private long guestReqExecSlowMillis = 20L;
     private long guestReqWaitSlowMillis = 20L;
     private long gatewayTickIntervalMillis = Constants.RUN_INTERVAL_MS;
+    private boolean gatewayRequestLogDisable = false;
+    private boolean gatewayResponseLogDisable = false;
 
     @Override
     protected void setProperties(Configuration config) {

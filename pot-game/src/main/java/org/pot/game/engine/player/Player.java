@@ -17,6 +17,7 @@ import org.pot.game.engine.player.common.PlayerCommonAgent;
 import org.pot.game.engine.player.component.PlayerEventComponent;
 import org.pot.game.engine.player.component.PlayerSceneComponent;
 import org.pot.game.engine.player.module.PlayerAgentsInitializer;
+import org.pot.game.engine.player.module.army.PlayerArmyAgent;
 import org.pot.game.engine.player.module.event.PlayerEventsInitializer;
 import org.pot.game.engine.player.module.ghost.PlayerGhostAgent;
 import org.pot.game.engine.player.module.tower.PlayerTowerAgent;
@@ -47,7 +48,7 @@ public class Player {
 
     public final PlayerTowerAgent towerAgent = new PlayerTowerAgent(this);
 
-    public final PlayerTowerAgent armyAgent = new PlayerTowerAgent(this);
+    public final PlayerArmyAgent armyAgent = new PlayerArmyAgent(this);
 
     @Getter
     public final List<PlayerAgentAdapter> agentAdapterList;
@@ -321,5 +322,10 @@ public class Player {
             if (atomic.send(message)) {
             }
         }
+    }
+    public void disconnect(IErrorCode errorCode) {
+        PlayerSession atomic = this.playerSession;
+        if (atomic != null)
+            atomic.disconnect(errorCode);
     }
 }

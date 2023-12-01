@@ -39,6 +39,16 @@ public final class ServerMessage {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ProtoMessage_AckCode_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ProtoMessage_Ping_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_ProtoMessage_Ping_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ProtoMessage_Pong_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_ProtoMessage_Pong_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -54,8 +64,10 @@ public final class ServerMessage {
       "\'\n\tErrorCode\022\014\n\004name\030\001 \001(\t\022\014\n\004code\030\002 \001(\005" +
       "\"<\n\016DisConnectCode\022*\n\terrorCode\030\001 \001(\0132\027." +
       "ProtoMessage.ErrorCode\"\027\n\007AckCode\022\014\n\004nam" +
-      "e\030\001 \001(\tB4\n\030org.pot.message.protocolB\rSer" +
-      "verMessageP\001Z\007messageb\006proto3"
+      "e\030\001 \001(\t\"\024\n\004Ping\022\014\n\004time\030\001 \001(\003\"(\n\004Pong\022 \n" +
+      "\004ping\030\001 \001(\0132\022.ProtoMessage.PingB4\n\030org.p" +
+      "ot.message.protocolB\rServerMessageP\001Z\007me" +
+      "ssageb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -91,6 +103,18 @@ public final class ServerMessage {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ProtoMessage_AckCode_descriptor,
         new java.lang.String[] { "Name", });
+    internal_static_ProtoMessage_Ping_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_ProtoMessage_Ping_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_ProtoMessage_Ping_descriptor,
+        new java.lang.String[] { "Time", });
+    internal_static_ProtoMessage_Pong_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_ProtoMessage_Pong_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_ProtoMessage_Pong_descriptor,
+        new java.lang.String[] { "Ping", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

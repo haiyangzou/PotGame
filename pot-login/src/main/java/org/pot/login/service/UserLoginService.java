@@ -157,7 +157,7 @@ public class UserLoginService {
     private boolean loadAccountOnOntExistsAutoCreate(UserLoginInfo userLoginInfo) {
         UserAccount userAccount = null;
         if (userLoginInfo.isDebugRole()) {
-            if (userLoginInfo.getLoginReqC2S().getLongType() != UserLoginInfo.SPECIFY_ROLE_LOGIN) {
+            if (userLoginInfo.getLoginReqC2S().getLoginType() != UserLoginInfo.SPECIFY_ROLE_LOGIN) {
                 userLoginInfo.setErrorCode(CommonErrorCode.DEBUG_ROLE_ERROR);
                 userLoginInfo.setErrorMessage("Debug role with wrong Login Type");
                 return false;
@@ -194,6 +194,7 @@ public class UserLoginService {
         }
         userLoginInfo.setUserAccount(userAccount);
         userAccount.setDevice(StringUtils.stripToEmpty(userLoginInfo.getLoginReqC2S().getDevice()));
+        userAccount.setAppPackageName(StringUtils.trimToEmpty(userLoginInfo.getLoginReqC2S().getAppPackage()));
         userAccount.setAppId(StringUtils.stripToEmpty(userLoginInfo.getLoginReqC2S().getAppId()));
         userAccount.setAppName(StringUtils.stripToEmpty(userLoginInfo.getLoginReqC2S().getAppName()));
         userAccount.setAppVersion(StringUtils.stripToEmpty(userLoginInfo.getLoginReqC2S().getAppVersion()));
@@ -254,7 +255,7 @@ public class UserLoginService {
         if (!loadAccountOnOntExistsAutoCreate(userLoginInfo)) return;
         if (!secondaryValidate(userLoginInfo)) return;
         List<UserRole> allRoles = Collections.unmodifiableList(userRoleDao.selectByAccountUid(userLoginInfo.getAccountUid()));
-        if (userLoginInfo.getLoginReqC2S().getLongType() == UserLoginInfo.SPECIFY_SERVER_LOGIN) {
+        if (userLoginInfo.getLoginReqC2S().getLoginType() == UserLoginInfo.SPECIFY_SERVER_LOGIN) {
             if (!validateServer(userLoginInfo)) return;
             List<UserRole> matchedRoles = allRoles.stream().filter(r -> Objects.equals(r.getServerId(), userLoginInfo.getServerId())).collect(Collectors.toList());
             if (matchedRoles.isEmpty()) {
@@ -279,7 +280,7 @@ public class UserLoginService {
                 userLoginInfo.setGameUid(matchedRole.getUid());
                 insertRoleOnExistUpdateLastLogin(userLoginInfo);
             }
-        } else if (userLoginInfo.getLoginReqC2S().getLongType() == UserLoginInfo.SPECIFY_ROLE_LOGIN) {
+        } else if (userLoginInfo.getLoginReqC2S().getLoginType() == UserLoginInfo.SPECIFY_ROLE_LOGIN) {
             UserRole matchedRole = allRoles.stream().filter(r -> Objects.equals(r.getUid(), userLoginInfo.getGameUid())).findFirst().orElse(null);
             if (matchedRole == null) {
                 userLoginInfo.setErrorCode(CommonErrorCode.INVALID_LOGIN_INFO);
@@ -316,6 +317,7 @@ public class UserLoginService {
             } else {
                 userLoginInfo.setNewRole(false);
                 userLoginInfo.setGameUid(latestRole.getUid());
+                userLoginInfo.setServerId(latestRole.getServerId());
                 insertRoleOnExistUpdateLastLogin(userLoginInfo);
             }
         }
@@ -333,7 +335,7 @@ public class UserLoginService {
     private void insertRoleOnExistUpdateLastLogin(UserLoginInfo userLoginInfo) {
         UserRole userRole = new UserRole();
         userRole.setUid(userLoginInfo.getGameUid());
-        userRole.setAccountUid(userLoginInfo.getAccountUid());
+        userRole.setAccountUid(userLoginInfo.getUserAccount().getUid());
         userRole.setServerId(userLoginInfo.getServerId());
         userRole.setLastLoginTime(System.currentTimeMillis());
         userRoleDao.insertRoleOnExistUpdateLastLogin(userRole);

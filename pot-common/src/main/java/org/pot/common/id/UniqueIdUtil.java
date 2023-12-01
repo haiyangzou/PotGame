@@ -18,7 +18,10 @@ public class UniqueIdUtil {
         long uid = UniqueIdUtil.getUid(uniqueId) >> 3;
         return (int) Math.abs(uid % buckets);
     }
-
+    public static int hash(long uniqueId, int buckets) {
+        long uid = getUid(uniqueId) >> 1L;
+        return (int)Math.abs(uid % buckets);
+    }
     public static int getServerId(long uniqueId) {
         return (int) (uniqueId & MAX_SERVER_ID);
     }

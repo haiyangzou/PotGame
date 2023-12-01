@@ -27,7 +27,7 @@ public class FrameCmdMessage extends FrameMessage {
 
     @Override
     public boolean isProtoType(Class<? extends Message> protoType) {
-        return StringUtils.equals(protoName, getProtoName());
+        return StringUtils.equals(protoName, ProtocolSupport.name(protoType));
     }
 
     @Override

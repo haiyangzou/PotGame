@@ -10,6 +10,7 @@ import com.google.protobuf.Message;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class GuestRequestHandlerSupport {
+    public static void init() {}
     private static final HandlerFactory<String, GuestRequestHandler> factory = new HandlerFactory<>();
 
     private static void addHandler(Class<? extends Message> proto, Class<? extends GuestRequestHandler> handler) {
