@@ -2,8 +2,16 @@ package org.pot.game.engine.world.module.map.born;
 
 import lombok.Getter;
 import org.pot.common.util.JsonUtil;
+import org.pot.common.util.PointUtil;
+import org.pot.common.util.RandomUtil;
+import org.pot.game.engine.enums.PointType;
+import org.pot.game.engine.point.PointCityData;
+import org.pot.game.engine.point.PointExtraData;
+import org.pot.game.engine.scene.PointManager;
+import org.pot.game.engine.world.module.map.scene.WorldBand;
 import org.pot.game.engine.world.module.map.scene.WorldBlock;
 import org.pot.game.engine.world.module.map.scene.WorldMapPointRegulation;
+import org.pot.game.engine.world.module.map.scene.WorldMapScene;
 import org.pot.game.engine.world.module.var.WorldVarDef;
 
 import java.util.List;
@@ -41,13 +49,22 @@ public class PlayerBornRule {
     }
 
     private int executeCommonPhase(long playerId, PlayerBornPhase nextPhase) {
-        PlayerBornPhase playerBornPhase = playerBornInfo.getPlayerBornPhase();
+        PointCityData city = new PointCityData(playerId);
         List<Integer> blocks = playerBornInfo.getBlocks();
+        PlayerBornPhase playerBornPhase = this.playerBornInfo.getPlayerBornPhase();
         for (int i = playerBornInfo.getCurrentIndex(); i >= 0 && i < blocks.size(); i++) {
             playerBornInfo.setCurrentIndex(i);
             Integer blockId = blocks.get(i);
             WorldBlock block = WorldMapPointRegulation.getBlock(blockId);
+            int count = block.getMainPointCount(PointType.CITY);
+            if (count < playerBornPhase.getBornCountLimit()) {
+                int pointId = WorldMapScene.singleton.getPointManager().allocateRandomLocation(block.getPointIds(), city);
+                if (pointId != PointUtil.INVALID_POINT_ID) {
+                    return pointId;
+                }
+            }
         }
+        playerBornInfo.setPhase(nextPhase);
         return executePhase(playerId);
     }
 

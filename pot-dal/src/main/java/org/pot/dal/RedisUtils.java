@@ -9,7 +9,7 @@ public final class RedisUtils {
         if (ArrayUtils.isEmpty(args)) {
             return prefix;
         }
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(prefix);
         for (Object arg : args) {
             sb.append(KEY_SEPARATOR).append(arg);
         }

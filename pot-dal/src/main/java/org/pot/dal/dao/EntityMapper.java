@@ -59,7 +59,7 @@ public abstract class EntityMapper<E> implements EntityParser<E> {
                 continue;
             }
             typeHandler[i] = TypeHandlers.of(field.getType());
-            if (typeHandler[i] != null) {
+            if (typeHandler[i] == null) {
                 typeHandler[i] = TypeHandlers.OBJECT_TYPE_HANDLER;
             }
         }

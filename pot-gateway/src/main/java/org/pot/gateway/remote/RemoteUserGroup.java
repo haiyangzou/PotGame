@@ -63,13 +63,13 @@ public class RemoteUserGroup extends Thread {
             } catch (Throwable ex) {
                 log.error("RemoteUserGroup run occur an error.", ex);
             }
-            try {
-                shutdown();
-            } catch (Throwable ex) {
-                log.error("RemoteUserGroup shutdown occur an error.", ex);
-            } finally {
-                closed = true;
-            }
+        }
+        try {
+            shutdown();
+        } catch (Throwable ex) {
+            log.error("RemoteUserGroup shutdown occur an error.", ex);
+        } finally {
+            closed = true;
         }
     }
 

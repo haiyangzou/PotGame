@@ -4,21 +4,32 @@ import com.google.common.collect.ImmutableList;
 import com.google.protobuf.Message;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.pot.cache.player.PlayerCaches;
 import org.pot.common.concurrent.exception.CommonErrorCode;
 import org.pot.common.concurrent.exception.IErrorCode;
 import org.pot.common.concurrent.exception.ServiceException;
 import org.pot.common.concurrent.executor.AsyncRunner;
+import org.pot.common.util.ExDateTimeUtil;
+import org.pot.common.util.Indicator;
 import org.pot.common.util.RunSignal;
+import org.pot.common.util.StringUtil;
 import org.pot.core.net.netty.FramePlayerMessage;
 import org.pot.core.util.SignalLight;
+import org.pot.game.engine.GameEngine;
+import org.pot.game.engine.enums.StatisticsEnum;
 import org.pot.game.engine.player.async.AbstractAsyncHandler;
 import org.pot.game.engine.player.async.AsyncHandlerManager;
 import org.pot.game.engine.player.common.PlayerCommonAgent;
+import org.pot.game.engine.player.component.PlayerPowerComponent;
+import org.pot.game.engine.player.component.PlayerPushComponent;
 import org.pot.game.engine.player.component.PlayerEventComponent;
 import org.pot.game.engine.player.component.PlayerSceneComponent;
+import org.pot.game.engine.player.component.PlayerStatisticsComponent;
 import org.pot.game.engine.player.module.PlayerAgentsInitializer;
 import org.pot.game.engine.player.module.army.PlayerArmyAgent;
 import org.pot.game.engine.player.module.event.PlayerEventsInitializer;
+import org.pot.game.engine.player.module.event.event.PlayerFirstLogin;
+import org.pot.game.engine.player.module.event.event.PlayerLogin;
 import org.pot.game.engine.player.module.ghost.PlayerGhostAgent;
 import org.pot.game.engine.player.module.tower.PlayerTowerAgent;
 import org.pot.game.engine.player.union.PlayerUnionAgent;
@@ -26,7 +37,7 @@ import org.pot.game.gate.PlayerSession;
 import org.pot.game.persistence.entity.PlayerProfileEntity;
 import org.pot.game.util.PlayerSnapshotUtil;
 import org.pot.message.protocol.ProtocolSupport;
-import org.pot.message.protocol.login.LoginDataS2S;
+import org.pot.message.protocol.login.*;
 
 import java.util.ConcurrentModificationException;
 import java.util.List;
@@ -44,6 +55,9 @@ public class Player {
     public final PlayerEventComponent eventComponent = new PlayerEventComponent(this);
     public final PlayerSceneComponent sceneComponent = new PlayerSceneComponent(this);
     public final PlayerCommonAgent commonAgent = new PlayerCommonAgent(this);
+    public final PlayerPushComponent pushComponent = new PlayerPushComponent(this);
+    public final PlayerPowerComponent powerComponent = new PlayerPowerComponent(this);
+    public final PlayerStatisticsComponent statisticsComponent = new PlayerStatisticsComponent(this);
     public final PlayerUnionAgent unionAgent = new PlayerUnionAgent(this);
 
     public final PlayerTowerAgent towerAgent = new PlayerTowerAgent(this);
@@ -99,6 +113,70 @@ public class Player {
                 data -> log.info("UId Load Player Fail !uid={}", data.getUid())
         );
         this.state.updateAndGet(s -> PlayerState.loading);
+    }
+
+    public IErrorCode onLoginSuccess(LoginSuccessC2S loginSuccessC2S) {
+        for (PlayerAgentAdapter playerAgent : agentAdapterList) {
+            String flag = StringUtil.format("Player@{}_onLoginSuccess_{}", new Object[]{Long.valueOf(this.uid), playerAgent.getClassSimpleName()});
+            SignalLight.setOn(flag);
+            try {
+                playerAgent.onLoginSuccess();
+            } catch (Exception e) {
+                log.error("Player On Login Success Error! uid={}, Agent={}", new Object[]{Long.valueOf(getUid()), playerAgent.getClassSimpleName(), e});
+            }
+            SignalLight.setOff(flag);
+        }
+        if (!ExDateTimeUtil.isSameDay(this.profile.getLastLoginTime(), System.currentTimeMillis())) {
+            this.statisticsComponent.addOneStatisticsInt(StatisticsEnum.LOGIN_COUNT);
+            this.eventComponent.postPlayerEvent(PlayerFirstLogin.builder().build());
+        }
+        this.eventComponent.postPlayerEvent(PlayerLogin.builder().build());
+        this.profile.setLastLoginTime(System.currentTimeMillis());
+        this.profile.setLastOnlineTime(System.currentTimeMillis());
+        PlayerCaches.snapShot().login(getUid());
+        return null;
+    }
+
+    public IErrorCode onLogin(LoginDataS2S loginDataS2S) {
+        this.profile.setLoginIp(loginDataS2S.getIp());
+        this.profile.setLoginDeviceOs(loginDataS2S.getLoginReqC2S().getDeviceOS());
+        this.profile.setAppVersion(loginDataS2S.getLoginReqC2S().getAppVersion());
+        this.profile.setOsVersion(loginDataS2S.getLoginReqC2S().getOsVersion());
+        this.profile.setDevice(loginDataS2S.getLoginReqC2S().getDevice());
+        this.profile.setChannel(loginDataS2S.getLoginReqC2S().getChannel());
+        this.profile.setPlatform(loginDataS2S.getLoginReqC2S().getPlatform());
+        this.profile.setCountry(loginDataS2S.getCountry());
+        LoginRespS2C.Builder builder = LoginRespS2C.newBuilder();
+        builder.setAccount(loginDataS2S.getLoginReqC2S().getAccount());
+        builder.setAccountUid(loginDataS2S.getAccountUid());
+        builder.setServerId(loginDataS2S.getServerId());
+        builder.setGameUid(loginDataS2S.getGameUid());
+        builder.setIsNewRole(loginDataS2S.getIsNewRole());
+        builder.setServerTime(System.currentTimeMillis());
+        builder.setServerOpenTime(GameEngine.getInstance().getOpenTime());
+        builder.setAppUpdatePolicy(loginDataS2S.getAppUpdatePolicy());
+        builder.setAppUpdateVersion(loginDataS2S.getAppUpdateVersion());
+        builder.setAppUpdateUrl(loginDataS2S.getAppUpdateUrl());
+        builder.setGuidePolicy(loginDataS2S.getGuidePolicy());
+        builder.setRegisterTime(this.profile.getRegTime());
+        for (PlayerAgentAdapter playerAgent : agentAdapterList) {
+            String flag = StringUtil.format("Player@{}_onLogin_{}", this.uid, playerAgent.getClassSimpleName());
+            SignalLight.setOn(flag);
+            try {
+                playerAgent.onLogin(builder);
+            } catch (Exception e) {
+                log.error("Player On Login Error! uid={}, Agent={}", getUid(), playerAgent.getClassSimpleName(), e);
+            }
+            SignalLight.setOff(flag);
+        }
+        builder.setPower(this.powerComponent.calculatePower(true));
+        if (loginDataS2S.getIsReconnect()) {
+            sendMessage(LoginReconnectRespS2C.newBuilder().setLoginRespS2C(builder).build());
+        } else {
+            sendMessage(builder.build());
+        }
+        this.pushComponent.onLoginPush();
+        return null;
     }
 
     public Player(PlayerSession playerSession, LoginDataS2S loginDataS2S) {
@@ -323,9 +401,31 @@ public class Player {
             }
         }
     }
+
     public void disconnect(IErrorCode errorCode) {
         PlayerSession atomic = this.playerSession;
         if (atomic != null)
             atomic.disconnect(errorCode);
+    }
+
+    public IErrorCode onLogout(LogoutReqC2S logoutReqC2S) {
+        for (PlayerAgentAdapter playerAgent : agentAdapterList) {
+            String flag = StringUtil.format("Player@{}_onLogout_{}", this.uid, playerAgent.getClassSimpleName());
+            SignalLight.setOn(flag);
+            try {
+                playerAgent.onLogout();
+            } catch (Exception e) {
+                log.error("Player On Logout Error! uid={}, Agent={}", getUid(), playerAgent.getClassSimpleName(), e);
+            }
+            SignalLight.setOff(flag);
+        }
+        this.profile.setLastOnlineTime(System.currentTimeMillis());
+        save();
+        PlayerCaches.snapShot().logout(getUid());
+        return null;
+    }
+
+    public boolean isOnline() {
+        return playerSession.isOnline();
     }
 }

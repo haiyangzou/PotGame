@@ -106,7 +106,8 @@ public class WebCmdCodec extends WebCodec<FrameCmdMessage> {
         byte[] clonedProtoData = ArrayUtils.clone(protoData);
         if (!cipher.decrypt(summary, protoData)) {
             in.clear();
-            throw new ProtocolException("Illegal Summary");
+            int decryptKey = (~(cipher.getRcvKey() % 0x100)) & 0xFF;
+            throw new ProtocolException("Illegal Summary:" + summary + "rcv:" + cipher.getRcvKey() + "snd:" + cipher.getSndKey() + "decryptKey:" + decryptKey);
         }
         if (HeaderByte.isCompressed(headerByte)) {
             int beforeCompress = protoData.length;

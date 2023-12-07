@@ -56,7 +56,9 @@ public class PlayerGroup extends Thread {
             return;
         this.nextPingTime = (System.currentTimeMillis() / 1000L + 1L) * 1000L;
         for (Player player : this.players.values())
-            player.sendMessage(Ping.newBuilder().setTime(System.currentTimeMillis()).build());
+            if(player.isOnline()){
+                player.sendMessage(Ping.newBuilder().setTime(System.currentTimeMillis()).build());
+            }
     }
 
     @Override
@@ -80,7 +82,7 @@ public class PlayerGroup extends Thread {
             try {
                 player.save();
             } catch (Exception ex) {
-                log.error("Player Save Occur An Error. uid={}", Long.valueOf(player.getUid()), ex);
+                log.error("Player Save Occur An Error. uid={}", player.getUid(), ex);
             }
             iterator.remove();
         }
@@ -98,17 +100,17 @@ public class PlayerGroup extends Thread {
             try {
                 player.tick();
             } catch (Exception ex) {
-                log.error("Player Tick Occur An Error. uid={}", Long.valueOf(player.getUid()), ex);
+                log.error("Player Tick Occur An Error. uid={}", player.getUid(), ex);
             }
             PlayerState playerState = player.getState().get();
             if (playerState == PlayerState.loadError) {
-                removes.add(Long.valueOf(player.getUid()));
+                removes.add(player.getUid());
                 player.disconnect(CommonErrorCode.INVALID_STATE);
-                log.error("Invalid Player State. uid={}, state={}", Long.valueOf(player.getUid()), playerState);
+                log.error("Invalid Player State. uid={}, state={}", player.getUid(), playerState);
             } else if (playerState == PlayerState.registerError) {
-                removes.add(Long.valueOf(player.getUid()));
+                removes.add(player.getUid());
                 player.disconnect(CommonErrorCode.INVALID_STATE);
-                log.error("Invalid Player State. uid={}, state={}", Long.valueOf(player.getUid()), playerState);
+                log.error("Invalid Player State. uid={}, state={}", player.getUid(), playerState);
             }
             SignalLight.setOff(flag);
         }
@@ -144,7 +146,7 @@ public class PlayerGroup extends Thread {
                 playerSession.disconnect(CommonErrorCode.INVALID_LOGIN_INFO);
                 return loginDataS2S;
             }
-        } else {
+        } else if (profile == null) {
             LoginDataS2S.Builder builder = loginDataS2S.toBuilder();
             builder.setIsNewRole(true);
             loginDataS2S = builder.build();

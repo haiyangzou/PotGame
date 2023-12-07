@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.cache.player.PlayerCacheConfig;
 import org.pot.common.concurrent.executor.AsyncExecutor;
+import org.pot.common.date.DateTimeUtil;
 import org.pot.dal.RedisUtils;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 
@@ -156,6 +157,24 @@ public class PlayerSnapShotCache {
                 .map(PlayerSnapShot::fromJson).block();
     }
 
+    public void login(long uid) {
+        update(uid, o -> {
+            o.setOnline(true);
+            o.setLastOnlineTime(DateTimeUtil.getUnixTimestamp());
+        });
+    }
+
+    public void updatePower(long uid, long power) {
+        update(uid, o -> o.setPower(power));
+    }
+
+    public void logout(long uid) {
+        update(uid, o -> {
+            o.setOnline(false);
+            o.setLastOnlineTime(DateTimeUtil.getUnixTimestamp());
+        });
+    }
+
     public static String keyOf(long uid) {
         return RedisUtils.buildRedisKey(CACHE_REDIS_PREFIX, uid);
     }
@@ -174,7 +193,7 @@ public class PlayerSnapShotCache {
     }
 
     public void updateName(long uid, String name) {
-        update(uid, o -> o.setAccount(name));
+        update(uid, o -> o.setName(name));
     }
 
     public void close() {

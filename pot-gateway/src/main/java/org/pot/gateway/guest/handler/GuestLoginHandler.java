@@ -41,7 +41,7 @@ public final class GuestLoginHandler extends GuestRequestHandler<LoginReqC2S> {
                 loginFail(guest, CommonErrorCode.SERVER_MAINTAIN.getErrorCode());
                 return false;
             }
-            int errorCode = loginDataS2S.getErrorCOde();
+            int errorCode = loginDataS2S.getErrorCode();
             String errorMessage = loginDataS2S.getErrorMessage();
             if (errorCode > 0) {
                 if (errorCode == CommonErrorCode.VERSION_LOW.getErrorCode()) {

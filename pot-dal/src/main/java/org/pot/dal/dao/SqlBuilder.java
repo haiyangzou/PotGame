@@ -229,7 +229,7 @@ public interface SqlBuilder {
             if (columns == 0) {
                 builder.append("(");
             } else {
-                builder.append(")");
+                builder.append(",");
             }
             builder.append('`').append(columnName).append('`');
             columns++;
@@ -238,7 +238,7 @@ public interface SqlBuilder {
 
         public String build() {
             builder.append(") VALUES (?");
-            for (int i = 0; i < columns; i++) {
+            for (int i = 1; i < columns; i++) {
                 builder.append(",?");
             }
             builder.append(")");
@@ -261,7 +261,7 @@ public interface SqlBuilder {
             } else {
                 this.valuesBuilder.append(',');
             }
-            valuesBuilder.append('`').append(columnName).append("=`VALUES(`").append(columnName).append("`)");
+            valuesBuilder.append('`').append(columnName).append("`=VALUES(`").append(columnName).append("`)");
             return this;
         }
 
@@ -269,7 +269,7 @@ public interface SqlBuilder {
             if (columns == 0) {
                 builder.append("(");
             } else {
-                builder.append(")");
+                builder.append(",");
             }
             builder.append('`').append(columnName).append('`');
             columns++;
@@ -278,7 +278,7 @@ public interface SqlBuilder {
 
         public String build() {
             builder.append(") VALUES (?");
-            for (int i = 0; i < columns; i++) {
+            for (int i = 1; i < columns; i++) {
                 builder.append(",?");
             }
             builder.append(")");

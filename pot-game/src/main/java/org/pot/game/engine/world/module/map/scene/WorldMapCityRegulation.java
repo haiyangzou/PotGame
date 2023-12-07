@@ -13,8 +13,8 @@ import org.pot.game.engine.world.module.map.clean.WorldMapCityCleaner;
 
 import java.util.List;
 
+@Getter
 public class WorldMapCityRegulation extends CityRegulation {
-    @Getter
     private final WorldMapCityCleaner cleaner = new WorldMapCityCleaner();
 
     public WorldMapCityRegulation(AbstractScene scene) {

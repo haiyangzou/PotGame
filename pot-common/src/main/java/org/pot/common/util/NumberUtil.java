@@ -1,5 +1,6 @@
 package org.pot.common.util;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 
@@ -60,6 +61,9 @@ public class NumberUtil {
         if (minFraDigits > -1) numberFormat.setMaximumFractionDigits(minFraDigits);
         numberFormat.setRoundingMode(roundingMode == null ? RoundingMode.HALF_EVEN : roundingMode);
         return numberFormat.format(number);
+    }
 
+    public static String plainString(double d) {
+        return BigDecimal.valueOf(d).toPlainString();
     }
 }

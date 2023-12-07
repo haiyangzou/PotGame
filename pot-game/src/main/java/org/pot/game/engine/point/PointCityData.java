@@ -11,9 +11,10 @@ import org.pot.game.engine.enums.PointType;
 @JsonTypeName("WorldCity")
 public class PointCityData extends PointExtraData {
     @JsonProperty("playerId")
-    private long playerId;
+    private final long playerId;
 
-    public PointCityData() {
+    public PointCityData(long playerId) {
         super(PointType.CITY);
+        this.playerId = playerId;
     }
 }

@@ -41,10 +41,8 @@ public class PlayerProfileEntity implements Serializable {
     private volatile String loginIp;
     @Column(name = "login_device_os")
     private volatile String loginDeviceOs;
-    @Column(name = "login_package")
-    private volatile String loginPackage;
     @Column(name = "last_login_time")
-    private volatile String lastLoginTime;
+    private volatile long lastLoginTime;
     @Column(name = "last_online_time")
     private volatile long lastOnlineTime;
     @Column(name = "online_time")
@@ -72,12 +70,12 @@ public class PlayerProfileEntity implements Serializable {
     private volatile String country;
     @Column(name = "language")
     private volatile String language;
-    @Column(name = "translate_language")
-    private volatile String translateLanguage;
     @Column(name = "cid")
     private volatile String cid;
     @Column(name = "chat_ban")
     private volatile Long chatBan;
     @Column(name = "rename_ban")
     private volatile Long renameBan;
+    @Column(name = "translate_language")
+    private volatile String translateLanguage;
 }

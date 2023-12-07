@@ -3,8 +3,8 @@ package org.pot.game.engine.scene;
 import lombok.Getter;
 import org.pot.game.engine.point.PointCityData;
 
+@Getter
 public abstract class CityRegulation {
-    @Getter
     protected final AbstractScene scene;
 
     public CityRegulation(AbstractScene scene) {

@@ -37,7 +37,7 @@ message LoginDataS2S{
   string ip = 5;
   string country = 6;
   string deviceLanguage = 7;
-  int32 errorCOde = 8;
+  int32 errorCode = 8;
   string errorMessage = 9;
   bool isReconnect = 10;
   bool isDebugRole = 11;
@@ -57,17 +57,26 @@ message LoginDataS2S{
   int64 banEndTime = 25;
 }
 message LoginRespS2C{
-  string account = 1;
-  int64 accountUid = 2;
-  int32 serverId = 3;
-  int64 gameUid = 4;
-  bool isNewRole = 5;
-  int64 serverTime = 6;
-  int32 guidePolicy = 7;
-  int32 x = 8;
-  int32 y = 9;
-  int64 power = 10;
+  string account                  = 1;//唯一的,平台账号,37平台授权加密串
+  int64 accountUid                = 2;//唯一的,平台账号的内部数字Id
+  int32 serverId                  = 3;//唯一的,服务器Id
+  int64 gameUid                   = 4;//唯一的,角色Id
+  bool isNewRole                  = 5;//是否新创建的角色
+  int64 serverTime                = 6;//服务器当前时间的UTC毫秒
 
+  int32 appUpdatePolicy           = 7;//客户端更新策略,0=无更新,1=推荐更新,2=强制更新
+  string appUpdateVersion         = 8;//客户端更新版本
+  string appUpdateUrl             = 9;//客户端更新地址
+
+  int32 guidePolicy               = 10;//新手引导策略, 0=不能跳过,1=可以跳过
+  int32 guideStep                 = 11;//新手引导步数
+  int32 guideStepMask             = 12;//新手引导步数的掩码,不一定会使用,可能表示引导中大步中的小步
+
+  int32 x                         = 13;//x坐标
+  int32 y                         = 14;//y坐标
+  int64 power                     = 15;//战力
+  int64 serverOpenTime            = 16; // 开服时间戳
+  int64 registerTime              = 17;//注册时间
 }
 message LogoutReqC2S{
   int64 gameUid = 1;
@@ -81,6 +90,9 @@ message AppVersionInfoS2C{
   int32 appUpdatePolicy = 1; //客户端更新策略，0=无更新，1=补丁更新，2=推荐更新，3 =强制更新
   string appUpdateVersion = 2; //客户端更新版本
   string appUpdateUrl = 3; //客户端更新地址
+}
+message LoginSuccessC2S{
+    int64 gameUid                    = 1;
 }
 message LoginNoticeC2S{
   int32 serverId = 1;

@@ -13,26 +13,17 @@ import org.pot.message.protocol.world.WorldPointStruct;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Getter
 public class WorldPoint implements Serializable {
-    @Getter
     private AbstractScene scene;
-    @Getter
     private PointType type;
-    @Getter
     private int id;
-    @Getter
     private int x;
-    @Getter
     private int y;
-    @Getter
     private int mainX;
-    @Getter
     private int mainY;
-    @Getter
     private PointExtraData extraData;
-    @Getter
     private final long timestamp = System.currentTimeMillis();
-    @Getter
     private WorldPointEntity worldPointEntity;
 
     public WorldPoint(AbstractScene scene, PointType type, int pid, int mainX, int mainY, PointExtraData extraData) {

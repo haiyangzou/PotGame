@@ -36,7 +36,7 @@ public interface Constants {
                 log.info("TimeZone is{}", ZoneId.systemDefault());
 //                localhostIp = ImmutableList.copyOf(Ipv4Util.getLocalhostIpv4Address(false));
                 localhostIp = new ArrayList<>();
-                localhostIp.add("192.168.2.134");
+                localhostIp.add("192.168.1.5");
                 if (CollectionUtil.isEmpty(localhostIp)) {
                     throw new IllegalStateException("Failed to Get Ipv4 Address");
                 }

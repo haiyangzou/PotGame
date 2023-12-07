@@ -33,7 +33,7 @@ public class PlayerNameCache {
     public String newUniqueName(long uid) {
         final int length = 14;
         final String delimiter = "-";
-        StringBuilder nameBuilder = new StringBuilder("Lord" + decimalToOtherBase(uid, 62));
+        StringBuilder nameBuilder = new StringBuilder("Lord" + decimalToOtherBase(uid, 6));
         if (nameBuilder.length() < length) {
             nameBuilder.append(delimiter);
         }
@@ -46,7 +46,7 @@ public class PlayerNameCache {
         }
         name = name + delimiter;
         while (true) {
-            String n = name + decimalToOtherBase(ThreadLocalRandom.current().nextInt(), 62);
+            String n = name + decimalToOtherBase(ThreadLocalRandom.current().nextInt(), 6);
             if (putIfAbsent(n, uid)) {
                 return n;
             }

@@ -153,7 +153,7 @@ public class EntityMapperBuilder<E> {
                     }
                     bodyBuilder.append("entity.").append(setter.getName()).append("((").append(paramTypeName).append(")(typeHandler[").append(i).append("].get(resultSet, \"").append(columnName).append("\")));\n");
                 }
-                bodyBuilder.append("} catch(Throwable cause) {\n logger.error(\"failed to parse ").append(entityName).append(".").append(propertyName).append("\", cause);\n}\n");
+                bodyBuilder.append("} catch(Throwable cause) {\n logger.error(\"failed to parse ").append(entityName).append(".").append(propertyName).append(columnName).append("\", cause);\n}\n");
             } else {
                 log.error("no setter found of{}.{}", entityClass.getName(), propertyName);
             }

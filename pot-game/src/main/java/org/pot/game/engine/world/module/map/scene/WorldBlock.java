@@ -3,6 +3,7 @@ package org.pot.game.engine.world.module.map.scene;
 import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import org.pot.common.util.PointUtil;
+import org.pot.game.engine.enums.PointType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,5 +35,8 @@ public class WorldBlock {
         pointIds = ImmutableList.copyOf(temp);
         inBlackEarthPointIds = ImmutableList.copyOf(temp);
         notInBlackEarthPointIds = ImmutableList.copyOf(temp);
+    }
+    public int getMainPointCount(PointType pointType) {
+        return WorldMapScene.singleton.getPointManager().getMainPoints(this.pointIds, pointType).size();
     }
 }

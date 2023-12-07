@@ -1,4 +1,4 @@
-﻿package org.pot.game.engine.player.handler;
+package org.pot.game.engine.player.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.pot.common.concurrent.exception.IErrorCode;

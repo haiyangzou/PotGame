@@ -64,5 +64,10 @@ public abstract class PlayerAgentAdapter {
     public long calculatePower() {
         return 0;
     }
+    @Getter
+    protected volatile long power = 0L;
 
+    public void setPower(long power) {
+        this.power = power;
+    }
 }

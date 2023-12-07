@@ -12,4 +12,9 @@ public class PlayerCommonAgent extends PlayerAgentAdapter {
         super(player);
     }
 
+
+    public int getLevel() {
+        return this.playerCommonInfo.getLevel();
+    }
+
 }

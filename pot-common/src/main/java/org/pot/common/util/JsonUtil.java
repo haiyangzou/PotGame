@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
@@ -201,6 +202,18 @@ public class JsonUtil {
             return MAPPER.readValue(string, MAPPER.getTypeFactory().constructMapType(mapClass, keyType, valueType));
         } catch (IOException e) {
             log.error("JsonSon to Map Error", e);
+            return null;
+        }
+    }
+
+    public static <T extends java.util.Collection<E>, E> T parseCollection(String string, Class<T> collectionClass, Class<E> elementType) {
+        try {
+            if (StringUtils.isBlank(string))
+                return null;
+            CollectionType type = MAPPER.getTypeFactory().constructCollectionType(collectionClass, elementType);
+            return MAPPER.readValue(string, type);
+        } catch (IOException e) {
+            log.error("JackSon to Object error, string={}, collectionClass={} elementClass={}", string, collectionClass, elementType, e);
             return null;
         }
     }

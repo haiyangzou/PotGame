@@ -100,6 +100,7 @@ public class PlayerSession {
         this.recvMessageQueue.clear();
         this.recvMessageQueue.add(new FramePlayerMessage(this.uid, message));
         this.lastActiveTimeMills = System.currentTimeMillis();
+        established = true;
     }
 
     void recv(FramePlayerMessage framePlayerMessage) {

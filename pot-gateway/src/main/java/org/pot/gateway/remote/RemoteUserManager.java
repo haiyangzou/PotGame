@@ -26,7 +26,7 @@ public class RemoteUserManager {
 
 
     public boolean addRemoteUser(RemoteUser remoteUser) {
-        int index = UniqueIdUtil.index(remoteUser.getGameUid(), remoteUserGroups.length);
+        int index = UniqueIdUtil.hash(remoteUser.getGameUid(), remoteUserGroups.length);
         return remoteUserGroups[index].addRemoteUser(remoteUser);
     }
 

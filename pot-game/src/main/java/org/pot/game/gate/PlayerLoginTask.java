@@ -8,11 +8,10 @@ import org.pot.game.engine.player.PlayerManager;
 import org.pot.message.protocol.ProtocolPrinter;
 import org.pot.message.protocol.login.LoginDataS2S;
 
+@Getter
 @Slf4j
 public class PlayerLoginTask implements Runnable {
-    @Getter
     private final PlayerSession playerSession;
-    @Getter
     private final LoginDataS2S loginDataS2S;
 
     public PlayerLoginTask(PlayerSession playerSession, LoginDataS2S loginDataS2S) {

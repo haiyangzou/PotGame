@@ -32,7 +32,6 @@ public class ExceptionUtil {
     public static String computeCaller(Object object, Class<?> exceptedClass1, Class<?> exceptedClass2) {
         return computeCaller(object.getClass().getName(), exceptedClass1, exceptedClass2);
     }
-
     public static String computeCaller(String name, Class<?> exceptedClass) {
         String result = callerCache.get(name);
         if (result == null) {
@@ -41,7 +40,12 @@ public class ExceptionUtil {
         }
         return result;
     }
-
+    public static String computeCaller(String name, Class<?> exceptedClass1, Class<?> exceptedClass2, Class<?> exceptedClass3) {
+        return callerCache.computeIfAbsent(name, k -> abbreviate(getStackTraceWithDepthByLine(1, new Class[] { callerCache.getClass(), exceptedClass1, exceptedClass2, exceptedClass3 })));
+    }
+    public static String computeCaller(String name, Class<?> exceptedClass1, Class<?> exceptedClass2) {
+        return callerCache.computeIfAbsent(name, k -> abbreviate(getStackTraceWithDepthByLine(1, new Class[] { callerCache.getClass(), exceptedClass1, exceptedClass2 })));
+    }
     public static String getStackTraceWithDepthByTab(final int depth, Class... exceptedClasss) {
         return getStackTraceWithDepth(depth, "\t", exceptedClasss);
     }

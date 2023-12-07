@@ -2,6 +2,7 @@ package org.pot.game.engine.player.common;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.pot.game.engine.player.module.common.PlayerStatistics;
 
 @Getter
 @Setter
@@ -14,6 +15,7 @@ public class PlayerCommonInfo {
     private long powerRefreshTime;
     private long energyRefreshTime;
     private long pictureRefreshTime;
+    private PlayerStatistics playerStatistics = new PlayerStatistics();
 
     public PlayerCommonInfo() {
     }

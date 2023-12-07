@@ -43,7 +43,7 @@ public class GuestReconnectHandler extends GuestRequestHandler<LoginReconnectC2S
                 reconnectFail(guest, CommonErrorCode.SERVER_MAINTAIN.getErrorCode());
                 return false;
             }
-            int errorCode = loginDataS2S.getErrorCOde();
+            int errorCode = loginDataS2S.getErrorCode();
             String errorMessage = loginDataS2S.getErrorMessage();
             if (errorCode > 0) {
                 if (errorCode == CommonErrorCode.VERSION_LOW.getErrorCode()) {

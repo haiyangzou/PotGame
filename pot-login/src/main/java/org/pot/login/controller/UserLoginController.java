@@ -126,7 +126,7 @@ public class UserLoginController {
                     builder.setAppUpdatePolicy(versionInfo.getAppUpdatePolicy());
                     builder.setAppUpdateVersion(versionInfo.getAppUpdateVersion());
                     builder.setAppUpdateUrl(versionInfo.getAppUpdateUrl());
-                    builder.setErrorCOde(IErrorCode.getErrorCode(versionInfo.getErrorCode()));
+                    builder.setErrorCode(IErrorCode.getErrorCode(versionInfo.getErrorCode()));
                     builder.setErrorMessage(StringUtils.stripToEmpty(versionInfo.getErrorMessage()));
                     loginDataS2S = builder.build();
                 }
