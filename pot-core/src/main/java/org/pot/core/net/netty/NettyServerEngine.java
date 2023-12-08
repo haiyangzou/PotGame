@@ -57,8 +57,8 @@ public class NettyServerEngine<M extends FrameMessage> extends NettyBaseEngine<M
         }
         bootstrap.option(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.SO_BACKLOG, config.getBacklog())
-                .option(ChannelOption.TCP_NODELAY, true)
-                .option(ChannelOption.SO_KEEPALIVE, true);
+                .childOption(ChannelOption.TCP_NODELAY, true)
+                .childOption(ChannelOption.SO_KEEPALIVE, true);
         bindServer(bootstrap);
     }
 

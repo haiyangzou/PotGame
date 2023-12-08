@@ -96,13 +96,13 @@ public class FrameCmdCodec extends FrameCodec<FrameCmdMessage> {
         }
         byte[] protoData = new byte[protoDataLength];
         in.readBytes(protoData);
-        byte[] clonedProtoData = ArrayUtils.clone(protoData);
         if (!cipher.decrypt(summary, protoData)) {
             in.clear();
+            return;
         }
         if (HeaderByte.isCompressed(headerByte)) {
             int beforeCompress = protoData.length;
-            protoData = compressor.compress(protoData);
+            protoData = compressor.decompress(protoData);
             int afterCompress = protoData.length;
             engine.getNetEngineStatus().addSendCompressBytes(beforeCompress, afterCompress);
         }

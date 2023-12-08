@@ -3,7 +3,7 @@
     <property name="queueSize" value="10240"/>
     <property name="discardingThreshold" value="0"/>
     <property name="LOG_HOME" value="./logs"/>
-    <property name="LOG_PATTERN" value="$d{yyyy-MM-dd HH:mm:ss.SSS}|%level|%thread|%logger{1}|%msg%n%ex"/>
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS}|%level|%thread|%logger{1}|%msg%n%ex"/>
     <property name="FLOW_LOG_PATTERN" value="%msg%n"/>
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">

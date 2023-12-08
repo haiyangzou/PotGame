@@ -1,20 +1,24 @@
 package org.pot.core.net.netty.websocket;
 
+import com.google.protobuf.Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.pot.common.compressor.Compressor;
 import org.pot.common.compressor.GzipCompressor;
 import org.pot.core.net.netty.FrameCipher;
 import org.pot.core.net.netty.FrameCmdMessage;
 import org.pot.core.net.netty.HeaderByte;
+import org.pot.message.protocol.ProtocolSupport;
 
 import java.net.ProtocolException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+@Slf4j
 public class WebCmdCodec extends WebCodec<FrameCmdMessage> {
     private static final int MAGIC = 0x1DEF;
     private static final Compressor compressor = new GzipCompressor();
@@ -103,15 +107,13 @@ public class WebCmdCodec extends WebCodec<FrameCmdMessage> {
         }
         byte[] protoData = new byte[protoDataLength];
         in.readBytes(protoData);
-        byte[] clonedProtoData = ArrayUtils.clone(protoData);
         if (!cipher.decrypt(summary, protoData)) {
             in.clear();
-            int decryptKey = (~(cipher.getRcvKey() % 0x100)) & 0xFF;
-            throw new ProtocolException("Illegal Summary:" + summary + "rcv:" + cipher.getRcvKey() + "snd:" + cipher.getSndKey() + "decryptKey:" + decryptKey);
+            throw new ProtocolException("Illegal Summary:" + summary + "rcv:" + cipher.getRcvKey() + "snd:" + cipher.getSndKey());
         }
         if (HeaderByte.isCompressed(headerByte)) {
             int beforeCompress = protoData.length;
-            protoData = compressor.compress(protoData);
+            protoData = compressor.decompress(protoData);
             int afterCompress = protoData.length;
             engine.getNetEngineStatus().addSendCompressBytes(beforeCompress, afterCompress);
         }
