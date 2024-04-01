@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.pot.game.engine.player.module.common.PlayerStatistics;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 public class PlayerCommonInfo {
@@ -16,6 +19,7 @@ public class PlayerCommonInfo {
     private long energyRefreshTime;
     private long pictureRefreshTime;
     private PlayerStatistics playerStatistics = new PlayerStatistics();
+    private Set<Long> forbiddenPlayerIds = new HashSet<>();
 
     public PlayerCommonInfo() {
     }

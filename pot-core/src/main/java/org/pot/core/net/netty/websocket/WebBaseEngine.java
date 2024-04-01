@@ -8,7 +8,7 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import lombok.Getter;
-import org.pot.common.concurrent.executor.ScheduledExcutor;
+import org.pot.common.concurrent.executor.ScheduledExecutor;
 import org.pot.common.util.IOUtils;
 import org.pot.core.config.NettyConfig;
 import org.pot.core.net.connection.ConnectionManager;
@@ -27,7 +27,7 @@ public abstract class WebBaseEngine<M extends FrameMessage> extends ChannelIniti
     @Getter
     protected final NetEngineStatus netEngineStatus = new NetEngineStatus();
 
-    protected final ScheduledExcutor executor = ScheduledExcutor.newScheduledExecutor(1,
+    protected final ScheduledExecutor executor = ScheduledExecutor.newScheduledExecutor(1,
             EvictConnectionTask.class.getName());
     protected final Function<WebBaseEngine<M>, WebCodec<M>> webCodecFactory;
 

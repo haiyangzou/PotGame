@@ -8,10 +8,10 @@ import java.util.concurrent.TimeUnit;
 
 @Getter
 public class ExecutorConfig {
-    private int queueMaxSize = 1_000_000;
-    private int coreThreadSize = 19;
-    private int maxThreadSize = 199;
-    private int keepAliveTime = 300;
+    private final int queueMaxSize = 1_000_000;
+    private final int coreThreadSize = 19;
+    private final int maxThreadSize = 199;
+    private final int keepAliveTime = 300;
     private String threadName = "Undefined";
     private final TimeUnit keepAliveTimeUnit = TimeUnit.SECONDS;
 

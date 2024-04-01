@@ -46,7 +46,7 @@ public class EventBus {
         }
         post0(event);
     }
-
+    @SuppressWarnings("unchecked")
     private void post0(final Object event) {
         CopyOnWriteArrayList<EventHandler> eventHandlers = subscribers.get(event.getClass());
         if (eventHandlers != null) {

@@ -54,7 +54,7 @@ public class PlayerGroup extends Thread {
     private void ping() {
         if (this.nextPingTime > System.currentTimeMillis())
             return;
-        this.nextPingTime = (System.currentTimeMillis() / 1000L + 1L) * 1000L;
+        this.nextPingTime = (System.currentTimeMillis() / 1000L + 5L) * 1000L;
         for (Player player : this.players.values())
             if(player.isOnline()){
                 player.sendMessage(Ping.newBuilder().setTime(System.currentTimeMillis()).build());
@@ -185,5 +185,9 @@ public class PlayerGroup extends Thread {
         if (player != null) {
             player.sendMessage(message);
         }
+    }
+    void broadcast(Message message) {
+        for (Player player : this.players.values())
+            player.sendMessage(message);
     }
 }

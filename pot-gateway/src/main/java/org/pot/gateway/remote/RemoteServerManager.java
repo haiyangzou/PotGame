@@ -6,7 +6,7 @@ import org.pot.common.communication.server.DefinedServerSupplier;
 import org.pot.common.communication.server.GameServer;
 import org.pot.common.concurrent.exception.ServiceException;
 import org.pot.common.concurrent.executor.ExecutorUtil;
-import org.pot.common.concurrent.executor.ScheduledExcutor;
+import org.pot.common.concurrent.executor.ScheduledExecutor;
 import org.pot.common.concurrent.executor.StandardExecutor;
 import org.pot.common.concurrent.executor.ThreadUtil;
 import org.pot.common.util.JsonUtil;
@@ -20,7 +20,7 @@ import java.util.concurrent.*;
 @Slf4j
 public class RemoteServerManager {
     private final StandardExecutor remoteServerConnector;
-    private final ScheduledExcutor remoteServerRunner;
+    private final ScheduledExecutor remoteServerRunner;
     private final ScheduledFuture<?> requestAndCorrectFuture;
     private final Map<Integer, RemoteServer> remoteServers = new ConcurrentHashMap<>();
     private final Map<Integer, GameServer> definedGameServers = new ConcurrentHashMap<>();
@@ -31,7 +31,7 @@ public class RemoteServerManager {
         int executorSize = MathUtil.divideAndCeil(serverSize, 10);
         remoteServerConnector = new StandardExecutor(executorSize, "RemoteServerCon");
         int schedulerSIze = MathUtil.divideAndCeil(serverSize, 2);
-        remoteServerRunner = ScheduledExcutor.newScheduledExecutor(schedulerSIze, "RemoteServerRun");
+        remoteServerRunner = ScheduledExecutor.newScheduledExecutor(schedulerSIze, "RemoteServerRun");
         requestAndCorrectFuture = remoteServerRunner.scheduleAtFixedRate(this::requestAndCorrect, 1, 60, TimeUnit.SECONDS);
 
     }

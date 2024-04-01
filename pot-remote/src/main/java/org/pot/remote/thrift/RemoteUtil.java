@@ -29,7 +29,11 @@ public class RemoteUtil {
                 }
                 duplicated.putIfAbsent(name, count);
             }
-            ServerType[] serverTypes = remoteServiceInterface.getAnnotation(RemoteServerType.class).value();
+            RemoteServerType remoteServerType = remoteServiceInterface.getAnnotation(RemoteServerType.class);
+            if (remoteServerType == null) {
+                continue;
+            }
+            ServerType[] serverTypes = remoteServerType.value();
             for (ServerType serverType : serverTypes) {
                 map.computeIfAbsent(serverType, k -> new LinkedHashSet<>()).add(remoteServiceInterface);
             }
@@ -45,6 +49,7 @@ public class RemoteUtil {
         return remoteServiceInterfaceMap.getOrDefault(serverType, Collections.emptySet());
     }
 
+    @SuppressWarnings("unchecked")
     public static Class<? extends IRemote> getRemoteServiceInterface(Class<? extends IRemote> remoteConcreteClass) {
         if (!ClassUtil.isConcrete(remoteConcreteClass)) {
             throw new IllegalStateException("Not Concrete Remote" + remoteConcreteClass.getName());

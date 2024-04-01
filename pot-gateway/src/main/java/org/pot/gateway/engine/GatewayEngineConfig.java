@@ -7,13 +7,13 @@ import org.pot.core.engine.EngineConfig;
 
 @Getter
 public class GatewayEngineConfig extends EngineConfig {
-    private int userGroupSize = 20;
-    private int serverConnectionSize = 4;
-    private long guestReqExecSlowMillis = 20L;
-    private long guestReqWaitSlowMillis = 20L;
-    private long gatewayTickIntervalMillis = Constants.RUN_INTERVAL_MS;
-    private boolean gatewayRequestLogDisable = false;
-    private boolean gatewayResponseLogDisable = false;
+    private final int userGroupSize = 20;
+    private final int serverConnectionSize = 4;
+    private final long guestReqExecSlowMillis = 20L;
+    private final long guestReqWaitSlowMillis = 20L;
+    private final long gatewayTickIntervalMillis = Constants.RUN_INTERVAL_MS;
+    private final boolean gatewayRequestLogDisable = false;
+    private final boolean gatewayResponseLogDisable = false;
 
     @Override
     protected void setProperties(Configuration config) {

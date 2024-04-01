@@ -42,8 +42,7 @@ public class RemoteServerHandler implements Remote.Iface {
             throw new TApplicationException(TApplicationException.PROTOCOL_ERROR, "proto error");
         }
         try {
-            ByteBuffer response = RPCResponse.toByteBuff(rpcResponse);
-            return response;
+            return RPCResponse.toByteBuff(rpcResponse);
         } catch (Throwable e) {
             throw new TApplicationException(TApplicationException.PROTOCOL_ERROR, "proto error");
         }

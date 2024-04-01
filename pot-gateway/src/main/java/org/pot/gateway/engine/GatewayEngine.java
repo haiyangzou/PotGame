@@ -16,12 +16,12 @@ import org.pot.core.net.netty.websocket.WebSocketServer;
 import org.pot.gateway.guest.GuestWaitingRoom;
 import org.pot.gateway.remote.RemoteServerManager;
 import org.pot.gateway.remote.RemoteUserManager;
-import org.pot.message.protocol.ProtocolSupport;
 import org.pot.web.JettyHttpServer;
 import org.pot.gateway.guest.GuestRequestHandlerSupport;
 
 import java.util.concurrent.TimeUnit;
 
+@Getter
 public class GatewayEngine extends AppEngine<GatewayEngineConfig> {
     public static GatewayEngine getInstance() {
         return (GatewayEngine) EngineInstance.getInstance();
@@ -31,19 +31,12 @@ public class GatewayEngine extends AppEngine<GatewayEngineConfig> {
         super(GatewayEngineConfig.class);
     }
 
-    @Getter
     private IHttpServer httpServer;
-    @Getter
     private ServerId serverId;
-    @Getter
     private NettyClientEngine<FramePlayerMessage> nettyClientEngine;
-    @Getter
     private NettyServerEngine<FrameCmdMessage> nettyServerEngine;
-    @Getter
     private WebSocketServer<FrameCmdMessage> webSocketServer;
-    @Getter
     private RemoteUserManager remoteUserManager;
-    @Getter
     private RemoteServerManager remoteServerManager;
 
     protected GatewayEngine(Class<GatewayEngineConfig> configClass) throws Exception {
@@ -52,7 +45,6 @@ public class GatewayEngine extends AppEngine<GatewayEngineConfig> {
 
     @Override
     protected void doStart() throws Exception {
-        ProtocolSupport.init();
         GuestRequestHandlerSupport.init();
         initServerInfo();
         initNettyClientEngine();

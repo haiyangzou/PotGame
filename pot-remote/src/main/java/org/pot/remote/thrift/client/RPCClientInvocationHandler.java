@@ -1,6 +1,7 @@
 package org.pot.remote.thrift.client;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.thrift.transport.TTransport;
 import org.pot.common.Constants;
 import org.pot.remote.thrift.client.manager.RpcClientManager;
 import org.pot.remote.thrift.protocol.RPCRequest;
@@ -22,12 +23,13 @@ public class RPCClientInvocationHandler implements InvocationHandler {
         long time = System.currentTimeMillis();
         String serviceName = method.getDeclaringClass().getName();
         if (rpcClient.isLocal()) {
-            Object result = RpcClientManager.instance.getLocalRemoteServer().localInvoke(serviceName, method, args);
-            long elapsed = System.currentTimeMillis() - time;
-            if (elapsed > Constants.RUN_SLOW_MS) {
-                log.warn("onLocalCallFinish SLow");
-            }
-            return result;
+//            Object result = RpcClientManager.instance.getLocalRemoteServer().localInvoke(serviceName, method, args);
+//            long elapsed = System.currentTimeMillis() - time;
+//            if (elapsed > Constants.RUN_SLOW_MS) {
+//                log.warn("onLocalCallFinish SLow");
+//            }
+//            return result;
+            return null;
         }
         RPCRequest rpcRequest = new RPCRequest();
         rpcRequest.setService(serviceName);
@@ -37,9 +39,10 @@ public class RPCClientInvocationHandler implements InvocationHandler {
         int port = rpcClient.getRemoteClientConfig().getPort();
         try {
             ByteBuffer request = RPCRequest.toByteBuff(rpcRequest);
-            rpcClient.getTransport();
+            TTransport transport = rpcClient.getTransport();
+            transport.write(request);
         } catch (Throwable throwable) {
-            throw throwable;
+            log.error("rpc call failed host:{} port:{}", host, port);
         }
         return null;
     }

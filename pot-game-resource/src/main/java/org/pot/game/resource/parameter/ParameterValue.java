@@ -23,6 +23,18 @@ public final class ParameterValue {
         return Double.parseDouble(parameter().getValue());
     }
 
+    public int getInt() {
+        return Integer.parseInt(parameter().getValue());
+    }
+
+    public String getString() {
+        return String.valueOf(parameter().getValue());
+    }
+
+    public long getLong() {
+        return Long.parseLong(parameter().getValue());
+    }
+
     public boolean exists() {
         return parameter() != null;
     }

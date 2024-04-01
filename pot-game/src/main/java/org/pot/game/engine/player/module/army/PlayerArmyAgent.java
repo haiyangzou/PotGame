@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+@Getter
 public class PlayerArmyAgent extends PlayerAgentAdapter {
-    @Getter
     private final Map<Integer,PlayerArmy> playerArmyMap = new ConcurrentHashMap<>();
 
     public PlayerArmyAgent(Player player) {

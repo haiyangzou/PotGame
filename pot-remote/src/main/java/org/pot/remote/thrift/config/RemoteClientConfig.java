@@ -9,10 +9,10 @@ import org.pot.remote.thrift.client.pool.TTransportWrap;
 
 @Getter
 public class RemoteClientConfig extends EndPointConfig {
-    protected int port = -1;
-    private int timeout = 1000;
-    private ServerId serverId;
-    private boolean useConnectionPool;
+    protected int port;
+    private final int timeout = 1000;
+    private final ServerId serverId;
+    private final boolean useConnectionPool;
     private GenericObjectPoolConfig<TTransportWrap> poolConfig;
 
     public RemoteClientConfig(String host, int port, int serverType, int serverId) {

@@ -65,7 +65,7 @@ public class RemoteServer implements Runnable {
             try {
                 shutdown();
             } catch (Exception ex) {
-                log.error("RemoteServer shutdown occur an error. host={}, port={}", new Object[]{this.host, this.port, ex});
+                log.error("RemoteServer shutdown occur an error. host={}, port={}", this.host, this.port, ex);
             } finally {
                 this.runFuture.cancel(false);
                 this.closed = true;
@@ -74,7 +74,7 @@ public class RemoteServer implements Runnable {
             try {
                 execute();
             } catch (Exception ex) {
-                log.error("RemoteServer run occur an error. host={}, port={}", new Object[]{this.host, this.port, ex});
+                log.error("RemoteServer run occur an error. host={}, port={}", this.host, this.port, ex);
             }
         }
     }

@@ -18,6 +18,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(of = "id")
 @Table(name = "world_march")
 @Getter
+@Setter
 public class WorldMarchEntity implements Serializable {
     @Id
     @Column(name = "id")

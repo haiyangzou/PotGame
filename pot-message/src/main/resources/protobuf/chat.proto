@@ -1,0 +1,185 @@
+syntax = "proto3";
+
+option java_package = "com.eyu.kylin.magics.protocol.chat";
+option java_multiple_files = true;
+
+//客户端请求发送聊天
+message SendChatC2S{
+    int32 channel = 1;//聊天频道 1,国家 2，联盟 3，战区
+    string content = 2;//聊天内容
+    string replyContent = 3;//回复聊天内容
+}
+
+//客户端发送喇叭聊天
+message SendChatBroadcastC2S{
+    string content = 1;//聊天内容
+}
+
+//发送分享坐标
+message SendPointC2S{
+    int32 channel = 1;//聊天频道 1,国家 2，联盟 3，战区
+    string content = 2;//聊天内容
+}
+
+//喇叭消息返回
+message SendChatBroadcastS2C{
+    string content           = 1;//聊天内容
+    ChatSendInfo sendInfo    = 2;//发送者信息
+}
+
+//发送公告广播
+message SendNoticeBroadcastS2C{
+    string content           = 1;//聊天内容
+}
+
+//客户端请求发送私聊
+message SendPersonalChatC2S{
+    string playerName = 1;//玩家名称
+    string title = 2;//主题
+    string content = 3;//聊天内容
+}
+
+//请求聊天信息
+message ChatListC2S{
+    int64 id = 1;//聊天id
+    int32 channel = 2;//聊天频道
+}
+
+//聊天信息返回
+message ChatListS2C{
+    repeated ChatInfo chatInfos = 1;//聊天消息
+}
+
+//私聊信息返回
+message ChatPersonalListS2C{
+    repeated PushPersonalChatS2C chatPersonalInfos = 1;//私聊信息
+}
+
+//聊天屏蔽状态
+message ChatChangeShieldC2S{
+    int64 playerId = 1;//玩家id
+    int32 type = 2;//屏蔽状态 1 加入屏蔽 2 解除屏蔽
+}
+
+//已读私人聊天
+message ChatPersonalReadC2S{
+    int64 playerId = 1;//玩家id
+}
+
+//删除私人聊天
+message ChatPersonalDeleteC2S{
+    int64 playerId = 1;//玩家id
+}
+
+//系统通知信息
+message ChatNotice{
+    int32 templateId = 1;//模板id
+    repeated string linkId = 2;//超链接id 具体数据根据模板确定
+    string key = 3;//多语言key
+    repeated string params = 4;//参数
+}
+
+
+//发送者信息
+message ChatSendInfo{
+    int64 playerId = 1;//玩家id
+    string name = 2;//名称
+    int32 icon = 3;//头像
+    bytes avatar = 4;//自定义头像
+    int32 frameId = 5;//头像框
+    string unionAlias = 6;//联盟简称
+    int32 unionPosition = 7;//联盟官阶
+    int32 kingdomTitle = 8;//王国头衔
+    int32 artifactId = 9;//神器图标
+    int64 ability = 10;//战力
+}
+
+//聊天消息
+message ChatInfo{
+    int64 id = 1;//聊天id
+    int64 time = 2;//时间
+    int32 type = 3;//聊天类型 1，基础聊天   2，集结信息  3 系统通知信息 5 战报
+    int32 channel = 4;//聊天频道
+    string content = 5;//聊天内容
+    string replyContent = 6;//回复聊天内容
+    ChatNotice chatNotice = 7;//系统通知信息
+    ChatSendInfo sendInfo = 8;//发送者信息
+    ChatBattle chatBattle = 9;//战报数据
+}
+
+//私聊信息
+message ChatPersonalInfo{
+    int64 id = 1;//聊天id
+    int64 time = 2;//时间
+    string title = 3;//主题
+    string content = 4;//聊天内容
+    int32 status = 5;//信息状态 1 已读 0 未读
+    ChatSendInfo sendInfo = 6;//发送者信息
+}
+
+//聊天信息推送
+message PushChatS2C{
+    ChatInfo chatInfo = 1;//聊天消息
+}
+
+//聊天私信推送
+message PushPersonalChatS2C{
+    int64 playerId = 1;//玩家id
+    int64 receiverId = 2;//消息接收者id
+    ChatPersonalInfo chatPersonalInfo = 3;//私信消息
+    ChatSendInfo receiverInfo = 4;//接收者信息
+}
+
+//战报信息
+message ChatBattle{
+    map<string,string> info = 1;//战报简化数据
+}
+
+
+//推送屏蔽的玩家id
+message PushChatShieldS2C{
+    repeated int64 playerIds = 1;//屏蔽的玩家id
+}
+
+//聊天服务通讯
+message ChatS2S{
+   int32 serverId = 1;//按照国家发送聊天信息
+   repeated int64 playerIds = 2;//按照玩家发送聊天信息   具体玩家可以是同一联盟 或同一战区 或者同一群组
+   int32 channel = 3;//聊天频道
+   int32 uniqueId = 4;//唯一标识（服务器id，联盟id，战区id，群聊id）
+   ChatInfo chatInfo = 5;//聊天信息
+}
+
+//获取聊天信息
+message ChatListS2S{
+   int32 channel = 1;//聊天频道
+   int32 uniqueId = 2;//唯一标识（服务器id，联盟id，战区id，群聊id）
+   int64 id = 3;//聊天id 0为获取聊天信息  其他为获取该id之前的聊天信息
+}
+
+
+//聊天信息返回
+message ChatPersonalListS2S{
+    int64 playerId = 1;//玩家id
+    repeated int64 shieldPlayerIds = 2;//屏蔽列表
+}
+
+//私聊通讯
+message ChatPersonalS2S{
+   int64 playerId = 1;//玩家id
+   int64 receiverId = 2;//消息接收者id
+   ChatPersonalInfo personalInfo = 3;//私聊信息
+}
+
+//私聊已读
+message ChatPersonalReadS2S{
+   int64 playerId =1 ;//本人id
+   int64 otherPlayerId = 2;//对方id
+}
+
+//私聊删除
+message ChatPersonalDeleteS2S{
+   int64 playerId =1 ;//本人id
+   int64 otherPlayerId = 2;//对方id
+}
+

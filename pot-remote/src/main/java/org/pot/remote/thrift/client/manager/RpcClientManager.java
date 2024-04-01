@@ -3,11 +3,13 @@ package org.pot.remote.thrift.client.manager;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.pot.cache.server.ServerListCache;
+import org.pot.common.Constants;
 import org.pot.common.communication.server.Server;
 import org.pot.common.communication.server.ServerId;
 import org.pot.common.communication.server.ServerType;
 import org.pot.common.concurrent.exception.ExceptionUtil;
-import org.pot.common.concurrent.executor.ScheduledExcutor;
+import org.pot.common.concurrent.executor.ScheduledExecutor;
+import org.pot.common.concurrent.executor.ThreadUtil;
 import org.pot.common.util.ClassUtil;
 import org.pot.remote.thrift.RemoteUtil;
 import org.pot.remote.thrift.define.IRemote;
@@ -31,7 +33,8 @@ public class RpcClientManager {
     @Getter
     private RemoteServer localRemoteServer;
 
-    private volatile ScheduledExcutor executor;
+    private volatile ScheduledExecutor executor;
+    private volatile ScheduledExecutor executor_evict;
 
     private volatile ScheduledFuture<?> ensureFuture;
 
@@ -44,12 +47,19 @@ public class RpcClientManager {
         RemoteUtil.init();
         this.localServerId = localServerId;
         this.localRemoteServer = localRemoteServer;
-        this.executor = ScheduledExcutor.newScheduledExecutor(10, RpcClientManager.class.getSimpleName());
+        this.executor = ScheduledExecutor.newScheduledExecutor(10, RpcClientManager.class.getSimpleName());
+        this.executor_evict = ScheduledExecutor.newScheduledExecutor(1, RpcClientManager.class.getSimpleName());
         this.ensureFuture = this.executor.scheduleAtFixedRate(this::ensureAvailable, 0, 2, TimeUnit.SECONDS);
+        this.executor_evict.scheduleAtFixedRate(this::ensureAvailableEvict, 0, 2, TimeUnit.SECONDS);
+    }
+
+    public void ensureAvailableEvict() {
+        log.info("rpc client ensureAvailableEvict shutdown:{},terminated:{},idle:{},isCancelled{},isDone{}", this.executor.isShutdown(), this.executor.isTerminated(), this.executor.isIdle(), ensureFuture.isCancelled(), ensureFuture.isDone());
     }
 
     public void ensureAvailable() {
         try {
+            log.info("rpc client ensureAvailable shutdown:{},terminated:{},idle:{},isCancelled{},isDone{}", this.executor.isShutdown(), this.executor.isTerminated(), this.executor.isIdle(), ensureFuture.isCancelled(), ensureFuture.isDone());
             List<Server> servers = ServerListCache.instance().getServerList();
             Set<ServerType> serverTypes = servers.stream().map(server -> ServerType.valueOf(server.getTypeId())).collect(Collectors.toSet());
             for (ServerType serverType : serverTypes) {
@@ -106,5 +116,10 @@ public class RpcClientManager {
     public <T extends IRemote> void ifPresentService(ServerType serverType, Class<T> serviceInterface, Consumer<T> func) {
         T remote = this.randomService(serverType, serviceInterface);
         if (remote != null) func.accept(remote);
+    }
+
+    public void shutdown() {
+        servertypeCacheMap.forEach((k, v) -> v.close());
+        ThreadUtil.cancel(Constants.AWAIT_MS, TimeUnit.MILLISECONDS, ensureFuture);
     }
 }

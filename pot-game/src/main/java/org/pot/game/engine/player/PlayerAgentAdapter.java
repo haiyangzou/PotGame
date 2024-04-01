@@ -61,9 +61,13 @@ public abstract class PlayerAgentAdapter {
 
     }
 
+    protected void onNewDay() {
+    }
+
     public long calculatePower() {
         return 0;
     }
+
     @Getter
     protected volatile long power = 0L;
 

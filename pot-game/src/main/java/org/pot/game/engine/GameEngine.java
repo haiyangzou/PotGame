@@ -147,5 +147,8 @@ public class GameEngine extends AppEngine<GameEngineConfig> {
         ThreadUtil.await(Constants.AWAIT_MS, TimeUnit.MILLISECONDS, () -> getAsyncExecutor().isIdle());
         ReactiveRedis.close();
         GameDb.close();
+        remoteServer.stop();
+        RpcClientManager.instance.shutdown();
+        httpServer.shutdown();
     }
 }

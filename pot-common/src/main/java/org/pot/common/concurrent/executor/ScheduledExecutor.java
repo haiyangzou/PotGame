@@ -5,24 +5,24 @@ import java.util.concurrent.RunnableScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 
-public class ScheduledExcutor extends ScheduledThreadPoolExecutor {
+public class ScheduledExecutor extends ScheduledThreadPoolExecutor {
     private final String name;
-    private volatile int queueCapacity = 0;
+    private int queueCapacity = 0;
 
-    public ScheduledExcutor(String name, int corePoolSize, ThreadFactory threadFactory) {
+    public ScheduledExecutor(String name, int corePoolSize, ThreadFactory threadFactory) {
         super(corePoolSize, threadFactory, new AbortPolicy());
         this.name = name;
     }
 
-    public static ScheduledExcutor newScheduledExecutor(int coreThreads, String poolName) {
+    public static ScheduledExecutor newScheduledExecutor(int coreThreads, String poolName) {
         return newScheduledExecutor(coreThreads, poolName, true);
     }
 
-    public static ScheduledExcutor newScheduledExecutor(int coreThreads, String poolName, boolean daemon) {
+    public static ScheduledExecutor newScheduledExecutor(int coreThreads, String poolName, boolean daemon) {
         ThreadFactory threadFactory = ThreadUtil.newThreadFactory(poolName + "-%d", daemon);
-        ScheduledExcutor excutor = new ScheduledExcutor(poolName, coreThreads, threadFactory);
-        setPolicy(excutor);
-        return excutor;
+        ScheduledExecutor executor = new ScheduledExecutor(poolName, coreThreads, threadFactory);
+        setPolicy(executor);
+        return executor;
     }
 
     public static void setPolicy(ScheduledThreadPoolExecutor scheduler) {

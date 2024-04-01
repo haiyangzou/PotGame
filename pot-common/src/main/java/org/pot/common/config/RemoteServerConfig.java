@@ -6,15 +6,15 @@ import org.apache.commons.configuration2.Configuration;
 @Getter
 public class RemoteServerConfig extends EndPointConfig {
     private int port = 0;
-    private int clientTimeout = 1000;
-    private int selectorThreads = 10;
-    private int acceptQueueSizePerThread = 10;
-    private int backlog = 1024;
-    private int maxReadBufferBytes = 2 * 1024 * 1024;
-    private int workerThreadsMin = 10;
-    private int workerThreadsMax = 200;
-    private int workerQueueMaxSize = 1000000;
-    private int workerKeepAliveSeconds = 300;
+    private final int clientTimeout = 1000;
+    private final int selectorThreads = 10;
+    private final int acceptQueueSizePerThread = 10;
+    private final int backlog = 1024;
+    private final int maxReadBufferBytes = 2 * 1024 * 1024;
+    private final int workerThreadsMin = 10;
+    private final int workerThreadsMax = 200;
+    private final int workerQueueMaxSize = 1000000;
+    private final int workerKeepAliveSeconds = 300;
 
     public static RemoteServerConfig loadRemoteConfig(Configuration config) {
         RemoteServerConfig remoteServerConfig = new RemoteServerConfig();

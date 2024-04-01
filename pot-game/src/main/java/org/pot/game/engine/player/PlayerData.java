@@ -20,6 +20,7 @@ import org.pot.game.engine.GameServerInfo;
 import org.pot.game.engine.world.WorldManager;
 import org.pot.game.engine.world.module.map.born.PlayerBornRule;
 import org.pot.game.persistence.GameDb;
+import org.pot.game.persistence.entity.PlayerHeroEntity;
 import org.pot.game.persistence.entity.PlayerProfileEntity;
 import org.pot.game.persistence.mapper.PlayerProfileEntityMapper;
 import org.pot.message.protocol.login.LoginDataS2S;
@@ -36,6 +37,7 @@ public class PlayerData implements Serializable {
     private volatile boolean loadOver = false;
     private volatile boolean loadSuccess = false;
     private volatile PlayerProfileEntity profile;
+    private volatile PlayerHeroEntity heroEntity;
 
     public PlayerData(long uid) {
         this.uid = uid;
@@ -169,7 +171,7 @@ public class PlayerData implements Serializable {
         temp.setLastLoginTime(System.currentTimeMillis());
         temp.setLastOnlineTime(System.currentTimeMillis());
         temp.setOnlineTime(System.currentTimeMillis());
-        int worldPointId = WorldManager.getInstance().execute(()-> PlayerBornRule.getInstance().bornPlayer(this.uid));
+        int worldPointId = WorldManager.getInstance().execute(() -> PlayerBornRule.getInstance().bornPlayer(this.uid));
         temp.setWorldPointId(worldPointId);
         temp.setWorldCleanTime(0L);
         temp.setPayTotalDiamond(0);

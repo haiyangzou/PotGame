@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.pot.common.communication.server.Server;
 import org.pot.common.communication.server.ServerType;
-import org.pot.common.concurrent.executor.ScheduledExcutor;
+import org.pot.common.concurrent.executor.ScheduledExecutor;
 import org.pot.common.config.RemoteServerFilterConfig;
 import org.pot.common.util.MapUtil;
 import org.pot.common.util.RandomUtil;
@@ -31,7 +31,7 @@ public class RpcServerTypeCache {
         }
     }
 
-    void ensureAvailable(ScheduledExcutor executor, Collection<Server> serverList) {
+    void ensureAvailable(ScheduledExecutor executor, Collection<Server> serverList) {
         serverList = RemoteServerFilterConfig.filterConnectionServer(serverList);
         List<Server> typeServerList = serverList.stream().filter(server -> server.getTypeId() == serverType.getId()).collect(Collectors.toList());
         Map<Integer, Server> definedTypeServers = MapUtil.toHashMap(typeServerList, Server::getServerId, server -> server);

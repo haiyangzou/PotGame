@@ -23,6 +23,8 @@
         <module>pot-hotswap</module>
         <module>pot-config</module>
         <module>pot-remote</module>
+        <module>pot-chat</module>
+        <module>pot-union</module>
     </modules>
     <packaging>pom</packaging>
     <name>pot</name>

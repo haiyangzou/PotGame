@@ -1,5 +1,6 @@
 package org.pot.cache.player;
 
+import lombok.Getter;
 import org.pot.cache.player.name.PlayerNameCache;
 import org.pot.cache.player.snapshot.PlayerSnapShot;
 import org.pot.cache.player.snapshot.PlayerSnapShotCache;
@@ -7,6 +8,7 @@ import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 
 import java.util.function.Function;
 
+@Getter
 public class PlayerCaches {
     private static PlayerNameCache playerNameCache;
     private static PlayerSnapShotCache playerSnapShot;

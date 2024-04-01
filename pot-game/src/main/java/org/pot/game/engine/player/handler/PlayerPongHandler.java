@@ -11,7 +11,7 @@ public class PlayerPongHandler extends PlayerRequestHandler<Pong> {
     @Override
     protected IErrorCode handleRequest(Player player, Pong request) throws Exception {
         long cost = System.currentTimeMillis() - request.getPing().getTime();
-        if (cost > 200L)
+        if (cost > 10000L)
             log.info("player net connection lag. uid={}, loopback={}ms", player.getUid(), cost);
         return null;
     }

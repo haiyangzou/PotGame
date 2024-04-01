@@ -7,6 +7,12 @@ public enum GameErrorCode implements IErrorCode {
     PLAYER_NOT_FOUND(100_06),
 
     MARCH_NOT_EXISTS(810_00),
+
+    ILLEGAL_CHAR(10103),
+    CHAT_CONTENT_LIMIT(21301),
+    CHAT_UNION_NO_EXISTS(21300),
+    CHAT_SEND_TIME_LIMIT(21302),
+    CHAT_SEND_SAME_CONTENT_TIME_LIMIT(21304),
     ;
     public final int errorCode;
 

@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
+@Getter
 @Setter
 @Entity
 @Builder
@@ -17,13 +18,10 @@ import java.io.Serializable;
 @Table(name = "player_ghost")
 public class PlayerGhostEntity implements Serializable {
     @Id
-    @Getter
     @Column(name = "player_id", columnDefinition = "bigint NOT NULL")
     private Long playerId;
-    @Getter
     @Column(name = "destroyed")
     private Boolean destroyed;
-    @Getter
     @Column(name = "visa_data")
     private String visaData;
 }

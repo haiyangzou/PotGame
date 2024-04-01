@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+option java_package = "com.eyu.kylin.magics.protocol.hero";
+option java_multiple_files = true;
+
+
+//取得英雄列表信息 1001_1 返回 GetHeroListS2C
+message GetHeroListC2S{
+
+}
+
+message GetHeroListS2C{
+     repeated PlayerHeroDto content = 1;//英雄信息列表
+}
+
+message PlayerHeroDto{
+    int32 heroBaseId = 1;//英雄基础id
+    int32 evolution = 2;//进化
+    int32 heroLevel = 3;//英雄等级
+    int32 strengthenLevel = 4;//强化等级
+    int32 ability = 5;//实力
+    int32 heroStatus = 6;//英雄状态
+    int32 star = 7;//英雄星级
+    int32 backgroudReward = 8;//背景板奖励
+    int64 playerHeroEquipId = 9;//玩家英雄宝物ID
+    int32 heroEquipBaseId = 10;//英雄宝物基础ID
+    int32 heroEquipStrengthLevel = 11;//英雄宝物强化等级
+    string skin = 12;//皮肤
+    bool skillFeature = 13;//是否释放过技能特写
+}
+
+//招募英雄 1001_2 返回 PushHeroInfoS2C
+message RecruitC2S{
+    int32 heroBaseId = 1;//英雄基础id
+}
+
+//升级 1001_3 返回 PushHeroInfoS2C
+message UpgradeLevelC2S{
+    int32 heroBaseId = 1;//英雄基础id
+}
+
+//进化 1001_4 返回 PushHeroInfoS2C
+message UpgradeEvolutionC2S{
+    int32 heroBaseId = 1;//英雄基础id
+}
+
+//强化 1001_5 返回 PushHeroInfoS2C
+message UpgradeStrengthenLevelC2S{
+    int32 heroBaseId = 1;//英雄基础id
+}
+
+//英雄重置 1001_6 返回 HeroResetS2C
+message HeroResetC2S{
+    int32 heroBaseId = 1;//英雄基础id
+}
+
+message HeroResetS2C{
+    int32 heroBaseId = 1;//英雄基础id
+}
+
+//英雄碎片回收 1001_8 返回 资源变化
+message HeroFragRecycleC2S{
+    string itemId = 1;//物品id
+    int32 count = 2;//数量
+}
+
+message HeroFragRecycleS2C{
+    string itemId = 1;//物品id
+    int32 count = 2;//数量
+    int32 score = 3;//积分
+}
+
+//英雄碎片兑换
+message HeroFragExchangeC2S{
+    string itemId = 1;//物品id
+    int32 count = 2;//数量
+}
+
+message HeroFragExchangeS2C{
+    string itemId = 1;//物品id
+    int32 count = 2;//数量
+}
+
+//招募英雄结果推送
+message HeroDrawRewardS2C{
+    repeated HeroDrawView heroDrawViews = 1;//招募英雄奖励
+    int32 score = 2;//获得积分
+}
+
+//招募英雄奖励
+message HeroDrawView{
+    string itemId = 1;//物品id
+    int32 count = 2;//数量
+    bool isNewHero = 3;//是否新英雄
+}
+
+//升星 1001_9 返回 UpgradeStarS2C
+message UpgradeStarC2S{
+    int32 heroBaseId = 1;//英雄基础id
+}
+
+//万能碎片兑换英雄碎片 1001_10 返回 Empty
+message ExchangeHeroFragC2S{
+    int32 heroBaseId = 1;//英雄基础id
+    int32 count = 2;//数量
+}
+
+//一键升级 1001_11 返回 PushHeroInfoS2C
+message UpgradeLevelOneKeyC2S{
+    int32 heroBaseId = 1;//英雄基础id
+}
+
+//获取英雄背景奖励 1001_15 返回 Empty
+message GetBackgroundRewardC2S{
+    int32 heroBaseId = 1;//英雄基础id
+}
+
+//推送英雄状态变化
+message PushHeroStatusChangeS2C{
+    repeated int32 heroBaseIds = 1;//英雄基础数据id集合
+    int32 heroStatus = 2;//英雄状态
+}
+
+//推送英雄数据
+message PushHeroInfoS2C{
+    PlayerHeroDto playerHero = 1;//玩家英雄信息
+}
+
+//酒馆抽奖
+message HeroDrawC2S{
+    int32 way = 1;//抽奖方式
+}

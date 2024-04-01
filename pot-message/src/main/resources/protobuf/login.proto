@@ -2,6 +2,7 @@ syntax = "proto3";
 package ProtoMessage;
 option java_package = "org.pot.message.protocol.login";
 option java_multiple_files = true;
+import "hero.proto";
 message LoginReqC2S{
   int32 loginType = 1;
   string account = 2;
@@ -77,6 +78,7 @@ message LoginRespS2C{
   int64 power                     = 15;//战力
   int64 serverOpenTime            = 16; // 开服时间戳
   int64 registerTime              = 17;//注册时间
+  repeated PlayerHeroDto heros    = 18;//英雄信息列表
 }
 message LogoutReqC2S{
   int64 gameUid = 1;

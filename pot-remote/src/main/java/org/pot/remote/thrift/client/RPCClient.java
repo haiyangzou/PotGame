@@ -17,6 +17,7 @@ import org.springframework.cglib.proxy.NoOp;
 
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -34,6 +35,8 @@ public class RPCClient {
     public RPCClient(RemoteClientConfig remoteClientConfig) {
         this.remoteClientConfig = remoteClientConfig;
         this.keepAliveRemote = createProxy(IKeepAliveRemote.class);
+        this.pool = new TTransportPool(null, this.remoteClientConfig.getHost(), this.remoteClientConfig.getPort(), this.remoteClientConfig.getTimeout());
+
     }
 
     TTransport getTransport() throws Exception {
@@ -65,7 +68,6 @@ public class RPCClient {
             available = false;
             if (NetSuppressErrors.isSuppressed(cause)) return;
             log.error("thrift client {}:{} pool error cause:{}", remoteClientConfig.getHost(), remoteClientConfig.getPoolConfig(), NetSuppressErrors.suppress(cause));
-
         }
     }
 
@@ -82,7 +84,10 @@ public class RPCClient {
     }
 
     public boolean isLocal() {
-        return RpcClientManager.instance.getLocalServerId().equals(this.remoteClientConfig.getServerId());
+        if (RpcClientManager.instance.getLocalServerId().serverType != this.remoteClientConfig.getServerId().serverType) {
+            return false;
+        }
+        return Objects.equals(RpcClientManager.instance.getLocalServerId().id, this.remoteClientConfig.getServerId().id);
     }
 
     public void close() {

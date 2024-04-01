@@ -7,14 +7,16 @@ import org.pot.common.util.EnumUtils;
 
 import java.util.Map;
 
+@Getter
 public enum ServerType implements IntEnum {
     GAME_SERVER(0),
     GATE_SERVER(1),
     GLOBAL_SERVER(2),
     SLAVE_SERVER(3),
     STRATEGY(14),
+    MAIL_SERVER(15),
+    CHAT_SERVER(16),
     ;
-    @Getter
     private final int value;
 
     ServerType(int value) {

@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class AsyncExecutor {
-    private final ScheduledExcutor scheduledExcutor;
+    private final ScheduledExecutor scheduledExecutor;
     private final StandardExecutor threadPoolExcutor;
     private final String name;
     private final Indicator indicator = Indicator.builder("tps").build();
@@ -20,13 +20,13 @@ public class AsyncExecutor {
         this.name = config.getThreadName();
         threadPoolExcutor = new StandardExecutor(config.getQueueMaxSize(), config.getCoreThreadSize(),
                 config.getMaxThreadSize(), config.getKeepAliveTime(), config.getKeepAliveTimeUnit(), this.name + "Sch");
-        scheduledExcutor = ScheduledExcutor.newScheduledExecutor(config.getCoreThreadSize(), this.name + "Sch");
+        scheduledExecutor = ScheduledExecutor.newScheduledExecutor(config.getCoreThreadSize(), this.name + "Sch");
     }
 
     public AsyncExecutor(String name, int coreSize) {
         this.name = name;
         threadPoolExcutor = new StandardExecutor(coreSize, this.name + "Sch");
-        scheduledExcutor = ScheduledExcutor.newScheduledExecutor(coreSize, this.name + "Sch");
+        scheduledExecutor = ScheduledExecutor.newScheduledExecutor(coreSize, this.name + "Sch");
     }
 
     public void execute(Runnable command) {
@@ -43,7 +43,7 @@ public class AsyncExecutor {
 
     public ScheduledFuture<?> scheduleAtFixedRate(long slowMills, Runnable comRunnable, long iniDelay, long period,
                                                   TimeUnit unit) {
-        return scheduledExcutor.scheduleAtFixedRate(wrap(slowMills, comRunnable), iniDelay, period, unit);
+        return scheduledExecutor.scheduleAtFixedRate(wrap(slowMills, comRunnable), iniDelay, period, unit);
     }
 
     private Runnable wrap(long slowMills, Runnable comRunnable) {
@@ -75,7 +75,7 @@ public class AsyncExecutor {
 
     public void shutdown() {
         shutdownExecutor(threadPoolExcutor);
-        shutdownExecutor(scheduledExcutor);
+        shutdownExecutor(scheduledExecutor);
     }
 
     private void shutdownExecutor(ExecutorService executorService) {
@@ -94,6 +94,6 @@ public class AsyncExecutor {
     }
 
     public boolean isScheduledExecutorIdle() {
-        return scheduledExcutor.isIdle();
+        return scheduledExecutor.isIdle();
     }
 }

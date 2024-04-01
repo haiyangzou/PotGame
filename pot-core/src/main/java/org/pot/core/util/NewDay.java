@@ -1,6 +1,7 @@
 package org.pot.core.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.pot.common.date.DateTimeUtil;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -86,5 +87,9 @@ public class NewDay {
 
     public static void addMonthTask(Task task) {
         dayTasks.add(task);
+    }
+
+    public static long getDayZeroMillis() {
+        return DateTimeUtil.toMills(DAY_ZERO_DATETIME);
     }
 }

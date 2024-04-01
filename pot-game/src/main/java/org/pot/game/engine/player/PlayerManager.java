@@ -116,4 +116,9 @@ public class PlayerManager {
 
     }
 
+    public void broadcast(Message message) {
+        for (PlayerGroup playerGroup : this.playerGroups)
+            playerGroup.broadcast(message);
+    }
+
 }

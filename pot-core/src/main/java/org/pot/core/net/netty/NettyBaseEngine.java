@@ -4,7 +4,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import lombok.Getter;
-import org.pot.common.concurrent.executor.ScheduledExcutor;
+import org.pot.common.concurrent.executor.ScheduledExecutor;
 import org.pot.core.config.NettyConfig;
 import org.pot.core.net.connection.ConnectionManager;
 import org.pot.core.net.connection.EvictConnectionTask;
@@ -20,7 +20,7 @@ public abstract class NettyBaseEngine<M extends FrameMessage> extends ChannelIni
     @Getter
     protected final NetEngineStatus netEngineStatus = new NetEngineStatus();
 
-    protected final ScheduledExcutor executor = ScheduledExcutor.newScheduledExecutor(1,
+    protected final ScheduledExecutor executor = ScheduledExecutor.newScheduledExecutor(1,
             EvictConnectionTask.class.getName());
     protected final Function<NettyBaseEngine<M>, FrameCodec<M>> codecFactory;
 

@@ -8,11 +8,10 @@ import org.pot.game.engine.player.Player;
 import org.pot.game.engine.player.PlayerManager;
 import org.pot.message.protocol.tunnel.GhostKeepAliveCmd;
 
+@Getter
 @Slf4j
 public class GhostKeepAliveTask implements Runnable {
-    @Getter
     private final PlayerSession playerSession;
-    @Getter
     private final GhostKeepAliveCmd ghostKeepAliveCmd;
 
     public GhostKeepAliveTask(PlayerSession playerSession, GhostKeepAliveCmd ghostKeepAliveCmd) {

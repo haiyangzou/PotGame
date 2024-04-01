@@ -10,27 +10,25 @@ import org.pot.common.concurrent.exception.IErrorCode;
 import org.pot.common.concurrent.exception.ServiceException;
 import org.pot.common.concurrent.executor.AsyncRunner;
 import org.pot.common.util.ExDateTimeUtil;
-import org.pot.common.util.Indicator;
 import org.pot.common.util.RunSignal;
 import org.pot.common.util.StringUtil;
 import org.pot.core.net.netty.FramePlayerMessage;
+import org.pot.core.util.NewDay;
 import org.pot.core.util.SignalLight;
 import org.pot.game.engine.GameEngine;
 import org.pot.game.engine.enums.StatisticsEnum;
 import org.pot.game.engine.player.async.AbstractAsyncHandler;
 import org.pot.game.engine.player.async.AsyncHandlerManager;
 import org.pot.game.engine.player.common.PlayerCommonAgent;
-import org.pot.game.engine.player.component.PlayerPowerComponent;
-import org.pot.game.engine.player.component.PlayerPushComponent;
-import org.pot.game.engine.player.component.PlayerEventComponent;
-import org.pot.game.engine.player.component.PlayerSceneComponent;
-import org.pot.game.engine.player.component.PlayerStatisticsComponent;
+import org.pot.game.engine.player.component.*;
 import org.pot.game.engine.player.module.PlayerAgentsInitializer;
 import org.pot.game.engine.player.module.army.PlayerArmyAgent;
+import org.pot.game.engine.player.module.chat.PlayerChatAgent;
 import org.pot.game.engine.player.module.event.PlayerEventsInitializer;
 import org.pot.game.engine.player.module.event.event.PlayerFirstLogin;
 import org.pot.game.engine.player.module.event.event.PlayerLogin;
 import org.pot.game.engine.player.module.ghost.PlayerGhostAgent;
+import org.pot.game.engine.player.module.hero.PlayerHeroAgent;
 import org.pot.game.engine.player.module.tower.PlayerTowerAgent;
 import org.pot.game.engine.player.union.PlayerUnionAgent;
 import org.pot.game.gate.PlayerSession;
@@ -63,6 +61,8 @@ public class Player {
     public final PlayerTowerAgent towerAgent = new PlayerTowerAgent(this);
 
     public final PlayerArmyAgent armyAgent = new PlayerArmyAgent(this);
+    public final PlayerChatAgent chatAgent = new PlayerChatAgent(this);
+    public final PlayerHeroAgent heroAgent = new PlayerHeroAgent(this);
 
     @Getter
     public final List<PlayerAgentAdapter> agentAdapterList;
@@ -117,12 +117,12 @@ public class Player {
 
     public IErrorCode onLoginSuccess(LoginSuccessC2S loginSuccessC2S) {
         for (PlayerAgentAdapter playerAgent : agentAdapterList) {
-            String flag = StringUtil.format("Player@{}_onLoginSuccess_{}", new Object[]{Long.valueOf(this.uid), playerAgent.getClassSimpleName()});
+            String flag = StringUtil.format("Player@{}_onLoginSuccess_{}", this.uid, playerAgent.getClassSimpleName());
             SignalLight.setOn(flag);
             try {
                 playerAgent.onLoginSuccess();
             } catch (Exception e) {
-                log.error("Player On Login Success Error! uid={}, Agent={}", new Object[]{Long.valueOf(getUid()), playerAgent.getClassSimpleName(), e});
+                log.error("Player On Login Success Error! uid={}, Agent={}", getUid(), playerAgent.getClassSimpleName(), e);
             }
             SignalLight.setOff(flag);
         }
@@ -339,6 +339,17 @@ public class Player {
 
     private void onLoadEnd() {
         PlayerSnapshotUtil.updateSnapshot(this);
+        this.powerComponent.calculatePower(true);
+    }
+
+    private void calculateOnlineSeconds() {
+        long lastLoginTime = this.profile.getLastLoginTime();
+        long onlineMillis = System.currentTimeMillis() - lastLoginTime;
+        if (onlineMillis > 0L) {
+            int onlineSeconds = (int) (onlineMillis / 1000L);
+            long totalOnlineSeconds = onlineSeconds + this.profile.getOnlineTime();
+            this.profile.setOnlineTime(totalOnlineSeconds);
+        }
     }
 
     private void register() {
@@ -387,7 +398,23 @@ public class Player {
     }
 
     public void onNewDay() {
-
+        for (PlayerAgentAdapter playerAgent : agentAdapterList) {
+            String flag = StringUtil.format("Player@{}_onNewDay_{}", this.uid, playerAgent.getClassSimpleName());
+            SignalLight.setOn(flag);
+            try {
+                playerAgent.onNewDay();
+            } catch (Exception e) {
+                log.error("Player On New Day Error! uid={}, Agent={}", getUid(), playerAgent.getClassSimpleName(), e);
+            }
+            SignalLight.setOff(flag);
+        }
+        if (isOnline()) {
+            this.profile.setLastLoginTime(System.currentTimeMillis());
+            this.profile.setLastOnlineTime(System.currentTimeMillis());
+            this.statisticsComponent.addOneStatisticsInt(StatisticsEnum.LOGIN_COUNT);
+            this.eventComponent.postPlayerEvent(PlayerLogin.builder().build());
+            this.eventComponent.postPlayerEvent(PlayerFirstLogin.builder().build());
+        }
     }
 
     public void onNewWeek() {
@@ -426,6 +453,11 @@ public class Player {
     }
 
     public boolean isOnline() {
-        return playerSession.isOnline();
+        PlayerSession atomic = this.playerSession;
+        return (atomic != null && atomic.isOnline());
+    }
+
+    public long getDailyResetTime() {
+        return NewDay.getDayZeroMillis();
     }
 }

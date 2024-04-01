@@ -26,7 +26,10 @@ public class DateTimeUtil {
     }
 
     public static LocalDateTime toLocalDateTime(final Date date, final ZoneId zoneId) {
-        return toLocalDateTime(date, zoneId);
+        return toLocalDateTime(date.toInstant(), zoneId);
+    }
+    public static LocalDateTime toLocalDateTime(long utcMilli, ZoneId zoneId) {
+        return toLocalDateTime(Instant.ofEpochMilli(utcMilli), zoneId);
     }
 
     public static LocalDateTime toLocalDateTime(final Date date) {

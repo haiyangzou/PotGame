@@ -51,7 +51,7 @@ public class ClassUtil {
     }
 
     public static String getAbbreviatedName(String stacktrace, int depth) {
-        if (stacktrace == null || stacktrace.length() == 0) {
+        if (stacktrace == null || stacktrace.isEmpty()) {
             return StringUtils.EMPTY;
         }
         if (depth < 1) {
