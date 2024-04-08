@@ -1,12 +1,11 @@
 package org.pot.game.engine.player.module.hero;
 
-import com.eyu.kylin.magics.protocol.hero.PlayerHeroDto;
 import lombok.Getter;
 import org.pot.game.engine.player.Player;
 import org.pot.game.engine.player.PlayerAgentAdapter;
 import org.pot.game.engine.player.PlayerData;
-import org.pot.game.engine.player.module.army.PlayerArmy;
 import org.pot.game.persistence.entity.PlayerHeroEntity;
+import org.pot.message.protocol.hero.PlayerHeroDto;
 import org.pot.message.protocol.login.LoginRespS2C;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 syntax = "proto3";
-
-option java_package = "com.eyu.kylin.magics.protocol.chat";
+package ProtoMessage;
+option java_package = "org.pot.message.protocol.chat";
 option java_multiple_files = true;
 
 //客户端请求发送聊天

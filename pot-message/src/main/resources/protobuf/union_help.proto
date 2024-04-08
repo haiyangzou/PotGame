@@ -1,0 +1,101 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package ="org.pot.message.protocol.union";
+option java_multiple_files = true;
+option java_outer_classname = "UnionHelpProto";
+
+import "player.proto";
+
+
+// 联盟帮助-别人请求我的
+message UnionHelpDto {
+    // 队列Id
+    int64 queueId = 1;
+    // 队列类型
+    int32 queueType = 2;
+    // 最大可帮助次数
+    int32 maxHelpCount = 3;
+    // 帮助者ID
+    repeated int64 helperId = 4;
+    // 请求帮助玩家信息
+    PlayerProfileDto profile = 5;
+    // 阶级
+    int32 rank = 6;
+    // 等级参数
+    int32 levelParam = 7;
+    // id参数
+    int32 idParam = 8;
+}
+
+// 获取帮助列表上行
+message GetUnionHelpListC2S {
+}
+
+// 获取帮助列表下行
+message GetUnionHelpListS2C {
+    //    帮助列表
+    repeated UnionHelpDto help = 1;
+    // 今日已获取联盟币
+    int64 unionCoins = 2;
+}
+
+// 帮助别人上行
+message UnionHelpC2S {
+    // 队列 Id
+    int64 queueId = 1;
+    // 其他玩家ID
+    int64 otherId = 2;
+}
+
+// 帮助别人下行(广播)：根据queueId增加帮助者ID playerId,playerId成员的联盟币加addUnionCoin,联盟增加荣誉addHonor,playerId是别人且queueId是自己请求的则提示别人帮助了我
+message UnionHelpS2C {
+    // 队列 Id
+    int64 queueId = 1;
+    // 帮助增加的联盟荣誉
+    int64 addHonor = 2;
+    // 帮助增加的联盟币
+    int64 addUnionCoin = 3;
+    // 帮助者玩家ID,如果是自己ID则是自己帮助别人，如果是其他玩家ID则是别人帮助
+    int64 playerId = 4;
+    // 队列类型，日志使用
+    int32 queueType = 5;
+}
+
+// 帮助All上行
+message UnionHelpAllC2S {
+}
+
+// 帮助All下行(广播)
+message UnionHelpAllS2C {
+    // 更新的帮助
+    repeated UnionHelpDto help = 1;
+    // 帮助增加的联盟荣誉
+    int64 addHonor = 2;
+    // playerId对应的成员增加的联盟币
+    int64 addUnionCoin = 3;
+    // 帮助者玩家ID，如果playerId不是自己且更新的帮助中有自己请求的则提示别人帮助了我
+    int64 playerId = 4;
+}
+
+// 请求帮助下行
+message AskForUnionHelpS2C {
+    // 队列 Id
+    UnionHelpDto helpDto = 1;
+}
+
+message AskForUnionHelpS2S {
+    UnionHelpDto help = 1;
+}
+
+// 删除联盟帮助
+message DeleteUnionHelpS2S {
+    //队列唯一ID
+    int64 queueId = 1;
+}
+
+// 推送删除帮助
+message DeleteUnionHelpS2C {
+    // 队列 Ids
+    repeated int64 queueId = 1;
+}
+

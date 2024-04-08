@@ -1,0 +1,79 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package ="org.pot.message.protocol.union";
+option java_multiple_files = true;
+option java_outer_classname = "UnionLogProto";
+
+// 埋点日志联盟快照
+message UnionSnapshotDto {
+    // 区服ID
+    int32 serverId = 1;
+    // 联盟ID
+    int32 unionId = 2;
+    // 联盟名
+    string unionName = 3;
+    // 联盟简称
+    string unionAlias = 4;
+    // 联盟等级
+    int32 unionLevel = 5;
+    // 联盟主语言
+    string language = 6;
+    // 联盟成员数
+    int32 memberCount = 7;
+    // 创建时间
+    int64 createTime = 8;
+    // 创建者玩家ID
+    int64 creatorId = 9;
+    // 盟主玩家ID
+    int64 leaderId = 10;
+    int32 oldUnionLevel = 11;
+    int64 oldUnionExp = 12;
+    int64 unionExp = 13;
+    int64 oldActiveValue = 14;
+    int64 activeValue = 15;
+    int64 dailyTechExp = 16;
+    int32 dailyResearchTimes = 17;
+    int32 oldGiftLevel = 18;
+    int32 giftLevel = 19;
+    int64 oldGiftExp = 20;
+    int64 giftExp = 21;
+    int32 dailyBigGiftCount = 22;
+    int32 dailyKeyCount = 23;
+    int64 oldHonor = 24;
+    int64 honor = 25;
+    int64 dailyHonorGain = 26;
+    int64 dailyHonorCost = 27;
+}
+
+//联盟快照推送消息
+message UnionSnapshotPushS2S {
+    UnionSnapshotDto snapshot = 1;
+}
+
+// 联盟活跃重置推送
+message UnionActiveResetPushS2S {
+    // 每种补给箱分配数量
+    repeated int32 boxNum = 1;
+    // 总活跃值
+    int64 totalActiveValue = 2;
+}
+
+// 联盟大礼物推送消息
+message UnionBigGiftPushS2S {
+    // 大礼物配置ID
+    int32 giftId = 1;
+    // 大礼物等级
+    int32 giftLevel = 2;
+}
+
+// 联盟礼物过期推送
+message UnionGiftExpirePushS2S {
+    // 礼物配置ID
+    int32 giftId = 1;
+    // 大礼物等级
+    int32 giftLevel = 2;
+    // 发送者ID
+    int64 senderId = 3;
+    // 总领取次数
+    int32 claimTimes = 4;
+}

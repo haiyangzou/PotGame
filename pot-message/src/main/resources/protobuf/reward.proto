@@ -1,0 +1,21 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package = "org.pot.message.protocol.task";
+option java_multiple_files = true;
+option java_outer_classname = "RewardProto";
+
+// 奖励信息
+message RewardDto {
+    // 奖励类型
+    int32 type = 1;
+    // 奖励ID
+    string id = 2;
+    // 奖励数量
+    int64 count = 3;
+}
+
+// 奖励列表
+message RewardList {
+    // 奖励
+    repeated RewardDto reward = 1;
+}

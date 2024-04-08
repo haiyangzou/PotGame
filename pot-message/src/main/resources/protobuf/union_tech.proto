@@ -1,0 +1,133 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package ="org.pot.message.protocol.union";
+option java_multiple_files = true;
+option java_outer_classname = "UnionTechProto";
+
+import "player.proto";
+
+// 联盟科技信息
+message UnionTechDto {
+    // 联盟科技ID
+    int32 id = 1;
+    // 联盟科技等级
+    int32 level = 2;
+    // 联盟科技经验
+    int64 exp = 3;
+    // 研究结束时间
+    int64 researchEndTime = 4;
+}
+
+// 玩家联盟科技信息
+message PlayerUnionTechDto {
+    // 本日捐献科技值
+    int64 donateTechPoint = 1;
+    // 剩余科技捐献次数
+    int32 donateTechTimes = 2;
+    // 下次科技捐献次数增加时间,下次时间戳
+    int64 donateTimesRefreshTime = 3;
+    // 钻石捐献次数
+    int32 diamondDonateTimes = 4;
+}
+
+// 设置推荐联盟科技上行请求
+message RecommendUnionTechC2S {
+    // 联盟科技ID
+    int32 techId = 1;
+}
+
+// 设置推荐联盟科技下行响应
+message RecommendUnionTechS2C {
+    int32 techId = 1;
+}
+
+
+message UnionTechRankDto {
+    // 排名
+    int32 rank = 1;
+    // 玩家基本信息
+    PlayerProfileDto profile = 2;
+    // 捐献科技点数
+    int64 value = 3;
+}
+
+// 联盟科技捐献上行请求
+message DonateUnionTechC2S {
+    // 联盟科技ID
+    int32 techId = 1;
+    // 消耗资源ID
+    int32 resourceId = 2;
+    // 资源数量
+    int64 amount = 3;
+}
+
+// 联盟科技捐献下行响应
+message DonateUnionTechS2C {
+    // 联盟科技信息
+    UnionTechDto tech = 1;
+    // 捐献翻倍倍数
+    int32 bonus = 2;
+    // 捐献后联盟等级
+    int32 unionLevel = 3;
+    // 捐献后联盟经验
+    int64 unionExp = 4;
+    // 捐献后的联盟荣誉
+    int64 honor = 5;
+    // 增加的科技经验(展示用)
+    int64 addTechExp = 6;
+    // 增加的联盟经验(展示用)
+    int64 addUnionExp = 7;
+    // 增加的联盟荣誉(展示用)
+    int64 addHonor = 8;
+    // 增加的联盟币(展示用)
+    int64 addUnionCoin = 9;
+    // 捐献后的次数信息
+    PlayerUnionTechDto PlayerUnionTech = 10;
+    // 捐献时间戳
+    int64 donateUnionTechTime = 11;
+}
+
+// 其他联盟成员捐献科技下行响应
+message OtherDonateUnionTechS2C {
+    // 联盟科技信息
+    UnionTechDto tech = 1;
+    // 捐献后联盟等级
+    int32 unionLevel = 3;
+    // 捐献后联盟经验
+    int64 unionExp = 4;
+    // 捐献后的联盟荣誉
+    int64 honor = 5;
+    // 捐献玩家ID
+    int64 playerId = 6;
+    // 每日捐献联盟科技经验
+    int64 dailyUnionTechExp = 7;
+    // 联盟科技捐献时间戳
+    int64 donateUnionTechTime = 8;
+}
+
+// 联盟科技研究上行请求
+message ResearchUnionTechC2S {
+    // 联盟科技ID
+    int32 techId = 1;
+}
+
+// 联盟科技研究下行响应
+message ResearchUnionTechS2C {
+    // 联盟科技ID
+    int32 techId = 1;
+    // 研究结束时间
+    int64 researchEndTime = 2;
+}
+
+// 联盟科技研究结束升级下行响应
+message UnionTechLevelUpS2C {
+    // 联盟科技信息
+    UnionTechDto tech = 1;
+}
+
+// 刷新联盟科技捐献次数下行响应
+message PlayerUnionTechS2C {
+    PlayerUnionTechDto PlayerUnionTech = 1;
+}
+
+

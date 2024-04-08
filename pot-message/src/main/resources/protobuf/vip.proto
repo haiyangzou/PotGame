@@ -1,0 +1,23 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package = "org.pot.message.protocol.vip";
+option java_multiple_files = true;
+
+
+//推送vip数据
+message PushVipS2C{
+   int32 level = 1;//vip等级
+   int32 exp = 2;//vip的经验
+   int32 loginDays = 3;//连续登录天数
+   int32 nextPoint = 4;//明天获取点数
+   int32 gainPoint = 5;//当天获得vip经验
+   int32 source = 6;//来源
+}
+
+//推送vip弹板显示数据
+message PushVipViewS2C{
+   int32 level = 1;//vip等级
+   int32 gainExp = 2;//获得vip经验
+   int32 loginDays = 3;//连续登录天数
+   int32 nextPoint = 4;//明天获取点数
+}

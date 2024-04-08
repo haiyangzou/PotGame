@@ -3,11 +3,12 @@ package org.pot.core.enums;
 import java.util.Map;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.pot.common.enums.IntEnum;
 import org.pot.common.util.EnumUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+@Slf4j
 @Getter
 public enum ChatChannel implements IntEnum {
     COUNTRY(1),
@@ -16,12 +17,8 @@ public enum ChatChannel implements IntEnum {
     PERSONAL(4);
 
     static {
-        log = LoggerFactory.getLogger(ChatChannel.class);
         INDEXES = EnumUtils.toMap(values());
     }
-
-    private static final Logger log;
-
     private final int channel;
 
     private static final Map<Integer, ChatChannel> INDEXES;

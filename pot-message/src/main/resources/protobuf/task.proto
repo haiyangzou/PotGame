@@ -1,0 +1,64 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package = "org.pot.message.protocol.task";
+option java_multiple_files = true;
+
+
+//章节任务取得玩家任务信息列表 64_1 返回 GetPlayerTaskListS2C
+message GetPlayerTaskListC2S{
+    int32 taskType = 1;//任务类型 1主线任务 2章节任务 3每日任务
+}
+
+message GetPlayerTaskListS2C{
+    int32 taskType = 1;//任务类型 1主线任务 2章节任务 3每日任务 所有类型都使用任务基础数据集(2使用chapterId，3使用score和dailyBox)
+    int32  chapterId = 2;//章节id
+    repeated BaseTask taskList = 3;//任务基础数据集
+    int32 score = 4;//每日任务积分
+    repeated DailyBox dailyBox = 5;//奖励列表
+}
+
+//任务基础
+message BaseTask{
+    int32 taskId = 1;//基础任务id
+    int32 taskStatus = 2;//任务状态
+    int64 progress = 3;//任务进度信息
+    int64 finishProgress = 4;//任务完成进度
+}
+
+message DailyBox{
+   int32 id = 1;//宝箱id
+   bool rewarded = 2;//是否领取
+}
+
+//领取任务奖励 64_3 返回 GetPlayerTaskListS2C
+message GetTaskRewardC2S{
+    int32 type = 1;//任务类型
+    int32 taskId = 2;//任务基础id
+}
+
+//领取宝箱奖励 64_4 返回 GetPlayerTaskListS2C
+message GetBoxRewardC2S{
+    int32 chapterId = 1;//章节id
+}
+
+//获取每日宝箱奖励 返回 GetPlayerTaskListS2C
+message GetDailyTaskBoxRewardC2S{
+   int32 id = 1;//宝箱id
+}
+
+//推送任务信息变化 1_1001
+message PushTaskChangeS2C{
+    int32 taskType = 1;//任务类型 1主线任务 2章节任务 3每日任务
+    repeated BaseTask taskList = 2;//任务
+}
+
+//推送每日任务积分变化
+message PushDailyTaskScoreS2C{
+    int32 score = 1;//每日任务积分
+}
+
+//推送每日任务宝箱变化
+message PushDailyBoxS2C{
+    repeated DailyBox dailyBox = 1;//奖励列表
+}
+

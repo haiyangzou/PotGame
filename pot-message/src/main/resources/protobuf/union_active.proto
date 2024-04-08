@@ -1,0 +1,94 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package = "org.pot.message.protocol.union";
+option java_multiple_files = true;
+option java_outer_classname = "UnionActiveProto";
+
+// 联盟活跃宝箱
+message UnionActiveBox {
+    //达成活跃值
+    int32 activeValue = 1;
+    //宝箱配置ID
+    int32 rewardId = 2;
+    //分配给的玩家ID
+    repeated int64 playerId = 3;
+}
+
+// 请求上周联盟活跃排行上行请求
+message UnionActiveRankC2S {
+}
+
+// 请求上周联盟活跃排行下行响应
+message UnionActiveRankS2C {
+    // 总活跃值
+    int32 totalActiveValue = 1;
+    // 联盟活跃宝箱状态
+    repeated UnionActiveBox box = 2;
+    //联盟成员贡献活跃值排行(有序)
+    map<int64, int32> memberActiveValue = 3;
+}
+
+// 联盟活跃宝箱分配记录
+message UnionActiveBoxDistribution {
+    //分配时间戳
+    int64 time = 1;
+    //宝箱道具配置ID
+    string itemId = 2;
+    //分配者玩家ID
+    int64 senderId = 3;
+    //分配者名字
+    string senderName = 4;
+    //被分配者玩家ID
+    int64 receiverId = 5;
+    //被分配者名字
+    string receiverName = 6;
+}
+
+// 联盟活跃宝箱分配记录查询上行请求
+message UnionActiveBoxDistributionC2S {
+}
+
+// 联盟活跃宝箱分配记录查询下行响应
+message UnionActiveBoxDistributionS2C {
+    //分配记录
+    repeated UnionActiveBoxDistribution record = 1;
+}
+
+// 分配联盟活跃宝箱上行请求
+message DistributeUnionActiveBoxC2S {
+    //分配的活跃宝箱的配置ID
+    int32 rewardId = 1;
+    // 分配给的成员ID
+    int64 playerId = 2;
+}
+
+// 分配联盟活跃宝箱下行响应
+message DistributeUnionActiveBoxS2C {
+    //分配的活跃宝箱的配置ID
+    int32 rewardId = 1;
+    // 分配者玩家ID
+    int64 senderId = 2;
+    // 被分配者玩家ID
+    int64 receiverId = 3;
+    //分配记录
+    UnionActiveBoxDistribution record = 4;
+}
+
+//增加联盟活跃度
+message AddUnionActiveValueS2S {
+    //增加的活跃度
+    int32 activeValue = 1;
+    // 更新时间
+    int64 time = 2;
+}
+
+//增加联盟活跃度下行响应
+message AddUnionActiveValueS2C {
+    // 玩家ID
+    int64 playerId = 1;
+    // 增加后的成员总活跃度
+    int32 activeValue = 2;
+    // 增加后的联盟总活跃度
+    int32 totalActiveValue = 3;
+}
+

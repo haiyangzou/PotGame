@@ -29,6 +29,7 @@ import org.pot.game.engine.player.module.event.event.PlayerFirstLogin;
 import org.pot.game.engine.player.module.event.event.PlayerLogin;
 import org.pot.game.engine.player.module.ghost.PlayerGhostAgent;
 import org.pot.game.engine.player.module.hero.PlayerHeroAgent;
+import org.pot.game.engine.player.module.resource.PlayerResourceAgent;
 import org.pot.game.engine.player.module.tower.PlayerTowerAgent;
 import org.pot.game.engine.player.union.PlayerUnionAgent;
 import org.pot.game.gate.PlayerSession;
@@ -63,6 +64,7 @@ public class Player {
     public final PlayerArmyAgent armyAgent = new PlayerArmyAgent(this);
     public final PlayerChatAgent chatAgent = new PlayerChatAgent(this);
     public final PlayerHeroAgent heroAgent = new PlayerHeroAgent(this);
+    public final PlayerResourceAgent resourceAgent = new PlayerResourceAgent(this);
 
     @Getter
     public final List<PlayerAgentAdapter> agentAdapterList;

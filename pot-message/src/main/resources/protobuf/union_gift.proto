@@ -1,0 +1,129 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package ="org.pot.message.protocol.union";
+option java_multiple_files = true;
+option java_outer_classname = "UnionGiftProto";
+import "reward.proto";
+// 联盟礼包数据
+message UnionGiftDto {
+    // 礼包唯一ID
+    int32 id = 1;
+    // 玩家ID
+    int64 playerId = 2;
+    // 玩家名字
+    string playerName = 3;
+    // 礼物配置ID
+    int32 giftId = 4;
+    // 充值礼包类型
+    int32 chargeGiftType = 5;
+    // 充值礼包ID
+    int32 chargeGiftId = 6;
+    // 场景服ID限制
+    int32 sceneServerId = 7;
+    // 开始时间戳
+    int64 startTime = 8;
+    // 结束时间戳
+    int64 endTime = 9;
+    // 领取状态:0未领取,1已领取
+    int32 status = 10;
+    // 奖励
+    repeated RewardDto reward = 11;
+}
+
+message UnionBigGiftDto {
+    // 大礼包配置ID
+    int32 giftId = 1;
+    // 大礼包等级
+    int32 level = 2;
+    // 大礼包经验
+    int64 exp = 3;
+    // 钥匙数量
+    int32 keyCount = 4;
+}
+
+
+// 添加联盟礼包请求
+message AddUnionGiftRequestS2S {
+    UnionGiftDto gift = 1;
+}
+
+// 添加联盟礼包请求
+message AddUnionGiftResponseS2S {
+    map<int64, UnionGiftDto> gift = 1;
+}
+
+// 添加联盟礼包响应
+message AddUnionGiftS2C {
+    // 联盟礼包
+    UnionGiftDto gift = 1;
+}
+
+// 查询联盟礼包列表上行请求
+message QueryUnionGiftListC2S {
+}
+
+// 查询联盟礼包列表下行响应
+message QueryUnionGiftListS2C {
+    // 大礼包信息
+    UnionBigGiftDto bigGift = 1;
+    // 礼包列表
+    repeated UnionGiftDto gift = 2;
+    // 大礼包倒计时(全量)
+    repeated int64 bigGiftEndTime = 3;
+}
+
+// 领取联盟礼包上行请求
+message ClaimUnionGiftC2S {
+    // 是否领取全部
+    bool all = 1;
+    // 领取单个礼包的ID
+    int32 id = 2;
+}
+
+// 领取联盟礼包下行响应
+message ClaimUnionGiftS2C {
+    // 大礼包信息
+    UnionBigGiftDto bigGift = 1;
+    // 领取的礼包奖励
+    map<int32, RewardList> reward = 2;
+    // 大礼包倒计时(全量)
+    repeated int64 bigGiftEndTime = 3;
+    // 礼包发放玩家ID：礼包ID->玩家ID,服务器日志使用
+    map<int32, int64> senderId = 4;
+    // 礼包ID->礼包配置ID，日志使用
+    map<int32, int32> baseId = 5;
+    // 新增的大礼包ID(埋点日志使用)
+    repeated int32 bigGiftId = 6;
+}
+
+// 删除联盟礼包上行请求
+message DeleteUnionGiftC2S {
+    // 是否删除全部
+    bool all = 1;
+    // 要删除的礼包ID
+    int32 id = 2;
+}
+
+// 删除联盟礼包下行响应
+message DeleteUnionGiftS2C {
+    // 删除的礼包ID
+    repeated int32 id = 1;
+}
+
+// 领取联盟大礼包上行请求
+message ClaimUnionBigGiftC2S {
+}
+
+// 领取联盟大礼包下行响应
+message ClaimUnionBigGiftS2C {
+    // 大礼包信息
+    UnionBigGiftDto bigGift = 1;
+    // 领取大礼包配置ID（服务器使用）
+    repeated int32 giftId = 2;
+    // 礼包发放玩家ID：礼包ID->玩家ID,服务器日志使用
+    map<int32, int64> senderId = 3;
+    // 礼包ID->礼包配置ID，日志使用
+    map<int32, int32> baseId = 4;
+}
+
+

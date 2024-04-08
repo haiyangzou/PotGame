@@ -1,6 +1,6 @@
 syntax = "proto3";
-
-option java_package = "com.eyu.kylin.magics.protocol.hero";
+package ProtoMessage;
+option java_package = "org.pot.message.protocol.hero";
 option java_multiple_files = true;
 
 

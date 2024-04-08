@@ -1,0 +1,174 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package = "org.pot.message.protocol.commander";
+option java_multiple_files = true;
+
+import "union.proto";
+
+//基础信息
+message CommonInfo{
+    int64 playerId = 1;//玩家Id,查看其他指挥官使用
+    int32 level = 2;//等级
+    int64 exp = 3;//经验
+    string name = 4;//名称
+    string server = 5;//区服信息
+    int64 totalAbility = 6;//总战力
+    ImageInfo imageInfo = 7;//形象信息
+    PowerInfo powerInfo = 8;//体力信息
+    EnergyInfo energyInfo  = 9;//行动点信息
+    map<string,string> statistics = 10;//统计数据
+    string language = 11;//语言
+}
+
+//查看其他指挥官
+message LookPlayerSimpleInfoC2S{
+    int64 playerId = 1;//玩家id
+}
+
+//已解锁的形象信息
+message UnLookIconInfoS2C{
+    int32 lookId = 1;//形象Id
+    int64 expireTime = 2;//形象到期时间 -1为永久形象
+}
+
+//已解锁的头像框信息
+message UnLockFrameInfoS2C{
+    int32 frameId = 1;//头像框Id
+    int64 expireTime = 2;//头像框到期时间 -1为永久头像框
+}
+
+//形象
+message ImageInfo{
+    int32 iconId = 1;//当前形象id
+    int32 frameId = 2;//当前头像框id
+    bytes avatar = 3;//当前自定义头像 如果没有为空
+    int64 avatarTime = 4;//自定义头像冷却时间（时间戳）
+    repeated UnLookIconInfoS2C icons = 5;//已激活形象
+    repeated UnLockFrameInfoS2C frames = 6;//已激活头像框
+}
+
+//推送形象信息
+message PushImageInfoS2C{
+    ImageInfo imageInfo = 1;//推送形象信息
+}
+
+//推送等级
+message PushLevelS2C{
+    int32 level = 1;//推送等级
+}
+
+//推送经验
+message PushExpS2C{
+    int64 exp = 1;//推送经验
+}
+
+//推送总战力
+message PushTotalAbilityS2C{
+    int64 totalAbility = 1;//总战力
+}
+
+//体力
+message PowerInfo{
+    int64 nextTime = 1;//下一个体力恢复时间
+    int64 allTime = 2;//所有体力恢复时间
+    int64 count = 3;//当前体力
+}
+
+//推送体力信息
+message PushPowerInfoS2C{
+    PowerInfo powerInfo = 1;//推送体力信息
+}
+
+//行动点
+message EnergyInfo{
+    int64 nextTime = 1;//下一个行动点恢复时间
+    int64 allTime = 2;//所有行动点恢复时间
+    int64 count = 3;//当前行动点
+}
+//推送行动点
+message PushEnergyInfoS2C{
+    EnergyInfo energyInfo = 1;//推送行动点
+}
+
+
+//修改玩家名称C2S 失败推送错误码,成功推送 CommanderRenameS2C
+message CommanderRenameC2S{
+    string newName = 1;//新玩家名称
+}
+
+//修改玩家名称S2C
+message CommanderRenameS2C{
+    string newName = 1;//新玩家名称
+}
+
+
+//修改形象(头像)
+message CommanderChangeIconC2S{
+    int32 iconId = 1;//新形象Id
+}
+
+message CommanderChangeIconS2C{
+    int32 iconId = 1;//新形象Id
+}
+
+//修改头像框
+message CommanderChangeFrameC2S{
+    int32 frameId = 1;//新头像框Id
+}
+
+message CommanderChangeFrameS2C{
+    int32 frameId = 1;//新头像框Id
+}
+
+//上传自定义头像 无返回值 审核通过发送邮件,推送PushCommanderImageInfoS2C
+message CommanderUploadAvatarC2S{
+    bytes AvatarBytes = 1;//头像数据
+}
+
+//推送全部统计数据
+message PushStatisticsMapS2C{
+    map<string,string> statistics = 10;//统计数据
+}
+
+//推送单个统计数据
+message PushStatisticsS2C{
+    string key = 1;
+    string value = 2;
+}
+
+//每日登录领奖
+message DayLoginRewardC2S{
+}
+
+//其他玩家简化信息
+message PlayerSimpleDataS2C{
+    PlayerSimpleDataPB playerSimpleData = 1;//玩家简要信息
+}
+
+message PlayerSimpleDataPB{
+    int64 playerId = 1;// 玩家ID 
+    string name = 2;// 玩家名字
+    int32 level = 3;// 玩家等级
+    int64 totalAbility = 4;// 玩家战力
+    int64 killCount = 5;// 玩家杀敌数
+    string language = 6;// 语言
+    ImageSimpleInfo imageSimpleInfo = 7;//形象信息
+    int32 serverId = 8; // 区服ID
+    UnionSimpleInfo unionSimpleInfo = 9;//联盟信息
+    map<string,string> statistics = 10;//统计数据
+}
+
+//玩家形象简化数据
+message ImageSimpleInfo{
+    int32 iconId = 1;//当前形象id
+    int32 frameId = 2;//当前头像框id
+    bytes avatar = 3;//当前自定义头像 如果没有为空
+}
+
+//联盟简化数据
+message UnionSimpleInfo{
+    int64 unionId = 1;//联盟id
+    string unionName = 2;//联盟名称
+    string unionAlias = 3;//联盟简称
+    UnionBadge unionBadge = 4;//联盟旗帜
+}

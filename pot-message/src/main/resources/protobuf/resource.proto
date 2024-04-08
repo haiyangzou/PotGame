@@ -1,0 +1,38 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package = "org.pot.message.protocol.resource";
+option java_multiple_files = true;
+
+//采集资源 返回 TakeResourceS2C
+message TakeResourceC2S{
+    int32 buildingId = 1;//建筑基础id
+}
+
+//资源道具加速 返回 PushBuildingInfoS2C
+message ResourceItemSpeedUpC2S{
+    int64 buildingUuid = 1;//建筑主键id
+    string itemId  = 2;//道具id
+}
+
+//资源钻石加速 返回 PushBuildingInfoS2C
+message ResourceDiamondSpeedUpC2S{
+    int64 buildingUuid = 1;//建筑主键id
+}
+
+//推送资源数据
+message ResourcePushS2C{
+    repeated ResourceInfo resources = 1;//资源基础数据
+}
+
+message ResourceInfo{
+   int32 type = 1;//资源类型
+   int64 value = 2;//资源数量
+   string itemId = 3;//物品id
+}
+
+//推送需要显示的奖励
+message ResourceViewPushS2C{
+   int32 sourceType = 1;//奖励来源
+   int32 showType = 2;//表现形式
+   repeated ResourceInfo resources = 3;//资源基础数据
+}

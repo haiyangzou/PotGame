@@ -1,0 +1,38 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package = "org.pot.message.protocol.player";
+option java_multiple_files = true;
+option java_outer_classname = "PlayerProto";
+
+//头像信息
+message ProfilePicture {
+    // 头像ID
+    int32 iconId = 1;
+    // 头像框ID
+    int32 frameId = 2;
+    // 自定义图片
+    bytes image = 3;
+}
+
+// 玩家简要信息
+message PlayerProfileDto {
+    // 玩家ID
+    int64 id = 1;
+    // 玩家名字
+    string name = 2;
+    // 等级
+    int32 level = 3;
+    // 战力
+    int64 battlePower = 4;
+    // 语言
+    string language = 5;
+    // 头像信息
+    ProfilePicture profilePicture = 6;
+    // 区服ID
+    int32 serverId = 7;
+}
+
+//修改语言
+message ChangeLanguageC2S{
+    string language = 1;
+}

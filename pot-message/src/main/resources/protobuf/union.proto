@@ -1,0 +1,784 @@
+syntax = "proto3";
+package ProtoMessage;
+option java_package = "org.pot.message.protocol.union";
+option java_multiple_files = true;
+option java_outer_classname = "UnionProto";
+
+import "player.proto";
+import "union_tech.proto";
+import "union_gift.proto";
+import "world.proto";
+
+// 玩家联盟信息
+message PlayerUnionDto {
+    // 是否是首次加入
+    bool firstJoin = 1;
+    // 联盟信息
+    UnionDto union = 2;
+    // 玩家联盟科技信息
+    PlayerUnionTechDto unionTechData = 3;
+}
+
+// 更新玩家联盟信息下行响应
+message PlayerUnionS2C {
+    // 是否是首次加入
+    bool firstJoin = 1;
+    // 联盟信息
+    UnionDto union = 2;
+    // 玩家联盟科技信息
+    PlayerUnionTechDto unionTechData = 3;
+}
+
+// 联盟领地数据
+message UnionTerritoryDto {
+    // 联盟领地大地图坐标
+    WorldPointStruct coords = 1;
+    // 上次请求全体成员迁城时间戳
+    int64 relocateRequestTime = 2;
+}
+
+// 联盟成员数据
+message UnionMemberDto {
+    PlayerProfileDto profile = 1;
+    // 阶位
+    int32 rank = 2;
+    // 官职
+    int32 position = 3;
+    // 上次退出游戏时间，0表示在线
+    int64 logoutTime = 4;
+    // 加入联盟时间
+    int64 joinTime = 5;
+    // 大使馆等级
+    int32 embassyLevel = 6;
+    // 每日联盟币
+    int64 dailyUnionCoin = 7;
+    // 每日联盟荣誉
+    int64 dailyHonor = 8;
+    // 每日捐献联盟科技经验
+    int64 dailyUnionTechExp = 9;
+    // 上次联盟科技捐献时间戳
+    int64 donateUnionTechTime = 10;
+    // 每周联盟活跃
+    int32 activeValue = 11;
+    // 城堡(指挥中心)等级
+    int32 castleLevel = 12;
+    // 大地图城池坐标
+    WorldPointStruct cityCoords = 13;
+}
+
+// 加入联盟限制
+message JoinUnionLimit {
+    // 加入限制类型：0 任何人, 1 战力，2战力并同意
+    int32 limitType = 1;
+    // 战力限制
+    int64 battlePower = 2;
+}
+
+// 联盟徽章
+message UnionBadge {
+    // 基底图片
+    int32 background = 1;
+    int32 insigniaId = 2;
+    int32 effectId = 3;
+}
+
+// 联盟数据
+message UnionDto {
+    // 联盟ID
+    int32 id = 1;
+    // 联盟名称
+    string name = 2;
+    // 联盟简称
+    string alias = 3;
+    // 徽章
+    UnionBadge badge = 4;
+    // 联盟语言
+    string language = 5;
+    // 战力
+    int64 battlePower = 6;
+    // 联盟等级
+    int32 level = 7;
+    // 内部公告
+    string bulletin = 8;
+    // 外部公告
+    string statement = 9;
+    // 盟主ID
+    int64 leaderId = 10;
+    // 盟主名字
+    string leaderName = 11;
+    // 加入联盟限制
+    JoinUnionLimit joinLimit = 12;
+    // 联盟成员列表
+    repeated UnionMemberDto member = 13;
+    // 加入联盟申请
+    repeated JoinUnionApplyDto apply = 14;
+    // 加入联盟邀请
+    repeated JoinUnionInvitationDto invitation = 15;
+    // 联盟荣誉
+    int64 honor = 16;
+    // 联盟经验
+    int64 exp = 17;
+    // 联盟科技
+    repeated UnionTechDto tech = 18;
+    // 区服ID
+    int32 serverId = 19;
+    // 推荐科技ID
+    int32 recommendTechId = 20;
+    // 联盟大礼包数据
+    UnionBigGiftDto bigGift = 21;
+    // 联盟活跃值
+    int32 activeValue = 22;
+    // 联盟领地
+    UnionTerritoryDto territory = 23;
+    // 联盟创建时间戳
+    int64 createTime = 24;
+    // 联盟创建者玩家ID（服务器打点日志使用）
+    int64 creatorId = 25;
+}
+
+// 创建联盟上行请求
+message CreateUnionC2S {
+    // 联盟名字
+    string unionName = 1;
+    // 联盟简称
+    string alias = 2;
+    // 徽章
+    UnionBadge badge = 3;
+    // 联盟语言
+    string language = 4;
+    // 加入联盟限制
+    JoinUnionLimit joinLimit = 5;
+}
+
+// 创建联盟下行响应
+message CreateUnionS2C {
+    // 联盟信息
+    UnionDto union = 1;
+}
+
+// 加入联盟申请
+message JoinUnionApplyDto {
+    // 申请时间戳
+    int64 applyTime = 1;
+    // 玩家信息
+    PlayerProfileDto playerProfile = 2;
+}
+
+// 加入联盟邀请
+message JoinUnionInvitationDto {
+    // 邀请时间戳
+    int64 inviteTime = 1;
+    // 玩家信息
+    PlayerProfileDto playerProfile = 2;
+}
+
+// 加入联盟信息
+message JoinUnionDto {
+    // 联盟ID
+    int32 unionId = 1;
+    // 联盟名称
+    string unionName = 2;
+    // 联盟简称
+    string alias = 3;
+    // 徽章ID
+    UnionBadge badge = 4;
+    // 联盟等级
+    int32 unionLevel = 5;
+    // 联盟战力
+    int64 battlePower = 6;
+    // 联盟语言
+    string language = 7;
+    // 最大成员数
+    int32 maxMemberCount = 8;
+    // 已有成员数
+    int32 memberCount = 9;
+    // 加入联盟限制
+    JoinUnionLimit joinLimit = 10;
+
+    // 加入联盟申请
+    JoinUnionApplyDto apply = 11;
+    // 加入联盟邀请
+    JoinUnionInvitationDto invitation = 12;
+}
+
+// 查询可加入联盟列表上行请求
+message QueryJoinUnionListC2S {
+    // 模糊搜索联盟名关键字
+    string nameKeyword = 1;
+}
+
+// 查询可加入联盟列表下行响应
+message QueryJoinUnionListS2C {
+    // 推荐列表
+    repeated JoinUnionDto union = 1;
+}
+
+// 查询加入联盟申请列表上行请求
+message QueryJoinUnionApplyC2S {
+
+}
+
+//查询加入联盟申请列表下行响应
+message QueryJoinUnionApplyS2C {
+    // 申请列表
+    repeated JoinUnionDto apply = 1;
+}
+
+// 查询加入联盟邀请列表上行请求
+message QueryJoinUnionInvitationC2S {
+    
+}
+
+// 查询加入联盟邀请列表下行响应
+message QueryJoinUnionInvitationS2C {
+    // 邀请列表
+    repeated JoinUnionDto invitation = 1;
+}
+
+// 申请加入联盟上行请求
+message ApplyJoinUnionC2S {
+    // 联盟ID
+    int32 unionId = 1;
+}
+
+// 申请加入联盟下行响应
+message ApplyJoinUnionS2C {
+    // 申请加入联盟信息
+    JoinUnionDto union = 1;
+    // 移除的申请列表
+    repeated JoinUnionApplyDto removeApply = 2;
+    //联盟信息, 如果限制是任何人，直接加入联盟
+    UnionDto unionData = 3;
+}
+
+// 取消加入联盟申请
+message CancelJoinUnionApplyC2S {
+    // 联盟ID
+    int32 unionId = 1;
+}
+
+// 取消加入联盟申请下行响应,广播
+message CancelJoinUnionApplyS2C {
+    //玩家ID
+    int64 playerId = 1;
+    // 联盟ID
+    int32 unionId = 2;
+}
+
+// 接受加入联盟申请上行请求
+message AcceptJoinUnionApplyC2S {
+    //玩家ID
+    int64 playerId = 1;
+}
+
+// 接受加入联盟申请下行响应,广播
+message AcceptJoinUnionApplyS2C {
+    //玩家ID
+    int64 playerId = 1;
+    // 联盟信息
+    UnionDto union = 2;
+    // 操作人ID
+    int64 operatorId = 3;
+}
+
+// 拒绝加入联盟申请上行请求
+message RejectJoinUnionApplyC2S {
+    //拒绝全部
+    bool rejectAll = 1;
+    //玩家ID,如果拒绝全部可忽略此字段
+    int64 playerId = 2;
+}
+
+// 拒绝加入联盟申请下行响应,广播
+message RejectJoinUnionApplyS2C {
+    //玩家ID
+    repeated int64 playerId = 1;
+    // 联盟ID
+    int32 unionId = 2;
+}
+
+// 邀请加入联盟上行请求
+message InviteJoinUnionC2S {
+    // 玩家ID
+    int64 playerId = 1;
+}
+
+// 邀请加入联盟下行响应
+message InviteJoinUnionS2C {
+    // 邀请加入联盟信息
+    JoinUnionDto union = 1;
+    // 移除的邀请数据
+    repeated JoinUnionInvitationDto removeInvitation = 2;
+}
+
+// 接受加入联盟邀请上行请求
+message AcceptJoinUnionInvitationC2S {
+    // 联盟ID
+    int32 unionId = 1;
+}
+
+// 接受加入联盟邀请下行响应
+message AcceptJoinUnionInvitationS2C {
+    // 玩家ID
+    int64 playerId = 1;
+    // 联盟信息
+    UnionDto union = 2;
+}
+
+// 拒绝联盟邀请上行请求
+message RejectJoinUnionInvitationC2S {
+    int32 unionId = 1;
+}
+
+// 拒绝联盟邀请下行响应(广播)
+message RejectJoinUnionInvitationS2C {
+    // 玩家ID
+    int64 playerId = 1;
+    // 联盟ID
+    int32 unionId = 2;
+}
+
+// 快速加入联盟上行请求
+message QuickJoinUnionC2S {
+
+}
+
+// 快速加入联盟
+message QuickJoinUnionS2S {
+    PlayerProfileDto playerProfile = 1;
+    // 大使馆等级
+    int32 embassyLevel = 2;
+    // 城堡（指挥中心等级）
+    int32 castleLevel = 3;
+    // 大地图城池坐标
+    WorldPointStruct cityCoords = 4;
+    // 每日联盟币
+    int64 dailyUnionCoin = 5;
+}
+
+//快速加入联盟
+message QuickJoinUnionS2C {
+    // 是否成功
+    bool success = 1;
+    // 联盟信息
+    UnionDto union = 2;
+}
+
+// 增加联盟成员下行响应
+message AddUnionMemberS2C {
+    UnionMemberDto member = 1;
+}
+
+// 退出联盟上行请求
+message ExitUnionC2S {
+}
+
+// 成功退出联盟下行响应,广播
+message ExitUnionS2C {
+    //玩家ID
+    int64 playerId = 1;
+}
+
+// 解散联盟 上行请求
+message DisbandUnionC2S {
+}
+
+// 解散联盟下行响应
+message DisbandUnionS2C {
+}
+
+// 踢出联盟成员上行请求
+message KickUnionMemberC2S {
+    //玩家ID
+    int64 playerId = 1;
+}
+
+// 成功踢出联盟成员下行响应,广播
+message KickUnionMemberS2C {
+    //玩家ID
+    int64 playerId = 1;
+    //管理员玩家ID
+    int64 managerId = 2;
+}
+
+// 更新联盟成员信息请求
+message UpdateUnionMemberS2S {
+    // 玩家信息
+    PlayerProfileDto profile = 1;
+    // 城堡等级
+    int32 castleLevel = 2;
+    // 大使馆等级
+    int32 embassyLevel = 3;
+    // 大地图城池坐标
+    WorldPointStruct cityCoords = 4;
+}
+
+// 更新联盟成员数据下行响应
+message UpdateUnionMemberS2C {
+    // 联盟成员数据
+    UnionMemberDto member = 1;
+}
+
+// 全部联盟成员数据列表下行响应
+message UnionMemberListS2C {
+    // 联盟成员数据
+    repeated UnionMemberDto member = 1;
+}
+
+// 更新联盟成员职位上行请求
+message UpdateUnionMemberPositionC2S {
+    // 成员ID
+    int64 playerId = 1;
+    // 职位
+    int32 position = 2;
+}
+
+// 更新联盟成员职位下行响应
+message UpdateUnionMemberPositionS2C {
+    // 成员ID
+    int64 playerId = 1;
+    // 职位
+    int32 position = 2;
+    // 阶级
+    int32 rank = 3;
+    // 管理员玩家ID
+    int64 managerId = 4;
+}
+
+// 更新联盟成员阶级上行请求
+message UpdateUnionMemberRankC2S {
+    // 成员ID
+    int64 playerId = 1;
+    // 阶级
+    int32 rank = 2;
+}
+
+// 更新联盟成员阶级下行响应
+message UpdateUnionMemberRankS2C {
+    // 成员ID
+    int64 playerId = 1;
+    // 阶级
+    int32 rank = 2;
+    // 管理员玩家ID
+    int64 managerId = 3;
+}
+
+// 联盟成员坐标同步请求
+message UpdateUnionMemberCoordsS2S {
+    // 成员ID
+    int64 playerId = 1;
+    // 坐标
+    WorldPointStruct point = 2;
+}
+
+// 联盟成员坐标同步响应
+message UnionMemberCoordsS2S {
+    // 成员ID
+    int64 playerId = 1;
+    // 坐标
+    WorldPointStruct point = 2;
+}
+
+// 盟主转让上行请求
+message UnionLeaderAbdicateC2S {
+    // 新盟主玩家ID
+    int64 playerId = 1;
+}
+
+// 盟主转让下行响应
+message UnionLeaderAbdicateS2C {
+    // 新盟主玩家ID
+    int64 playerId = 1;
+}
+
+// 弹劾盟主上行请求
+message DelateUnionLeaderC2S {
+    // 弹劾盟主离线时间限制（服务器用，客户端不传值）
+    int64 timeLimit = 1;
+}
+
+// 弹劾盟主下行响应
+message DelateUnionLeaderS2C {
+    //弹劾失败下发弹劾时间限制
+    int64 timeLimit = 1;
+    //弹劾成功下发弹劾者玩家ID
+    int64 playerId = 2;
+}
+
+//创建联盟RPC请求
+message CreateUnionS2S {
+    // 联盟
+    UnionDto union = 1;
+}
+
+
+// 申请加入联盟
+message ApplyJoinUnionS2S {
+    // 联盟ID
+    int32 unionId = 1;
+    // 申请信息
+    JoinUnionApplyDto apply = 2;
+    // 大使馆等级
+    int32 embassyLevel = 3;
+    // 城堡（指挥中心等级）
+    int32 castleLevel = 4;
+    // 大地图城池坐标
+    WorldPointStruct cityCoords = 5;
+    // 每日联盟币
+    int64 dailyUnionCoin = 6;
+}
+
+// 接受加入联盟申请
+message AcceptJoinUnionApplyS2S {
+    // 玩家ID
+    int64 playerId = 1;
+    // 申请玩家最新信息
+    PlayerProfileDto profile = 2;
+    // 申请玩家大使馆等级
+    int32 embassyLevel = 3;
+    // 申请玩家城堡（指挥中心等级）
+    int32 castleLevel = 4;
+    // 大地图城池坐标
+    WorldPointStruct cityCoords = 5;
+    // 每日联盟币
+    int64 dailyUnionCoin = 6;
+}
+
+// 邀请加入联盟
+message InviteJoinUnionS2S {
+    // 联盟ID
+    int32 unionId = 1;
+    // 邀请信息
+    JoinUnionInvitationDto invitation = 2;
+    // 被邀请玩家大使馆等级
+    int32 embassyLevel = 3;
+    // 被邀请玩家城堡（指挥中心等级）
+    int32 castleLevel = 4;
+    // 被邀请玩家大地图城池坐标
+    WorldPointStruct cityCoords = 5;
+}
+
+// 接受加入联盟邀请
+message AcceptJoinUnionInvitationS2S {
+    // 联盟ID
+    int32 unionId = 1;
+    // 玩家信息
+    PlayerProfileDto profile = 2;
+    // 大使馆等级
+    int32 embassyLevel = 3;
+    // 城堡（指挥中心等级）
+    int32 castleLevel = 4;
+    // 大地图城池坐标
+    WorldPointStruct cityCoords = 5;
+    // 每日联盟币
+    int64 dailyUnionCoin = 6;
+}
+
+// 修改联盟名字上行请求
+message ChangeUnionNameC2S {
+    // 联盟名
+    string unionName = 1;
+}
+
+// 修改联盟名字下行响应
+message ChangeUnionNameS2C {
+    // 联盟名字
+    string unionName = 1;
+}
+
+// 修改联盟简称上行请求
+message ChangeUnionAliasC2S {
+    // 联盟简称
+    string alias = 1;
+}
+
+// 修改联盟简称下行响应
+message ChangeUnionAliasS2C {
+    // 联盟简称
+    string alias = 1;
+}
+
+// 修改加入联盟条件上行请求
+message UpdateUnionJoinLimitC2S {
+    JoinUnionLimit joinLimit = 1;
+}
+
+// 修改加入联盟条件下行响应
+message UpdateUnionJoinLimitS2C {
+    JoinUnionLimit joinLimit = 1;
+}
+
+// 更新联盟内部公告上行请求
+message UpdateUnionBulletinC2S {
+    // 内部公告
+    string bulletin = 1;
+}
+
+// 更新联盟内部公告下行响应
+message UpdateUnionBulletinS2C {
+    // 内部公告
+    string bulletin = 1;
+}
+
+// 更新联盟外部公告上行请求
+message UpdateUnionStatementC2S {
+    // 外部公告
+    string statement = 1;
+}
+
+// 更新联盟外部公告下行响应
+message UpdateUnionStatementS2C {
+    // 外部公告
+    string statement = 1;
+}
+
+// 更新联盟语言上行请求
+message UpdateUnionLanguageC2S {
+    // 联盟语言
+    string language = 1;
+}
+
+// 更新联盟语言下行响应
+message UpdateUnionLanguageS2C {
+    // 联盟语言
+    string language = 1;
+}
+
+// 更新联盟徽章上行请求
+message UpdateUnionBadgeC2S {
+    // 徽章
+    UnionBadge badge = 1;
+}
+
+// 更新联盟徽章下行响应
+message UpdateUnionBadgeS2C {
+    // 徽章
+    UnionBadge badge = 1;
+}
+
+// 拉取联盟数据请求
+message PullUnionDataRequestS2S {
+}
+
+// 拉取联盟数据响应
+message PullUnionDataResponseS2S {
+    // 联盟数据
+    repeated UnionDto union = 1;
+}
+
+// 联盟成员登录请求
+message UnionMemberLoginS2S {
+    // 玩家详情
+    PlayerProfileDto profile = 1;
+    // 大使馆等级
+    int32 embassyLevel = 2;
+    // 城堡(指挥中心)等级
+    int32 castleLevel = 3;
+    // 大地图城池坐标
+    WorldPointStruct cityCoords = 4;
+}
+
+// 联盟成员响应下行响应(广播)
+message UnionMemberLoginS2C {
+    // 联盟成员信息
+    UnionMemberDto member = 1;
+}
+
+// 联盟成员登出游戏请求
+message UnionMemberLogoutS2S {
+    // 玩家详情
+    PlayerProfileDto profile = 1;
+    // 登出时间戳
+    int64 logoutTime = 2;
+    // 大使馆等级
+    int32 embassyLevel = 3;
+    // 城堡（指挥中心等级）
+    int32 castleLevel = 4;
+    // 大地图城池坐标
+    WorldPointStruct cityCoords = 5;
+}
+
+// 联盟成员登出游戏下行响应(广播)
+message UnionMemberLogoutS2C {
+    // 联盟成员信息
+    UnionMemberDto member = 1;
+}
+
+// 联盟公共信息
+message UnionPublicInfoDto {
+    // 联盟ID
+    int32 id = 1;
+    // 联盟名称
+    string name = 2;
+    // 联盟简称
+    string alias = 3;
+    // 徽章
+    UnionBadge badge = 4;
+    // 联盟语言
+    string language = 5;
+    // 战力
+    int64 battlePower = 6;
+    // 联盟等级
+    int32 level = 7;
+    // 外部公告
+    string statement = 8;
+    // 盟主ID
+    int64 leaderId = 9;
+    // 盟主名字
+    string leaderName = 10;
+    // 联盟成员列表
+    repeated UnionMemberDto member = 11;
+    // 最大成员数
+    int32 maxMemberCount = 12;
+    // 联盟经验
+    int64 exp = 13;
+    // 加入联盟限制
+    JoinUnionLimit joinLimit = 14;
+}
+
+// 查询联盟信息上行请求
+message QueryUnionPublicInfoC2S {
+    int32 unionId = 1;
+}
+
+// 查询联盟信息下行响应
+message QueryUnionPublicInfoS2C {
+    // 联盟公共信息
+    UnionPublicInfoDto unionPublicInfo = 1;
+}
+
+// 翻译联盟内部公告上行请求
+message TranslateUnionBulletinC2S {
+}
+
+// 翻译联盟内部公告下行响应
+message TranslateUnionBulletinS2C {
+    // 语言
+    string language = 1;
+    // 翻译后内部公告
+    string text = 2;
+}
+
+// 翻译联盟外部公告上行请求
+message TranslateUnionStatementC2S {
+    // 联盟ID
+    int32 unionId = 1;
+}
+
+// 翻译联盟外部公告下行响应
+message TranslateUnionStatementS2C {
+    // 联盟ID
+    int32 unionId = 1;
+    // 语言
+    string language = 2;
+    // 翻译后外部公告
+    string text = 3;
+}
+
+// 联盟招募上行请求
+message UnionRecruitC2S {
+}
+
+// 联盟招募下行响应
+message UnionRecruitS2C {
+}

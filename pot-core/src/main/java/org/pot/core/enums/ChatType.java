@@ -4,11 +4,13 @@ package org.pot.core.enums;
 import java.util.Map;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.pot.common.enums.IntEnum;
 import org.pot.common.util.EnumUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Slf4j
 @Getter
 public enum ChatType implements IntEnum {
     NORMAL(1),
@@ -18,11 +20,9 @@ public enum ChatType implements IntEnum {
     BATTLE(5);
 
     static {
-        log = LoggerFactory.getLogger(ChatType.class);
         INDEXES = EnumUtils.toMap(values());
     }
 
-    private static final Logger log;
 
     private final int type;
 
