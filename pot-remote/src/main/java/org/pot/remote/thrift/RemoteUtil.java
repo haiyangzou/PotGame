@@ -7,6 +7,7 @@ import org.pot.common.util.ClassUtil;
 import org.pot.common.util.MapUtil;
 import org.pot.remote.thrift.define.IRemote;
 import org.pot.remote.thrift.define.RemoteServerType;
+import org.pot.remote.thrift.define.alive.IKeepAliveRemote;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -17,7 +18,7 @@ public class RemoteUtil {
 
     static {
         Map<ServerType, Set<Class<? extends IRemote>>> map = new HashMap<>();
-        Set<Class<? extends IRemote>> remoteServiceInterfaces = ClassUtil.getSubTypeOf(PotPackage.class, IRemote.class, ClassUtil::isConcrete);
+        Set<Class<? extends IRemote>> remoteServiceInterfaces = ClassUtil.getSubTypeOf(PotPackage.class, IRemote.class);
         for (Class<? extends IRemote> remoteServiceInterface : remoteServiceInterfaces) {
             Map<String, Integer> duplicated = new HashMap<>();
             Method[] methods = remoteServiceInterface.getMethods();
@@ -65,5 +66,4 @@ public class RemoteUtil {
         }
         throw new IllegalStateException("Not Remote Service Impl" + remoteConcreteClass.getName());
     }
-
 }

@@ -196,7 +196,5 @@ public class ChatServerManager {
      */
     public static void brodCastPersonalMessage(int gameId, Message message) {
         ServerId serverId = ServerId.of(ServerType.GAME_SERVER, gameId);
-        RpcClientManager.instance.getService(serverId, ChatRemote.class);
-
     }
 }

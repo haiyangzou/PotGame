@@ -20,8 +20,8 @@ import org.pot.game.engine.player.Player;
 import org.pot.game.engine.player.PlayerAgentAdapter;
 import org.pot.game.engine.player.PlayerManager;
 import org.pot.game.resource.parameter.GameParameters;
-import org.pot.remote.thrift.define.chat.ChatRemote;
 import org.pot.remote.thrift.client.manager.RpcClientManager;
+import org.pot.remote.thrift.define.chat.ChatRemote;
 
 import java.util.ArrayList;
 import java.util.HashMap;

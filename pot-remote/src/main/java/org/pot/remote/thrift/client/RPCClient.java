@@ -11,6 +11,7 @@ import org.pot.remote.thrift.client.manager.RpcClientManager;
 import org.pot.remote.thrift.client.pool.TTransportPool;
 import org.pot.remote.thrift.config.RemoteClientConfig;
 import org.pot.remote.thrift.define.alive.IKeepAliveRemote;
+import org.pot.remote.thrift.define.alive.KeepAliveRemote;
 import org.springframework.cglib.proxy.Callback;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.NoOp;
@@ -32,11 +33,11 @@ public class RPCClient {
     private volatile boolean available;
     private final IKeepAliveRemote keepAliveRemote;
 
+
     public RPCClient(RemoteClientConfig remoteClientConfig) {
         this.remoteClientConfig = remoteClientConfig;
         this.keepAliveRemote = createProxy(IKeepAliveRemote.class);
         this.pool = new TTransportPool(null, this.remoteClientConfig.getHost(), this.remoteClientConfig.getPort(), this.remoteClientConfig.getTimeout());
-
     }
 
     TTransport getTransport() throws Exception {
@@ -59,6 +60,7 @@ public class RPCClient {
             }
             try {
                 keepAliveRemote.ping();
+                available = true;
             } catch (Throwable cause) {
                 available = false;
                 if (NetSuppressErrors.isSuppressed(cause)) return;

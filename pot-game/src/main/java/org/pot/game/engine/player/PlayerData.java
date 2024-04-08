@@ -22,6 +22,7 @@ import org.pot.game.engine.world.module.map.born.PlayerBornRule;
 import org.pot.game.persistence.GameDb;
 import org.pot.game.persistence.entity.PlayerHeroEntity;
 import org.pot.game.persistence.entity.PlayerProfileEntity;
+import org.pot.game.persistence.mapper.PlayerHeroEntityMapper;
 import org.pot.game.persistence.mapper.PlayerProfileEntityMapper;
 import org.pot.message.protocol.login.LoginDataS2S;
 
@@ -62,6 +63,7 @@ public class PlayerData implements Serializable {
         try {
             SqlSession sqlSession = GameDb.local().getSqlSession(uid);
             sqlSession.getMapper(PlayerProfileEntityMapper.class).insertOnDuplicateKeyUpdate(profile);
+            sqlSession.getMapper(PlayerHeroEntityMapper.class).insertOnDuplicateKeyUpdate(this.heroEntity);
             if (onSuccess != null) onSuccess.operate();
         } catch (Throwable ex) {
             log.error("Update Player Error!uid={},caller={},dump={}", uid, caller, dump(), ex);
@@ -103,6 +105,7 @@ public class PlayerData implements Serializable {
         try {
             SqlSession sqlSession = GameDb.local().getSqlSession(uid);
             sqlSession.getMapper(PlayerProfileEntityMapper.class).insert(profile);
+            sqlSession.getMapper(PlayerHeroEntityMapper.class).insert(this.heroEntity);
             if (onSuccess != null) onSuccess.operate();
         } catch (Throwable ex) {
             log.error("Insert Player Error!uid={},caller={},dump={}", uid, caller, dump(), ex);
@@ -123,6 +126,7 @@ public class PlayerData implements Serializable {
         try {
             SqlSession sqlSession = GameDb.local().getSqlSession(uid);
             sqlSession.getMapper(PlayerProfileEntityMapper.class).delete(profile);
+            sqlSession.getMapper(PlayerHeroEntityMapper.class).delete(heroEntity);
             if (onSuccess != null) onSuccess.operate();
         } catch (Throwable ex) {
             log.error("Delete Player Error!uid={},caller={},dump={}", uid, caller, dump(), ex);
@@ -141,6 +145,7 @@ public class PlayerData implements Serializable {
                     onFail.accept(this);
                 }
             }
+            this.heroEntity = (sqlSession.getMapper(PlayerHeroEntityMapper.class)).select(this.uid);
             loadSuccess = true;
             loadOver = true;
             if (onSuccess != null) onSuccess.accept(this);

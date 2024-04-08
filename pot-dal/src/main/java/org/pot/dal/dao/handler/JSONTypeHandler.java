@@ -30,7 +30,7 @@ public class JSONTypeHandler<T> implements TypeHandler<T> {
             return null;
         }
         try {
-            JsonUtil.parseJackJson(text, type);
+            return JsonUtil.parseJackJson(text, type);
         } catch (IOException e) {
             e.printStackTrace();
         }

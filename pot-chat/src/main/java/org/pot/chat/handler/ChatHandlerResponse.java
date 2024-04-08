@@ -8,9 +8,13 @@ import org.pot.chat.module.Chat;
 import org.pot.chat.module.ChatPersonal;
 import org.pot.chat.module.ChatServerManager;
 import org.pot.chat.util.ChatUtil;
+import org.pot.common.communication.server.ServerType;
+import org.pot.remote.thrift.define.RemoteServerType;
 import org.pot.remote.thrift.define.chat.ChatRemote;
 
 import java.util.List;
+
+@RemoteServerType(ServerType.CHAT_SERVER)
 public class ChatHandlerResponse implements ChatRemote {
     @Override
     public ChatListS2C getChatList(ChatListS2S request) {

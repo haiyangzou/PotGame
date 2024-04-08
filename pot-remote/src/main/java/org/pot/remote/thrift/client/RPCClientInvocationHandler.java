@@ -1,10 +1,13 @@
 package org.pot.remote.thrift.client;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.transport.TTransport;
 import org.pot.common.Constants;
+import org.pot.remote.thrift.Remote;
 import org.pot.remote.thrift.client.manager.RpcClientManager;
 import org.pot.remote.thrift.protocol.RPCRequest;
+import org.pot.remote.thrift.protocol.RPCResponse;
 import org.springframework.cglib.proxy.InvocationHandler;
 
 import java.lang.reflect.Method;
@@ -20,7 +23,7 @@ public class RPCClientInvocationHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        long time = System.currentTimeMillis();
+//        long time = System.currentTimeMillis();
         String serviceName = method.getDeclaringClass().getName();
         if (rpcClient.isLocal()) {
 //            Object result = RpcClientManager.instance.getLocalRemoteServer().localInvoke(serviceName, method, args);
@@ -28,7 +31,6 @@ public class RPCClientInvocationHandler implements InvocationHandler {
 //            if (elapsed > Constants.RUN_SLOW_MS) {
 //                log.warn("onLocalCallFinish SLow");
 //            }
-//            return result;
             return null;
         }
         RPCRequest rpcRequest = new RPCRequest();
@@ -37,13 +39,17 @@ public class RPCClientInvocationHandler implements InvocationHandler {
         rpcRequest.setParameterValues(args);
         String host = rpcClient.getRemoteClientConfig().getHost();
         int port = rpcClient.getRemoteClientConfig().getPort();
+        RPCResponse response;
         try {
             ByteBuffer request = RPCRequest.toByteBuff(rpcRequest);
-            TTransport transport = rpcClient.getTransport();
-            transport.write(request);
+            Remote.Client client = new Remote.Client(new TBinaryProtocol(rpcClient.getTransport()));
+            ByteBuffer responseBuffer = client.call(request);
+            response = RPCResponse.parseByteBuff(responseBuffer);
         } catch (Throwable throwable) {
             log.error("rpc call failed host:{} port:{}", host, port);
+            rpcClient.close();
+            response = new RPCResponse(throwable);
         }
-        return null;
+        return response.getResult();
     }
 }

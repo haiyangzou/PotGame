@@ -20,6 +20,7 @@ import org.pot.remote.thrift.Remote;
 import org.pot.remote.thrift.RemoteUtil;
 import org.pot.remote.thrift.define.IRemote;
 import org.pot.remote.thrift.define.RemoteServerType;
+import org.pot.remote.thrift.define.alive.IKeepAliveRemote;
 import org.springframework.cglib.reflect.FastClass;
 import org.springframework.context.ApplicationContext;
 
@@ -65,11 +66,21 @@ public class RemoteServer {
                             } else {
                                 FastClass remoteFastClass = FastClass.create(remoteServiceClass);
                                 IRemote remote = (IRemote) remoteFastClass.newInstance();
-                                addHandler(remoteServiceClass.getName(), remote);
+                                addHandler(remoteServiceInterface.getName(), remote);
                             }
                         }
                     } catch (Throwable e) {
                         log.error("thrift server handler error:{}", remoteServiceClass.getName(), e);
+                    }
+                }
+                Set<Class<? extends IKeepAliveRemote>> aliveServiceClasses = ClassUtil.getSubTypeOf(PotPackage.class, IKeepAliveRemote.class, ClassUtil::isConcrete);
+                for (Class<? extends IKeepAliveRemote> aliveServiceClass : aliveServiceClasses) {
+                    try {
+                        FastClass remoteFastClass = FastClass.create(aliveServiceClass);
+                        IKeepAliveRemote remote = (IKeepAliveRemote) remoteFastClass.newInstance();
+                        addHandler(IKeepAliveRemote.class.getName(), remote);
+                    } catch (Throwable e) {
+                        log.error("thrift server handler error:{}", aliveServiceClass.getName(), e);
                     }
                 }
             } else {

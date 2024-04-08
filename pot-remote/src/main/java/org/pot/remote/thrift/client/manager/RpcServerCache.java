@@ -2,9 +2,11 @@ package org.pot.remote.thrift.client.manager;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.pot.common.communication.server.Server;
 import org.pot.common.communication.server.ServerType;
+import org.pot.common.util.ClassUtil;
 import org.pot.remote.thrift.RemoteUtil;
 import org.pot.remote.thrift.client.RPCClient;
 import org.pot.remote.thrift.config.RemoteClientConfig;
@@ -29,7 +31,9 @@ public class RpcServerCache {
         ServerType serverType = ServerType.valueOf(server.getTypeId());
         Set<Class<? extends IRemote>> remoteServiceInterfaces = RemoteUtil.getRemoteServiceInterface(serverType);
         for (Class<? extends IRemote> remoteServiceInterface : remoteServiceInterfaces) {
-            serviceProxyMap.put(remoteServiceInterface, rpcClient.createProxy(remoteServiceInterface));
+            if (!ClassUtil.isConcrete(remoteServiceInterface)) {
+                serviceProxyMap.put(remoteServiceInterface, rpcClient.createProxy(remoteServiceInterface));
+            }
         }
     }
 

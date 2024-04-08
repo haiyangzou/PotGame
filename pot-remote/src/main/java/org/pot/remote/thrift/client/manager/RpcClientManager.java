@@ -34,8 +34,6 @@ public class RpcClientManager {
     private RemoteServer localRemoteServer;
 
     private volatile ScheduledExecutor executor;
-    private volatile ScheduledExecutor executor_evict;
-
     private volatile ScheduledFuture<?> ensureFuture;
 
     private final Map<ServerType, RpcServerTypeCache> servertypeCacheMap = new ConcurrentHashMap<>();
@@ -48,18 +46,11 @@ public class RpcClientManager {
         this.localServerId = localServerId;
         this.localRemoteServer = localRemoteServer;
         this.executor = ScheduledExecutor.newScheduledExecutor(10, RpcClientManager.class.getSimpleName());
-        this.executor_evict = ScheduledExecutor.newScheduledExecutor(1, RpcClientManager.class.getSimpleName());
         this.ensureFuture = this.executor.scheduleAtFixedRate(this::ensureAvailable, 0, 2, TimeUnit.SECONDS);
-        this.executor_evict.scheduleAtFixedRate(this::ensureAvailableEvict, 0, 2, TimeUnit.SECONDS);
-    }
-
-    public void ensureAvailableEvict() {
-        log.info("rpc client ensureAvailableEvict shutdown:{},terminated:{},idle:{},isCancelled{},isDone{}", this.executor.isShutdown(), this.executor.isTerminated(), this.executor.isIdle(), ensureFuture.isCancelled(), ensureFuture.isDone());
     }
 
     public void ensureAvailable() {
         try {
-            log.info("rpc client ensureAvailable shutdown:{},terminated:{},idle:{},isCancelled{},isDone{}", this.executor.isShutdown(), this.executor.isTerminated(), this.executor.isIdle(), ensureFuture.isCancelled(), ensureFuture.isDone());
             List<Server> servers = ServerListCache.instance().getServerList();
             Set<ServerType> serverTypes = servers.stream().map(server -> ServerType.valueOf(server.getTypeId())).collect(Collectors.toSet());
             for (ServerType serverType : serverTypes) {
