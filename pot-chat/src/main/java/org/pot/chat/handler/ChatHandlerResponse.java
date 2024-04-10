@@ -1,6 +1,5 @@
 package org.pot.chat.handler;
 
-import com.eyu.kylin.magics.protocol.chat.*;
 import org.pot.cache.player.PlayerCaches;
 import org.pot.cache.player.snapshot.PlayerSnapShot;
 import org.pot.chat.engine.ChatEngine;
@@ -9,6 +8,7 @@ import org.pot.chat.module.ChatPersonal;
 import org.pot.chat.module.ChatServerManager;
 import org.pot.chat.util.ChatUtil;
 import org.pot.common.communication.server.ServerType;
+import org.pot.message.protocol.chat.*;
 import org.pot.remote.thrift.define.RemoteServerType;
 import org.pot.remote.thrift.define.chat.ChatRemote;
 

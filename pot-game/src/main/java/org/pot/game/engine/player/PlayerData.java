@@ -20,12 +20,8 @@ import org.pot.game.engine.GameServerInfo;
 import org.pot.game.engine.world.WorldManager;
 import org.pot.game.engine.world.module.map.born.PlayerBornRule;
 import org.pot.game.persistence.GameDb;
-import org.pot.game.persistence.entity.PlayerHeroEntity;
-import org.pot.game.persistence.entity.PlayerProfileEntity;
-import org.pot.game.persistence.entity.PlayerResourceEntity;
-import org.pot.game.persistence.mapper.PlayerHeroEntityMapper;
-import org.pot.game.persistence.mapper.PlayerProfileEntityMapper;
-import org.pot.game.persistence.mapper.PlayerResourceEntityMapper;
+import org.pot.game.persistence.entity.*;
+import org.pot.game.persistence.mapper.*;
 import org.pot.message.protocol.login.LoginDataS2S;
 
 import java.io.Serializable;
@@ -42,6 +38,8 @@ public class PlayerData implements Serializable {
     private volatile PlayerProfileEntity profile;
     private volatile PlayerHeroEntity heroEntity;
     private volatile PlayerResourceEntity resourceEntity;
+    private volatile PlayerCommonEntity commonEntity;
+    private volatile DropRecordEntity dropRecordEntity;
 
     public PlayerData(long uid) {
         this.uid = uid;
@@ -68,6 +66,8 @@ public class PlayerData implements Serializable {
             sqlSession.getMapper(PlayerProfileEntityMapper.class).insertOnDuplicateKeyUpdate(profile);
             sqlSession.getMapper(PlayerHeroEntityMapper.class).insertOnDuplicateKeyUpdate(this.heroEntity);
             sqlSession.getMapper(PlayerResourceEntityMapper.class).insertOnDuplicateKeyUpdate(this.resourceEntity);
+            sqlSession.getMapper(PlayerCommonEntityMapper.class).insertOnDuplicateKeyUpdate(this.commonEntity);
+            sqlSession.getMapper(DropRecordEntityMapper.class).insertOnDuplicateKeyUpdate(this.dropRecordEntity);
             if (onSuccess != null) onSuccess.operate();
         } catch (Throwable ex) {
             log.error("Update Player Error!uid={},caller={},dump={}", uid, caller, dump(), ex);
@@ -111,6 +111,8 @@ public class PlayerData implements Serializable {
             sqlSession.getMapper(PlayerProfileEntityMapper.class).insert(profile);
             sqlSession.getMapper(PlayerHeroEntityMapper.class).insert(this.heroEntity);
             sqlSession.getMapper(PlayerResourceEntityMapper.class).insert(this.resourceEntity);
+            sqlSession.getMapper(PlayerCommonEntityMapper.class).insert(this.commonEntity);
+            sqlSession.getMapper(DropRecordEntityMapper.class).insert(this.dropRecordEntity);
             if (onSuccess != null) onSuccess.operate();
         } catch (Throwable ex) {
             log.error("Insert Player Error!uid={},caller={},dump={}", uid, caller, dump(), ex);
@@ -133,6 +135,8 @@ public class PlayerData implements Serializable {
             sqlSession.getMapper(PlayerProfileEntityMapper.class).delete(profile);
             sqlSession.getMapper(PlayerHeroEntityMapper.class).delete(heroEntity);
             sqlSession.getMapper(PlayerResourceEntityMapper.class).delete(resourceEntity);
+            sqlSession.getMapper(PlayerCommonEntityMapper.class).delete(commonEntity);
+            sqlSession.getMapper(DropRecordEntityMapper.class).delete(dropRecordEntity);
             if (onSuccess != null) onSuccess.operate();
         } catch (Throwable ex) {
             log.error("Delete Player Error!uid={},caller={},dump={}", uid, caller, dump(), ex);
@@ -153,6 +157,8 @@ public class PlayerData implements Serializable {
             }
             this.heroEntity = (sqlSession.getMapper(PlayerHeroEntityMapper.class)).select(this.uid);
             this.resourceEntity = (sqlSession.getMapper(PlayerResourceEntityMapper.class)).select(this.uid);
+            this.commonEntity = (sqlSession.getMapper(PlayerCommonEntityMapper.class)).select(this.uid);
+            this.dropRecordEntity = (sqlSession.getMapper(DropRecordEntityMapper.class)).select(this.uid);
             loadSuccess = true;
             loadOver = true;
             if (onSuccess != null) onSuccess.accept(this);

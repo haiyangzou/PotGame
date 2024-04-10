@@ -20,8 +20,9 @@ public class EventBus {
     public void setThreadId() {
         long busThreadId = threadId;
         long currentThreadId = Thread.currentThread().getId();
-        if (busThreadId > 0 && busThreadId != currentThreadId) {
+        if (busThreadId > 0 && ((Long) busThreadId).longValue() != ((Long) currentThreadId).longValue()) {
             log.error("current thread({}) not equals bus thread({})", currentThreadId, busThreadId);
+            return;
         }
         threadId = currentThreadId;
     }
@@ -29,8 +30,9 @@ public class EventBus {
     public void handleAsyncEvent() {
         long busThreadId = threadId;
         long currentThreadId = Thread.currentThread().getId();
-        if (busThreadId > 0 && busThreadId != currentThreadId) {
+        if (busThreadId > 0 && ((Long) busThreadId).longValue() != ((Long) currentThreadId).longValue()) {
             log.error("current thread({}) not equals bus thread({})", currentThreadId, busThreadId);
+            return;
         }
         Object event;
         while ((event = events.poll()) != null) {
@@ -42,10 +44,14 @@ public class EventBus {
         long busThreadId = threadId;
         long currentThreadId = Thread.currentThread().getId();
         if (busThreadId > 0) {
-            log.error("current thread({}) not equals bus thread({})", currentThreadId, busThreadId);
+            if (((Long) busThreadId).longValue() != ((Long) currentThreadId).longValue()) {
+                this.events.offer(event);
+                return;
+            }
         }
         post0(event);
     }
+
     @SuppressWarnings("unchecked")
     private void post0(final Object event) {
         CopyOnWriteArrayList<EventHandler> eventHandlers = subscribers.get(event.getClass());

@@ -18,4 +18,8 @@ public class ExDateTimeUtil {
     public static boolean isSameDay(long timeMilli1, long timeMilli2) {
         return DateTimeUtil.differentDays(timeMilli1, timeMilli2) == 0;
     }
+
+    public static long getNextDayStart() {
+        return DateTimeUtil.adjust(DateTimeUnit.DAY, System.currentTimeMillis(), true, 1);
+    }
 }

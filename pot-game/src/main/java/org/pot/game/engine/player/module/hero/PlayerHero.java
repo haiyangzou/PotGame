@@ -2,6 +2,8 @@ package org.pot.game.engine.player.module.hero;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import org.pot.game.engine.enums.HeroStatus;
+import org.pot.game.resource.hero.HeroInfo;
 
 @Getter
 public class PlayerHero {
@@ -37,5 +39,19 @@ public class PlayerHero {
 
     @JsonProperty("backgroundReward")
     private int backgroundReward;
+
+    void initHero(HeroInfo heroInfo) {
+        this.heroBaseId = heroInfo.getId();
+        this.level = 1;
+        this.ability = 0;
+        this.heroStatus = HeroStatus.IDLE.value;
+        this.color = heroInfo.getColor();
+        this.strengthenLevel = 0;
+        this.star = heroInfo.getStar();
+        this.rank = 0;
+        this.skin = "";
+        this.equipId = 0;
+        this.backgroundReward = 0;
+    }
 
 }

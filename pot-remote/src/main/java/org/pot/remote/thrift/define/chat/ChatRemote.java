@@ -1,8 +1,7 @@
 package org.pot.remote.thrift.define.chat;
 
-import com.eyu.kylin.magics.protocol.chat.*;
 import org.pot.common.communication.server.ServerType;
-import org.pot.common.concurrent.exception.IErrorCode;
+import org.pot.message.protocol.chat.*;
 import org.pot.remote.thrift.define.IRemote;
 import org.pot.remote.thrift.define.RemoteServerType;
 

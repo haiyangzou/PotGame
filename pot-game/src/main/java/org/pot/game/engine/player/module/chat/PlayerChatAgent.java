@@ -1,6 +1,6 @@
 package org.pot.game.engine.player.module.chat;
 
-import com.eyu.kylin.magics.protocol.chat.*;
+import org.pot.message.protocol.chat.*;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.ProtocolStringList;
 import lombok.extern.slf4j.Slf4j;

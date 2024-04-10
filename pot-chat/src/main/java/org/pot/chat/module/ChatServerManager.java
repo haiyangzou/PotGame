@@ -1,6 +1,5 @@
 package org.pot.chat.module;
 
-import com.eyu.kylin.magics.protocol.chat.ChatPersonalS2S;
 import com.google.protobuf.Message;
 import org.pot.chat.engine.ChatEngine;
 import org.pot.common.communication.server.ServerId;
@@ -8,13 +7,12 @@ import org.pot.common.communication.server.ServerType;
 import org.pot.common.util.JsonUtil;
 import org.pot.core.enums.ChatChannel;
 import org.pot.dal.redis.ReactiveRedis;
-import org.pot.remote.thrift.define.chat.ChatRemote;
-import org.pot.remote.thrift.client.manager.RpcClientManager;
+import org.pot.message.protocol.chat.ChatPersonalS2S;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.time.Duration;
 import java.util.stream.Collectors;
 
 public class ChatServerManager {

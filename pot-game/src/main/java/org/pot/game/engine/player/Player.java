@@ -24,11 +24,13 @@ import org.pot.game.engine.player.component.*;
 import org.pot.game.engine.player.module.PlayerAgentsInitializer;
 import org.pot.game.engine.player.module.army.PlayerArmyAgent;
 import org.pot.game.engine.player.module.chat.PlayerChatAgent;
+import org.pot.game.engine.player.module.drop.PlayerDropAgent;
 import org.pot.game.engine.player.module.event.PlayerEventsInitializer;
 import org.pot.game.engine.player.module.event.event.PlayerFirstLogin;
 import org.pot.game.engine.player.module.event.event.PlayerLogin;
 import org.pot.game.engine.player.module.ghost.PlayerGhostAgent;
 import org.pot.game.engine.player.module.hero.PlayerHeroAgent;
+import org.pot.game.engine.player.module.item.PlayerItemAgent;
 import org.pot.game.engine.player.module.resource.PlayerResourceAgent;
 import org.pot.game.engine.player.module.tower.PlayerTowerAgent;
 import org.pot.game.engine.player.union.PlayerUnionAgent;
@@ -65,6 +67,8 @@ public class Player {
     public final PlayerChatAgent chatAgent = new PlayerChatAgent(this);
     public final PlayerHeroAgent heroAgent = new PlayerHeroAgent(this);
     public final PlayerResourceAgent resourceAgent = new PlayerResourceAgent(this);
+    public final PlayerItemAgent itemAgent = new PlayerItemAgent(this);
+    public final PlayerDropAgent dropAgent = new PlayerDropAgent(this);
 
     @Getter
     public final List<PlayerAgentAdapter> agentAdapterList;
@@ -356,7 +360,6 @@ public class Player {
 
     private void register() {
         try {
-
             this.eventComponent.setThreadId();
             this.profile = this.playerData.onRegister(this.loginDataS2S);
         } catch (Exception e) {

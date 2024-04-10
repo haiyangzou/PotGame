@@ -1,8 +1,8 @@
 package org.pot.chat.module;
 
-import com.eyu.kylin.magics.protocol.chat.ChatNotice;
 import lombok.Getter;
 import lombok.Setter;
+import org.pot.message.protocol.chat.ChatNotice;
 
 import java.util.List;
 

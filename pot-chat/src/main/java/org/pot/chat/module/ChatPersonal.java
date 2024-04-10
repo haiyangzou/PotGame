@@ -1,13 +1,13 @@
 package org.pot.chat.module;
 
-import com.eyu.kylin.magics.protocol.chat.ChatPersonalInfo;
-import com.eyu.kylin.magics.protocol.chat.ChatPersonalS2S;
-import com.eyu.kylin.magics.protocol.chat.PushPersonalChatS2C;
 import lombok.Getter;
 import lombok.Setter;
 import org.pot.cache.player.PlayerCaches;
 import org.pot.cache.player.snapshot.PlayerSnapShot;
 import org.pot.chat.util.ChatUtil;
+import org.pot.message.protocol.chat.ChatPersonalInfo;
+import org.pot.message.protocol.chat.ChatPersonalS2S;
+import org.pot.message.protocol.chat.PushPersonalChatS2C;
 
 @Setter
 @Getter

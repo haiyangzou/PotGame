@@ -3,7 +3,7 @@ package org.pot.game.engine.player;
 import lombok.Getter;
 import org.pot.common.util.StringUtil;
 import org.pot.message.protocol.login.LoginRespS2C;
-
+import com.google.protobuf.Message;
 public abstract class PlayerAgentAdapter {
     volatile String SIGNAL_FLAG_REGISTER;
     volatile String SIGNAL_FLAG_LOAD;
@@ -73,5 +73,9 @@ public abstract class PlayerAgentAdapter {
 
     public void setPower(long power) {
         this.power = power;
+    }
+
+    public void sendMessage(Message message) {
+        this.player.sendMessage(message);
     }
 }

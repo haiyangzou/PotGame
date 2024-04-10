@@ -1,8 +1,8 @@
 package org.pot.chat.util;
 
-import com.eyu.kylin.magics.protocol.chat.ChatSendInfo;
 import com.google.protobuf.ByteString;
 import org.pot.cache.player.snapshot.PlayerSnapShot;
+import org.pot.message.protocol.chat.ChatSendInfo;
 
 public class ChatUtil {
     public static ChatSendInfo toChatSendInfo(PlayerSnapShot playerSnapshot) {

@@ -13,4 +13,9 @@ public interface GameParameters {
     ParameterValue worldTalk_same_cd = ParameterValue.of(SUPPLIER, "worldTalk_same_cd");
     ParameterValue worldTalk_id = ParameterValue.of(SUPPLIER, "worldTalk_id");
     ParameterValue privateChat_max = ParameterValue.of(SUPPLIER, "privateChat_max");
+    ParameterValue bookMark_Default = ParameterValue.of(SUPPLIER, "bookMark_Default");
+    ParameterValue energy_limit = ParameterValue.of(SUPPLIER, "energy_limit");
+    ParameterValue recovery_energy_time = ParameterValue.of(SUPPLIER, "recovery_energy_time");
+    ParameterValue power_limit = ParameterValue.of(SUPPLIER, "power_limit");
+    ParameterValue recovery_power_time = ParameterValue.of(SUPPLIER, "recovery_power_time");
 }
